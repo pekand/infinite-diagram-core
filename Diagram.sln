@@ -1,0 +1,71 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29503.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diagram", "Diagram\Diagram.csproj", "{D0F5AB22-2879-4A9B-A0A0-DE53A7A8A3CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{FFE9FEC6-C7F3-43D7-9A36-C4BF60BB8A94}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreateDirectoryPlugin", "Plugins\CreateDirectoryPlugin\CreateDirectoryPlugin.csproj", "{A9C44B23-1D63-44FD-B428-8B6DBF3D96FA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DropPlugin", "Plugins\DropPlugin\DropPlugin.csproj", "{A570FF27-52C0-4894-905B-9A240069A95B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FindUidPlugin", "Plugins\FindUidPlugin\FindUidPlugin.csproj", "{F9B1E994-7401-4EB0-A703-388DAD1F0783}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirstPlugin", "Plugins\FirstPlugin\FirstPlugin.csproj", "{B3760480-70D8-46F9-AB09-4457BB4946ED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NcalcPlugin", "Plugins\NcalcPlugin\NcalcPlugin.csproj", "{3525D370-FBFA-46A5-860E-D3F806550E63}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScriptingPlugin", "Plugins\ScriptingPlugin\ScriptingPlugin.csproj", "{749D2D63-C7FE-4A12-8686-F41FF29A1473}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0F5AB22-2879-4A9B-A0A0-DE53A7A8A3CA}.Debug|x64.ActiveCfg = Debug|x64
+		{D0F5AB22-2879-4A9B-A0A0-DE53A7A8A3CA}.Debug|x64.Build.0 = Debug|x64
+		{D0F5AB22-2879-4A9B-A0A0-DE53A7A8A3CA}.Release|x64.ActiveCfg = Release|x64
+		{D0F5AB22-2879-4A9B-A0A0-DE53A7A8A3CA}.Release|x64.Build.0 = Release|x64
+		{A9C44B23-1D63-44FD-B428-8B6DBF3D96FA}.Debug|x64.ActiveCfg = Debug|x64
+		{A9C44B23-1D63-44FD-B428-8B6DBF3D96FA}.Debug|x64.Build.0 = Debug|x64
+		{A9C44B23-1D63-44FD-B428-8B6DBF3D96FA}.Release|x64.ActiveCfg = Release|x64
+		{A9C44B23-1D63-44FD-B428-8B6DBF3D96FA}.Release|x64.Build.0 = Release|x64
+		{A570FF27-52C0-4894-905B-9A240069A95B}.Debug|x64.ActiveCfg = Debug|x64
+		{A570FF27-52C0-4894-905B-9A240069A95B}.Debug|x64.Build.0 = Debug|x64
+		{A570FF27-52C0-4894-905B-9A240069A95B}.Release|x64.ActiveCfg = Release|x64
+		{A570FF27-52C0-4894-905B-9A240069A95B}.Release|x64.Build.0 = Release|x64
+		{F9B1E994-7401-4EB0-A703-388DAD1F0783}.Debug|x64.ActiveCfg = Debug|x64
+		{F9B1E994-7401-4EB0-A703-388DAD1F0783}.Debug|x64.Build.0 = Debug|x64
+		{F9B1E994-7401-4EB0-A703-388DAD1F0783}.Release|x64.ActiveCfg = Release|x64
+		{F9B1E994-7401-4EB0-A703-388DAD1F0783}.Release|x64.Build.0 = Release|x64
+		{B3760480-70D8-46F9-AB09-4457BB4946ED}.Debug|x64.ActiveCfg = Debug|x64
+		{B3760480-70D8-46F9-AB09-4457BB4946ED}.Debug|x64.Build.0 = Debug|x64
+		{B3760480-70D8-46F9-AB09-4457BB4946ED}.Release|x64.ActiveCfg = Release|x64
+		{B3760480-70D8-46F9-AB09-4457BB4946ED}.Release|x64.Build.0 = Release|x64
+		{3525D370-FBFA-46A5-860E-D3F806550E63}.Debug|x64.ActiveCfg = Debug|x64
+		{3525D370-FBFA-46A5-860E-D3F806550E63}.Debug|x64.Build.0 = Debug|x64
+		{3525D370-FBFA-46A5-860E-D3F806550E63}.Release|x64.ActiveCfg = Release|x64
+		{3525D370-FBFA-46A5-860E-D3F806550E63}.Release|x64.Build.0 = Release|x64
+		{749D2D63-C7FE-4A12-8686-F41FF29A1473}.Debug|x64.ActiveCfg = Debug|x64
+		{749D2D63-C7FE-4A12-8686-F41FF29A1473}.Debug|x64.Build.0 = Debug|x64
+		{749D2D63-C7FE-4A12-8686-F41FF29A1473}.Release|x64.ActiveCfg = Release|x64
+		{749D2D63-C7FE-4A12-8686-F41FF29A1473}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A9C44B23-1D63-44FD-B428-8B6DBF3D96FA} = {FFE9FEC6-C7F3-43D7-9A36-C4BF60BB8A94}
+		{A570FF27-52C0-4894-905B-9A240069A95B} = {FFE9FEC6-C7F3-43D7-9A36-C4BF60BB8A94}
+		{F9B1E994-7401-4EB0-A703-388DAD1F0783} = {FFE9FEC6-C7F3-43D7-9A36-C4BF60BB8A94}
+		{B3760480-70D8-46F9-AB09-4457BB4946ED} = {FFE9FEC6-C7F3-43D7-9A36-C4BF60BB8A94}
+		{3525D370-FBFA-46A5-860E-D3F806550E63} = {FFE9FEC6-C7F3-43D7-9A36-C4BF60BB8A94}
+		{749D2D63-C7FE-4A12-8686-F41FF29A1473} = {FFE9FEC6-C7F3-43D7-9A36-C4BF60BB8A94}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AB0FD69A-2498-4AE8-B952-EF71FB3CD86B}
+	EndGlobalSection
+EndGlobal
