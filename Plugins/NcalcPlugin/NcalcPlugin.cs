@@ -4,12 +4,14 @@ using NCalc;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace Plugin
 {
+    
+
     public class NcalcPlugin : IKeyPressPlugin
     {
-
         public string Name
         {
             get

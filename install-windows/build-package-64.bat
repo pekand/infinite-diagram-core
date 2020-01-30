@@ -9,6 +9,15 @@ copy ..\Diagram\bin\x64\Release\netcoreapp3.0\Diagram.dll .\files\
 copy ..\Diagram\bin\x64\Release\netcoreapp3.0\Diagram.runtimeconfig.json .\files\
 copy ..\Diagram\bin\x64\Release\netcoreapp3.0\Interop.Shell32.dll .\files\
 
+copy ..\Diagram\bin\x64\Release\netcoreapp3.0\plugins\NcalcPlugin\netcoreapp3.0\NCalc.dll .\files\
+copy ..\Diagram\bin\x64\Release\netcoreapp3.0\plugins\ScriptingPlugin\netcoreapp3.0\IronPython.zip .\files\
+copy ..\Diagram\bin\x64\Release\netcoreapp3.0\plugins\ScriptingPlugin\netcoreapp3.0\IronPython.dll .\files\
+copy ..\Diagram\bin\x64\Release\netcoreapp3.0\plugins\ScriptingPlugin\netcoreapp3.0\IronPython.Modules.dll .\files\
+copy ..\Diagram\bin\x64\Release\netcoreapp3.0\plugins\ScriptingPlugin\netcoreapp3.0\IronPython.SQLite.dll .\files\
+copy ..\Diagram\bin\x64\Release\netcoreapp3.0\plugins\ScriptingPlugin\netcoreapp3.0\Microsoft.Dynamic.dll .\files\
+copy ..\Diagram\bin\x64\Release\netcoreapp3.0\plugins\ScriptingPlugin\netcoreapp3.0\Microsoft.Scripting.dll .\files\
+copy ..\Diagram\bin\x64\Release\netcoreapp3.0\plugins\ScriptingPlugin\netcoreapp3.0\Microsoft.Scripting.Metadata.dll .\files\
+
 mkdir plugins
 mkdir plugins\DropPlugin
 mkdir plugins\FindUidPlugin

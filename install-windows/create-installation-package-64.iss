@@ -43,6 +43,15 @@ Source: "files\diagram.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "files\Interop.Shell32.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "files\Diagram.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
 
+Source: "files\NCalc.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "files\IronPython.zip"; DestDir: "{app}"; Flags: ignoreversion
+Source: "files\IronPython.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "files\IronPython.Modules.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "files\IronPython.SQLite.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "files\Microsoft.Dynamic.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "files\Microsoft.Scripting.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "files\Microsoft.Scripting.Metadata.dll"; DestDir: "{app}"; Flags: ignoreversion
+
 Source: "plugins\CreateDirectoryPlugin\CreateDirectoryPlugin.dll"; DestDir: "{userappdata}\Diagram\plugins\CreateDirectoryPlugin\"; Flags: ignoreversion createallsubdirs recursesubdirs comparetimestamp
 
 Source: "plugins\DropPlugin\DropPlugin.dll"; DestDir: "{userappdata}\Diagram\plugins\DropPlugin\"; Flags: ignoreversion createallsubdirs recursesubdirs comparetimestamp
