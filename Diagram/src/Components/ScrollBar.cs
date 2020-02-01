@@ -49,7 +49,7 @@ namespace Diagram
         public long delta = 0;
 
         // timer - animation
-        Timer timer = new Timer(); // timer pre animaciu
+        readonly Timer timer = new Timer(); // timer pre animaciu
         public long opacity = 0;
         public bool animation = false; // animation is running
         public bool active = false; // scrolbarr is visible
@@ -68,7 +68,7 @@ namespace Diagram
             vertical = !horizontalOrientation;
             horizontal = horizontalOrientation;
 
-            setPosition(per);
+            SetPosition(per);
 
             if (horizontal)
             {
@@ -261,10 +261,7 @@ namespace Diagram
                 {
                     trackposold = trackpos;
 
-                    if (OnChangePosition != null)
-                    {
-                        OnChangePosition(this, new PositionEventArgs(position));
-                    }
+                    OnChangePosition?.Invoke(this, new PositionEventArgs(position));
 
                     return true;
                 }
@@ -326,10 +323,7 @@ namespace Diagram
                         position = (double)(trackpos - bary) / (barheight - trackwidth);
                     }
 
-                    if (OnChangePosition != null)
-                    {
-                        OnChangePosition(this, new PositionEventArgs(position));
-                    }
+                    OnChangePosition?.Invoke(this, new PositionEventArgs(position));
                 }
 
                 mousedown = false;
@@ -372,7 +366,7 @@ namespace Diagram
             ((Form)this.parent).Invalidate();
 		}
 
-        public void setPosition(double per)
+        public void SetPosition(double per)
         {
             position = per;
             if (horizontal)

@@ -20,7 +20,7 @@ namespace Diagram
 
     public class Diagram //UID2487098516
     {
-        private Main main = null;                 // reference to main form
+        private readonly Main main = null;                 // reference to main form
 
         /*************************************************************************************************************************/
         // COOLECTIONS
@@ -97,7 +97,7 @@ namespace Diagram
                     return false;
                 }
 
-                bool opened = false;
+                bool opened;
                 if (xml.Trim() == "")
                 {
                     opened = true; // count empty file as valid new diagram
@@ -124,7 +124,7 @@ namespace Diagram
                 this.SaveXMLFile(this.FileName);
                 this.NewFile = false;
                 this.SavedFile = true;
-                this.undoOperations.rememberSave();
+                this.undoOperations.RememberSave();
                 this.SetTitle();
 
                 return true;
@@ -287,7 +287,7 @@ namespace Diagram
             {
                 XElement rectangle = new XElement("rectangle");
                 rectangle.Add(new XElement("id", rec.id));
-                if (!Fonts.compare(this.FontDefault, rec.font))
+                if (!Fonts.Compare(this.FontDefault, rec.font))
                 {
                     rectangle.Add(Fonts.FontToXml(rec.font));
                 }
@@ -356,28 +356,7 @@ namespace Diagram
 
             return xlines;
         }
-        
-        public XElement SaveInnerXmlPolygons(Polygons polygons) 
-        {
-            XElement xpolygons = new XElement("polygons");
-            foreach (Polygon polygon in polygons)
-            {
-                XElement xpolygon = new XElement("polygon");
-                xpolygon.Add(new XElement("layer", polygon.layer));
-                xpolygon.Add(new XElement("color", polygon.color));  
-                XElement xnodes = new XElement("nodes");    
-                foreach (Node node in polygon.nodes)
-                {
-                    XElement xnode = new XElement("node");
-                    xnode.Add(new XElement("id", node.id));
-                    xnodes.Add(xnode);
-                }  
-                xpolygon.Add(xnodes);
-                xpolygons.Add(xpolygon);
-            }
-
-            return xpolygons;
-        }
+      
         
         // XML SAVE create xml from current diagram file state
         public string SaveInnerXMLFile() //UID8716692347
@@ -389,12 +368,10 @@ namespace Diagram
                 XElement option = this.SaveInnerXmlOptions();
                 XElement rectangles = this.SaveInnerXmlRectangles(this.GetAllNodes());
                 XElement lines = this.SaveInnerXmlLines(this.GetAllLines());
-                XElement polygons = this.SaveInnerXmlPolygons(this.GetAllPolygons());
                 
                 root.Add(option);
                 root.Add(rectangles);
                 root.Add(lines);
-                root.Add(polygons);
                 
                 this.main.plugins.SaveAction(this, root);
 
@@ -449,28 +426,25 @@ namespace Diagram
 
             try
             {
-                using (XmlReader xr = XmlReader.Create(new StringReader(xml), xws))
+                using XmlReader xr = XmlReader.Create(new StringReader(xml), xws);
+                XElement root = XElement.Load(xr);
+                foreach (XElement diagram in root.Elements())
                 {
-
-                    XElement root = XElement.Load(xr);
-                    foreach (XElement diagram in root.Elements())
+                    if (diagram.Name.ToString() == "version")
                     {
-                        if (diagram.Name.ToString() == "version")
-                        {
-                            version = diagram.Value;
-                        }
-
-                        if (diagram.Name.ToString() == "salt")
-                        {
-                            salt = diagram.Value;
-                        }
-
-                        if (diagram.Name.ToString() == "encrypted")
-                        {
-                            encrypted = diagram.Value;
-                        }
-
+                        version = diagram.Value;
                     }
+
+                    if (diagram.Name.ToString() == "salt")
+                    {
+                        salt = diagram.Value;
+                    }
+
+                    if (diagram.Name.ToString() == "encrypted")
+                    {
+                        encrypted = diagram.Value;
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -823,7 +797,7 @@ namespace Diagram
                             if (el.Name.ToString() == "image")
                             {
                                 R.imagepath = el.Value.ToString();
-                                R.loadImage();
+                                R.LoadImage();
                             }
 
 
@@ -943,94 +917,6 @@ namespace Diagram
             }
         }
         
-        public void LoadInnerXmlPolygons(Polygons polygons, Nodes nodes, XElement diagram)
-        {
-            foreach (XElement block in diagram.Descendants())
-            {
-
-                if (block.Name.ToString() == "polygon")
-                {
-                    Polygon P = new Polygon();
-
-                    foreach (XElement el in block.Descendants())
-                    {
-                        try
-                        {
-                            if (el.Name.ToString() == "layer")
-                            {
-                                P.layer = Int64.Parse(el.Value);
-                                
-                                
-                                if (P.layer < 0)
-                                {
-                                    continue;
-                                }
-
-                                if (P.layer != 0) {
-                                    Node node = nodes.Find(P.layer);
-                                    if (node == null) {
-                                        continue;
-                                    }
-
-                                    if (!node.haslayer) {
-                                        continue;
-                                    }
-                                }
-                            }
-
-                            if (el.Name.ToString() == "color")
-                            {
-                                P.color.Set(el.Value.ToString());
-                            }
-                            
-                            if (el.Name.ToString() == "nodes")
-                            {
-                                foreach (XElement subblock in el.Descendants())
-                                {
-                                    if (subblock.Name.ToString() == "node")
-                                    {
-                                        long nodeId = 0;
-
-                                        foreach (XElement subel in subblock.Descendants())
-                                        {
-                                            try
-                                            {
-                                                if (subel.Name.ToString() == "id")
-                                                {
-                                                    nodeId = Int64.Parse(subel.Value);
-                                                }
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                Program.log.Write("load xml nodes error: " + ex.Message);
-                                            }
-                                        }
-
-                                        if (nodeId > 0) {
-                                            Node node = nodes.Find(nodeId);
-
-                                            if (node != null) {
-                                                P.nodes.Add(node);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Program.log.Write("load xml nodes error: " + ex.Message);
-                        }
-                    }
-                    
-                    if (P.nodes.Count > 0)
-                    {
-                        polygons.Add(P);
-                    }
-                }
-            }
-        }    
-        
         // XML LOAD inner part of diagram file. If file is invalid return false UID3586094034
         public bool LoadInnerXML(string xml)
         {
@@ -1042,43 +928,35 @@ namespace Diagram
 
             Nodes nodes = new Nodes();
             Lines lines = new Lines();
-            Polygons polygons = new Polygons();
 
             try
             {
-                using (XmlReader xr = XmlReader.Create(new StringReader(xml), xws))
+                using XmlReader xr = XmlReader.Create(new StringReader(xml), xws);
+                XElement root = XElement.Load(xr);
+                foreach (XElement diagram in root.Elements())
                 {
-
-                    XElement root = XElement.Load(xr);
-                    foreach (XElement diagram in root.Elements())
+                    if (diagram.HasElements)
                     {
-                        if (diagram.HasElements)
+
+                        if (diagram.Name.ToString() == "option") // [options] [config]
                         {
-
-                            if (diagram.Name.ToString() == "option") // [options] [config]
-                            {
-                                this.LoadInnerXmlOptions(diagram, FontDefaultString);
-                            }
-
-                            if (diagram.Name.ToString() == "rectangles")
-                            {
-                                this.LoadInnerXmlRectangles(nodes, diagram, FontDefaultString);
-                            }
-
-                            if (diagram.Name.ToString() == "lines")
-                            {
-                                this.LoadInnerXmlLines(lines, nodes, diagram);
-                            }
-                            
-                            if (diagram.Name.ToString() == "polygons")
-                            {
-                                this.LoadInnerXmlPolygons(polygons, nodes, diagram);
-                            }
+                            this.LoadInnerXmlOptions(diagram, FontDefaultString);
                         }
+
+                        if (diagram.Name.ToString() == "rectangles")
+                        {
+                            this.LoadInnerXmlRectangles(nodes, diagram, FontDefaultString);
+                        }
+
+                        if (diagram.Name.ToString() == "lines")
+                        {
+                            this.LoadInnerXmlLines(lines, nodes, diagram);
+                        }
+
                     }
-                    
-                    this.main.plugins.LoadAction(this, root);
                 }
+
+                this.main.plugins.LoadAction(this, root);
             }
             catch (Exception ex)
             {
@@ -1098,11 +976,11 @@ namespace Diagram
             {
                 if (!rec.isimage)
                 {
-                    SizeF s = rec.measure();
+                    SizeF s = rec.Measure();
                     newWidth = (decimal)s.Width;
                     newHeight = (decimal)s.Height;
 
-                    rec.resize();
+                    rec.Resize();
 
                 }
 
@@ -1120,11 +998,6 @@ namespace Diagram
                     line.color,
                     line.width
                 );
-            }
-
-            foreach (Polygon polygon in polygons)
-            {
-                this.layers.AddPolygon(polygon);
             }
             
             return true;
@@ -1150,38 +1023,39 @@ namespace Diagram
 
         public void Unsave(string type, Node node, Position position = null, decimal scale = 0, long layer = 0)
         {
-            Nodes nodes = new Nodes();
-            nodes.Add(node);
+            Nodes nodes = new Nodes
+            {
+                node
+            };
             this.Unsave(type, nodes, null, position, scale, layer);
         }
 
         public void Unsave(string type, Line line, Position position = null, decimal scale = 0, long layer = 0)
         {
-            Lines lines = new Lines();
-            lines.Add(line);
+            Lines lines = new Lines
+            {
+                line
+            };
             this.Unsave(type, null, lines, position, scale, layer);
         }
 
         public void Unsave(string type, Node node, Line line, Position position = null, decimal scale = 0, long layer = 0)
         {
-            Nodes nodes = new Nodes();
-            nodes.Add(node);
-            Lines lines = new Lines();
-            lines.Add(line);
+            Nodes nodes = new Nodes
+            {
+                node
+            };
+            Lines lines = new Lines
+            {
+                line
+            };
             this.Unsave(type, nodes, lines, position, scale, layer);
         }
 
         public void Unsave(string type, Nodes nodes = null, Lines lines = null, Position position = null, decimal scale = 0, long layer = 0)
         {
-            this.undoOperations.rememberSave();
-            this.undoOperations.add(type, nodes, lines, position, scale, layer);
-            this.Unsave();
-        }
-
-        public void Unsave(string type, Nodes nodes = null, Lines lines = null, Polygons polygons = null, Position position = null, decimal scale = 0, long layer = 0)
-        {
-            this.undoOperations.rememberSave();
-            this.undoOperations.add(type, nodes, lines, polygons, position, scale, layer);
+            this.undoOperations.RememberSave();
+            this.undoOperations.Add(type, nodes, lines, position, scale, layer);
             this.Unsave();
         }
 
@@ -1207,13 +1081,13 @@ namespace Diagram
         // undo
         public void DoUndo(DiagramView view = null)
         {
-            this.undoOperations.doUndo(view);
+            this.undoOperations.DoUndo(view);
         }
 
         // redo
         public void DoRedo(DiagramView view = null)
         {
-            this.undoOperations.doRedo(view);
+            this.undoOperations.DoRedo(view);
         }
 
         /*************************************************************************************************************************/
@@ -1230,7 +1104,7 @@ namespace Diagram
         {
             foreach (Node rec in this.GetAllNodes()) // Loop through List with foreach
             {
-                if (Patterns.isScriptId(rec.link, id))
+                if (Patterns.IsScriptId(rec.link, id))
                 {
                     return rec;
                 }
@@ -1247,17 +1121,12 @@ namespace Diagram
         public Lines GetAllLines()
         {
             return this.layers.GetAllLines();
-        }
-        
-        public Polygons GetAllPolygons()
-        {
-            return this.layers.GetAllPolygons();
-        }
+        }     
 
         // NODE Najdenie nody podla pozicie myši
         public Node FindNodeInPosition(Position position, long layer, Node skipNode = null)
         {
-            decimal scale = 0;
+            decimal scale;
 
             foreach (Node node in this.layers.GetLayer(layer).nodes.Reverse<Node>()) // Loop through List with foreach
             {
@@ -1343,7 +1212,7 @@ namespace Diagram
 
             if (canDelete)
             {
-                this.undoOperations.add("delete", toDeleteNodes, toDeleteLines, position, layer);
+                this.undoOperations.Add("delete", toDeleteNodes, toDeleteLines, position, layer);
 
                 foreach (Node node in toDeleteNodes.Reverse<Node>()) // remove lines to node
                 {
@@ -1374,7 +1243,7 @@ namespace Diagram
 
             if (!found) {
                 TextForm textf = new TextForm(this.main);
-                textf.setDiagram(this);
+                textf.SetDiagram(this);
                 textf.node = rec;
                 string[] lines = rec.name.Split(Environment.NewLine.ToCharArray()).ToArray();
                 if(lines.Count()>0)
@@ -1429,7 +1298,7 @@ namespace Diagram
 
             rec.layer = layer;
 
-            rec.setName(name);
+            rec.SetName(name);
             rec.note = "";
             rec.link = "";
 
@@ -1491,7 +1360,7 @@ namespace Diagram
                 {
 
                     // calculate line layer from node layers
-                    long layer = 0;
+                    long layer;
                     if (a.layer == b.layer) // nodes are in same layer
                     {
                         layer = a.layer;
@@ -1800,7 +1669,7 @@ namespace Diagram
                         if (line.Trim() != "")
                         {
                             Node newNode = this.CreateNode(new Node(node)); // duplicate content of old node
-                            newNode.setName(line);
+                            newNode.SetName(line);
                             newNode.position.y = posy;
                             posy = posy + newNode.height + 10;
                             newNodes.Add(newNode);
@@ -1836,11 +1705,11 @@ namespace Diagram
         public void ResetFont(Nodes nodes, Position position = null, long layer = 0)
         {
             if (nodes.Count>0) {
-                this.undoOperations.add("edit", nodes, null, position, layer);
+                this.undoOperations.Add("edit", nodes, null, position, layer);
                 foreach (Node rec in nodes) // Loop through List with foreach
                 {
                     rec.font = this.FontDefault;
-                    rec.resize();
+                    rec.Resize();
                 }
                 this.Unsave();
                 this.InvalidateDiagram();
@@ -1876,7 +1745,7 @@ namespace Diagram
             rec.imagepath = "";
             rec.image = null;
             rec.embeddedimage = false;
-            rec.resize();
+            rec.Resize();
         }
 
         // set image embedded
@@ -1885,57 +1754,6 @@ namespace Diagram
             if (rec.isimage)
             {
                 rec.embeddedimage = true;
-            }
-        }
-
-        /*************************************************************************************************************************/
-        // POLYGON
-
-        // create polygon
-        public void CreatePolygon(Nodes Nodes, long layer)
-        {
-            if (Nodes.Count() > 0)
-            {
-                this.layers.CreatePolygon(Nodes, layer);
-            }
-        }
-
-        // remove polygon
-        public void RemovePolygon(Nodes Nodes)
-        {
-            if (Nodes.Count() > 0)
-            {
-                Polygons polygons = this.layers.GetAllPolygonsFromNodes(Nodes);
-                if (polygons.Count > 0)
-                {
-                    foreach (Polygon polygon in polygons)
-                    {
-                        this.layers.RemovePolygon(polygon);
-                    }
-                }
-            }
-        }
-
-        // remove polygon
-        public void SwitchPolygon(Nodes Nodes, Position position, decimal scale, long layer)
-        {
-            if (Nodes.Count() > 0)
-            {
-                Polygons polygons = this.layers.GetAllPolygonsFromNodes(Nodes);
-                if (polygons.Count > 0)
-                {
-                    foreach (Polygon polygon in polygons) {
-                        this.layers.RemovePolygon(polygon);
-                    }
-                    this.Unsave("delete", null, null, polygons, position, scale, layer);
-                }
-                else
-                {
-                    Polygon newPolygon = this.layers.CreatePolygon(Nodes, layer);
-                    Polygons newPolygons = new Polygons();
-                    newPolygons.Add(newPolygon);
-                    this.Unsave("create", null, null, newPolygons, position, scale, layer);
-                }
             }
         }
         
@@ -2097,11 +1915,11 @@ namespace Diagram
                 
                 if (node.isimage && !node.embeddedimage)
                 {
-                    node.loadImage();
+                    node.LoadImage();
                 }
                 else
                 {
-                    node.resize();
+                    node.Resize();
                 }
             }
 
@@ -2115,11 +1933,11 @@ namespace Diagram
             {
                 if (node.isimage && !node.embeddedimage)
                 {
-                    node.loadImage();
+                    node.LoadImage();
                 }
                 else
                 {
-                    node.resize();
+                    node.Resize();
                 }
             }
 
@@ -2173,7 +1991,6 @@ namespace Diagram
 
             Nodes NewNodes = new Nodes();
             Lines NewLines = new Lines();
-            Polygons NewPolygons = new Polygons();
 
             XmlReaderSettings xws = new XmlReaderSettings
             {
@@ -2184,28 +2001,20 @@ namespace Diagram
             string xml = DiagramXml;
             try
             {
-                using (XmlReader xr = XmlReader.Create(new StringReader(xml), xws))
+                using XmlReader xr = XmlReader.Create(new StringReader(xml), xws);
+                XElement root = XElement.Load(xr);
+                foreach (XElement diagram in root.Elements())
                 {
-
-                    XElement root = XElement.Load(xr);
-                    foreach (XElement diagram in root.Elements())
+                    if (diagram.HasElements)
                     {
-                        if (diagram.HasElements)
+                        if (diagram.Name.ToString() == "rectangles")
                         {
-                            if (diagram.Name.ToString() == "rectangles")
-                            {
-                                this.LoadInnerXmlRectangles(NewNodes, diagram, FontDefaultString);
-                            }
+                            this.LoadInnerXmlRectangles(NewNodes, diagram, FontDefaultString);
+                        }
 
-                            if (diagram.Name.ToString() == "lines")
-                            {
-                                this.LoadInnerXmlLines(NewLines, NewNodes, diagram);
-                            }
-
-                            if (diagram.Name.ToString() == "polygons")
-                            {
-                                this.LoadInnerXmlPolygons(NewPolygons, NewNodes, diagram);
-                            }
+                        if (diagram.Name.ToString() == "lines")
+                        {
+                            this.LoadInnerXmlLines(NewLines, NewNodes, diagram);
                         }
                     }
                 }
@@ -2338,32 +2147,8 @@ namespace Diagram
                 }
             }
             
-            foreach (Polygon NewPolygon in NewPolygons)
-            {
-                // remap layer ids
-                long polygonLayer = 0;
-                if (NewPolygon.layer == 0)
-                {
-                    polygonLayer = layer;
-                }
-                else
-                {
-                    foreach (MappedNode mapednode in maps)
-                    {
-                        if (NewPolygon.layer == mapednode.oldId)
-                        {
-                            polygonLayer = mapednode.newNode.id;
-                            break;
-                        }
-                    }
-                }
 
-                NewPolygon.layer = polygonLayer;
-
-                this.layers.AddPolygon(NewPolygon);
-            }
-
-            return new DiagramBlock(NewNodes, createdLines, NewPolygons);
+            return new DiagramBlock(NewNodes, createdLines);
         }
 
         // Get all layers nodes
@@ -2409,8 +2194,6 @@ namespace Diagram
             Nodes copy = new Nodes();
             copy.Copy(nodes);
 
-            string copyxml = "";
-
             XElement root = new XElement("diagram");
 
             decimal minx = copy[0].position.x;
@@ -2428,8 +2211,8 @@ namespace Diagram
 
             foreach (Node rec in copy)
             {
-                rec.position.x = rec.position.x - minx;
-                rec.position.y = rec.position.y - miny;
+                rec.position.x -= minx;
+                rec.position.y -= miny;
             }
             
             Nodes subnodes = new Nodes();
@@ -2441,14 +2224,14 @@ namespace Diagram
 
             foreach (Node node in subnodes)
             {
-                copy.Add(node.clone());
+                copy.Add(node.Clone());
             }            
 
             foreach (Node rec in copy)
             {
                 rec.id = rec.id - minid + 1;
-                if (rec.shortcut != 0 && rec.shortcut - minid + 1 > 0) rec.shortcut = rec.shortcut + 1;
-                if (rec.layer != 0 && rec.layer - minlayer >= 0)  rec.layer = rec.layer - minlayer;
+                if (rec.shortcut != 0 && rec.shortcut - minid + 1 > 0) rec.shortcut += 1;
+                if (rec.layer != 0 && rec.layer - minlayer >= 0)  rec.layer -= minlayer;
             }
             
             Lines lines = new Lines();
@@ -2460,28 +2243,13 @@ namespace Diagram
                 li.end = li.end - minid + 1;
                 li.layer = li.layer - minid + 1;
             }
-
-            Polygons polygons = new Polygons();
-            polygons.Copy(this.layers.GetAllPolygonsFromNodes(nodes));
-            
-            foreach (Polygon polygon in polygons)
-            {
-                if (polygon.layer != 0 && polygon.layer - minlayer >= 0)  polygon.layer = polygon.layer - minlayer;
-
-                foreach (Node node in polygon.nodes)
-                {
-                    node.id = node.id - minid + 1;
-                }
-            }
             
             XElement xrectangles = this.SaveInnerXmlRectangles(copy);
             XElement xlines = this.SaveInnerXmlLines(lines);
-            XElement xpolygons = this.SaveInnerXmlPolygons(polygons);
                 
             root.Add(xrectangles);
             root.Add(xlines);
-            root.Add(xpolygons);
-            copyxml = root.ToString();
+            string copyxml = root.ToString();
 
             return copyxml;
         }
@@ -2541,7 +2309,7 @@ namespace Diagram
             Nodes duplicatedNodes = new Nodes();
             foreach (Node node in diagramPart.nodes)
             {
-                duplicatedNodes.Add(node.clone());
+                duplicatedNodes.Add(node.Clone());
             }
 
             // order nodes parent first (layer must exist when sub node is created)
@@ -2570,7 +2338,7 @@ namespace Diagram
 
 
                 rec.layer = layerParent;
-                rec.resize();
+                rec.Resize();
 
                 oldId = rec.id;
                 newNode = this.CreateNode(rec);

@@ -28,7 +28,7 @@ namespace Diagram
         /// );
         /// </code>
         /// </example>
-        public static void doJob(DoWorkEventHandler doJob = null, RunWorkerCompletedEventHandler afterJob = null)
+        public static void DoJob(DoWorkEventHandler doJob = null, RunWorkerCompletedEventHandler afterJob = null)
         {
             try
             {

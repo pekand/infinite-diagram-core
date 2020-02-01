@@ -42,8 +42,8 @@ namespace Diagram
             this.edit.Name = "edit";
             this.edit.Size = new System.Drawing.Size(100, 13);
             this.edit.TabIndex = 0;
-            this.edit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nodeNameEdit_KeyDown);
-            this.edit.TextChanged += new EventHandler(nodeNameEdit_TextChanged);
+            this.edit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.NodeNameEdit_KeyDown);
+            this.edit.TextChanged += new EventHandler(NodeNameEdit_TextChanged);
             this.edit.AcceptsTab = true;
             this.edit.Multiline = true;
             this.edit.Left = 12;
@@ -62,7 +62,7 @@ namespace Diagram
         #endregion
 
         // EDITPANEL SHOW add new node
-        public void showEditPanel(Position currentPosition, char FirstKey = ' ', bool addKey = true)
+        public void ShowEditPanel(Position currentPosition, char FirstKey = ' ', bool addKey = true)
         {
             if (!this.Visible)
             {
@@ -84,7 +84,7 @@ namespace Diagram
                     this.edit.Text += (FirstKey).ToString(); // add first character
                 }
 
-                this.setPanelSize();
+                this.SetPanelSize();
 
                 this.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFFB8");
                 this.edit.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFFB8");
@@ -98,7 +98,7 @@ namespace Diagram
         }
 
         // EDITPANEL SHOW edit existing node
-        public void editNode(Position currentPosition, Node editedNode)
+        public void EditNode(Position currentPosition, Node editedNode)
         {
             if (!this.Visible)
             {
@@ -120,7 +120,7 @@ namespace Diagram
                 this.edit.Font = font;
                 this.edit.Text = this.editedNode.name; // add first character
 
-                this.setPanelSize();
+                this.SetPanelSize();
 
                 this.BackColor = this.editedNode.color.Get();
                 this.edit.BackColor = this.editedNode.color.Get();
@@ -133,19 +133,19 @@ namespace Diagram
         }
 
         // EDITPANEL SAVE
-        public void saveNodeNamePanel(bool selectNode = true)
+        public void SaveNodeNamePanel(bool selectNode = true)
         {
 
             if (this.editedNode == null) {
                 this.editedNode = this.diagramView.CreateNode(new Position(this.Left, this.Top));
-                this.editedNode.setName(edit.Text);
-                this.diagramView.diagram.undoOperations.add("create", this.editedNode, this.diagramView.shift, this.diagramView.scale, this.diagramView.currentLayer.id);
+                this.editedNode.SetName(edit.Text);
+                this.diagramView.diagram.undoOperations.Add("create", this.editedNode, this.diagramView.shift, this.diagramView.scale, this.diagramView.currentLayer.id);
                 this.diagramView.diagram.Unsave();
             }
             else if (this.editedNode.name != edit.Text)
             {
-                this.diagramView.diagram.undoOperations.add("edit", this.editedNode, this.diagramView.shift, this.diagramView.scale, this.diagramView.currentLayer.id);
-                this.editedNode.setName(edit.Text);
+                this.diagramView.diagram.undoOperations.Add("edit", this.editedNode, this.diagramView.shift, this.diagramView.scale, this.diagramView.currentLayer.id);
+                this.editedNode.SetName(edit.Text);
                 this.diagramView.diagram.Unsave();
             }
 
@@ -170,12 +170,12 @@ namespace Diagram
         }
 
         // EDITPANEL RESIZE change panel with after text change
-        private void nodeNameEdit_TextChanged(object sender, EventArgs e)
+        private void NodeNameEdit_TextChanged(object sender, EventArgs e)
         {
-            this.setPanelSize();
+            this.SetPanelSize();
         }
 
-        private void setPanelSize() {
+        private void SetPanelSize() {
 
             int padding = Node.NodePadding;
 
@@ -189,33 +189,33 @@ namespace Diagram
         }
 
         // EDITPANEL EDIT catch keys in edit
-        private void nodeNameEdit_KeyDown(object sender, KeyEventArgs e)
+        private void NodeNameEdit_KeyDown(object sender, KeyEventArgs e)
         {
 
             Keys keyData = e.KeyCode;
 
             if (KeyMap.ParseKey("ESCAPE", keyData)) // zrusenie editácie v panely
             {
-                this.saveNodeNamePanel();
+                this.SaveNodeNamePanel();
                 this.Focus();
             }
 
             if (KeyMap.ParseKey("ENTER", keyData) && !e.Shift) // zvretie panelu a vytvorenie novej editacie
             {
-                this.saveNodeNamePanel();
+                this.SaveNodeNamePanel();
                 this.Focus();
             }
 
             if (KeyMap.ParseKey("TAB", keyData) && !e.Shift) // zvretie panelu a vytvorenie novej editacie
             {
-                this.saveNodeNamePanel();
+                this.SaveNodeNamePanel();
                 this.Focus();
                 this.diagramView.AddNodeAfterNode();
             }
 
             if (KeyMap.ParseKey("TAB", keyData) && e.Shift) // zvretie panelu a vytvorenie novej editacie
             {
-                this.saveNodeNamePanel();
+                this.SaveNodeNamePanel();
                 this.Focus();
                 this.diagramView.AddNodeBelowNode();
             }
@@ -229,14 +229,14 @@ namespace Diagram
             }
         }
 
-        public bool isEditing()
+        public bool IsEditing()
         {
             return this.editing;
         }
 
-        public void closePanel()
+        public void ClosePanel()
         {
-            this.saveNodeNamePanel();
+            this.SaveNodeNamePanel();
         }
     }
 }

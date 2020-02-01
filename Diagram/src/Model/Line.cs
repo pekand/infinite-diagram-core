@@ -35,13 +35,13 @@
 
         public Line(Line line)
         {
-            this.set(line);
+            this.Set(line);
         }
 
         /*************************************************************************************************************************/
         // SETTERS AND GETTERS
 
-        public void set(Line line)
+        public void Set(Line line)
         {
             this.start = line.start;
             this.end = line.end;
@@ -55,7 +55,7 @@
 
         /// <summary>
         /// clone line to new line</summary>
-        public Line clone()
+        public Line Clone()
         {
             return new Line(this);
         }

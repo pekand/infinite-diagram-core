@@ -12,7 +12,7 @@ namespace Diagram
 
         /// <summary>
         /// check if string is integer</summary>
-        public static bool isNumber(string text)
+        public static bool IsNumber(string text)
         {
             Match matchNumber = (new Regex("^(\\d+)$")).Match(text);
 
@@ -26,7 +26,7 @@ namespace Diagram
 
         /// <summary>
         /// check if string is html color format starting with hash</summary>
-        public static bool isColor(string text)
+        public static bool IsColor(string text)
         {
             Match matchNumber = (new Regex("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$")).Match(text);
 
@@ -43,7 +43,7 @@ namespace Diagram
 
         /// <summary>
         /// windows shell command with arguments spit for run command from node link</summary>
-        public static string[] splitCommand(string cmd)
+        public static string[] SplitCommand(string cmd)
         {
             // ^(?:\s*"?)((?<=")(?:\\.|[^"\\])*(?=")|[^ "]+)(?:"?\s*)(.*)
             string pattern = "";
@@ -74,7 +74,7 @@ namespace Diagram
         /// <summary>
         /// check if file path ending on hash with string after hastag 
         /// Parse node link to file for open on position</summary>
-        public static bool hasHastag(string link, ref string fileName, ref string searchString)
+        public static bool HasHastag(string link, ref string fileName, ref string searchString)
         {
             Match matchFileOpenOnPosition = (new Regex(@"^([^#]+)#(.*)$")).Match(link.Trim());
 
@@ -90,7 +90,7 @@ namespace Diagram
 
         /// <summary>
         /// check if string start with hash</summary>
-        public static bool isGotoIdCommand(string text)
+        public static bool IsGotoIdCommand(string text)
         {
             Match matchNumber = (new Regex(@"^\s*#(\\d+)\s*$")).Match(text);
 
@@ -104,7 +104,7 @@ namespace Diagram
 
         /// <summary>
         ///  parse integer (representing node id) from goto command string </summary>
-        public static long getGotoIdCommand(string text)
+        public static long GetGotoIdCommand(string text)
         {
             Match match = Regex.Match(text, @"^\s*#(\\d+)\s*$", RegexOptions.IgnoreCase);
 
@@ -120,7 +120,7 @@ namespace Diagram
         /// <summary>
         ///  Check if string is in format of node link search command
         ///  Example: #search for string</summary>
-        public static bool isGotoStringCommand(string text)
+        public static bool IsGotoStringCommand(string text)
         {
             Match matchNumber = (new Regex(@"^\s*#([\\w ]+)\s*$")).Match(text);
 
@@ -135,7 +135,7 @@ namespace Diagram
         /// <summary>
         ///  Get argument from search command
         ///  Example: #search for string</summary>
-        public static String getGotoStringCommand(string text)
+        public static String GetGotoStringCommand(string text)
         {
             Match match = Regex.Match(text, @"^\s*#([\\w ]+)\s*$", RegexOptions.IgnoreCase);
 
@@ -152,21 +152,21 @@ namespace Diagram
 
         /// <summary>
         /// check if url start on http or https </summary>
-        public static bool isURL(String url)
+        public static bool IsURL(String url)
         {
             return (Regex.IsMatch(url, @"^(http|https)://[^ ]*$"));
         }
 
         /// <summary>
         /// check if url start on https </summary>
-        public static bool isHttpsURL(String url)
+        public static bool IsHttpsURL(String url)
         {
             return (Regex.IsMatch(url, @"^(https)://[^ ]*$"));
         }
         
         /// <summary>
         /// check if url start on https </summary>
-        public static bool isEmail(String email)
+        public static bool IsEmail(String email)
         {
             string validEmailPattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|"
             + @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)"
@@ -179,7 +179,7 @@ namespace Diagram
 
         /// <summary>
         /// get page title from html</summary>
-        public static string matchWebPageTitle(String page)
+        public static string MatchWebPageTitle(String page)
         {
             return Regex.Match(
                 page,
@@ -190,7 +190,7 @@ namespace Diagram
 
         /// <summary>
         /// get page encoding from html</summary>
-        public static string matchWebPageEncoding(String page)
+        public static string MatchWebPageEncoding(String page)
         {
             return Regex.Match(
                 page,
@@ -201,7 +201,7 @@ namespace Diagram
 
         /// <summary>
         /// get page redirect url from html meta tag</summary>
-        public static string matchWebPageRedirectUrl(String page)
+        public static string MatchWebPageRedirectUrl(String page)
         {
             return Regex.Match(
                 page,
@@ -212,7 +212,7 @@ namespace Diagram
 
         /// <summary>
         /// check if url start on http or https </summary>
-        public static bool isScriptId(String link, string id)
+        public static bool IsScriptId(String link, string id)
         {
             Regex regex = new Regex(@"^\s*@(\w+){1}\s*$");
             Match match = regex.Match(link);

@@ -8,9 +8,9 @@ namespace Diagram
 {
     public class DataStorage
     {
-        private IDictionary<string, IStorage> dataStorage = new Dictionary<string, IStorage>(); // data storage
+        private readonly IDictionary<string, IStorage> dataStorage = new Dictionary<string, IStorage>(); // data storage
 
-        public IStorage getStorage(string name)
+        public IStorage GetStorage(string name)
         {
             if (dataStorage.ContainsKey(name)) {
                 return dataStorage[name];
@@ -19,7 +19,7 @@ namespace Diagram
             return null;
         }
 
-        public void setStorage(string name, IStorage storage)
+        public void SetStorage(string name, IStorage storage)
         {
             dataStorage[name] = storage;
         }

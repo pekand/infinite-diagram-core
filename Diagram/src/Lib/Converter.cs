@@ -7,9 +7,8 @@ namespace Diagram
 	{
 		public static DateTime ToDateAndTime(string s)
 		{
-			DateTime d;
-			bool result = DateTime.TryParse(s, out d);
-			if (!result) {
+            bool result = DateTime.TryParse(s, out DateTime d);
+            if (!result) {
 				return DateTime.Now;
 			}
 
@@ -18,9 +17,8 @@ namespace Diagram
 
 		public static DateTime ToDate(string s)
 		{
-			DateTime d;
-			bool result = DateTime.TryParseExact(s, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out d);
-			if (!result) {
+            bool result = DateTime.TryParseExact(s, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime d);
+            if (!result) {
 				return DateTime.Now;
 			}
 
@@ -36,9 +34,8 @@ namespace Diagram
 
 		public static long ToInt(string s)
 		{
-			long i;
-			bool result = Int64.TryParse(s, out i);
-			if (!result) {
+            bool result = Int64.TryParse(s, out long i);
+            if (!result) {
 				return 0;
 			}
 

@@ -6,7 +6,7 @@ namespace Diagram
     public partial class LineWidthForm : Form //UID4672738884
     {
         public delegate void LineWidthFormTrackbarChangedEventHandler(int value);
-        public event LineWidthFormTrackbarChangedEventHandler trackbarStateChanged;
+        public event LineWidthFormTrackbarChangedEventHandler TrackbarStateChanged;
 		private System.Windows.Forms.TrackBar trackBar1;
 
 		/// <summary>
@@ -27,7 +27,7 @@ namespace Diagram
 			this.trackBar1.Size = new System.Drawing.Size(432, 45);
 			this.trackBar1.TabIndex = 0;
 			this.trackBar1.Value = 1;
-			this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+			this.trackBar1.ValueChanged += new System.EventHandler(this.TrackBar1_ValueChanged);
 			// 
 			// LineWidthForm
 			// 
@@ -56,13 +56,12 @@ namespace Diagram
 
         }
 
-        public void trackBar1_ValueChanged(object sender, EventArgs e)
+        public void TrackBar1_ValueChanged(object sender, EventArgs e)
         {
-            if (this.trackbarStateChanged != null)
-                this.trackbarStateChanged(this.trackBar1.Value);
+            this.TrackbarStateChanged?.Invoke(this.trackBar1.Value);
         }
 
-        public void setValue(long value)
+        public void SetValue(long value)
         {
             this.trackBar1.Value = (int)value; // TODO: scale long to int
         }

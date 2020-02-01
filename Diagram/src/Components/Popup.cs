@@ -12,8 +12,8 @@ namespace Diagram
     {
         public DiagramView diagramView = null;       // diagram ktory je previazany z pohladom
 
-        private Dictionary<string, ToolStripMenuItem> items = new Dictionary<string, ToolStripMenuItem>();
-        private Dictionary<string, ToolStripSeparator> separators = new Dictionary<string, ToolStripSeparator>();
+        private readonly Dictionary<string, ToolStripMenuItem> items = new Dictionary<string, ToolStripMenuItem>();
+        private readonly Dictionary<string, ToolStripSeparator> separators = new Dictionary<string, ToolStripSeparator>();
 
         public ToolStripItem[] recentItems = null;
         private System.Windows.Forms.ToolStripMenuItem pluginItems = null;
@@ -448,30 +448,6 @@ namespace Diagram
             items["imageItem"].Name = "imageItem";
             items["imageItem"].Text = "Image";
             //
-            // polygonCreateItem
-            //
-            items.Add("polygonCreateItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["polygonCreateItem"].Name = "polygonCreateItem";
-            items["polygonCreateItem"].Text = "Create polygon";
-            items["polygonCreateItem"].Click += new System.EventHandler(this.PolygonCreateItem_Click);
-            //
-            // polygonRemoveItem
-            //
-            items.Add("polygonRemoveItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["polygonRemoveItem"].Name = "polygonRemoveItem";
-            items["polygonRemoveItem"].Text = "Remove polygon";
-            items["polygonRemoveItem"].Click += new System.EventHandler(this.PolygonRemoveItem_Click);
-            //
-            // imageItem
-            //
-            items.Add("polygonItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["polygonItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                items["polygonCreateItem"],
-                items["polygonRemoveItem"]
-            });
-            items["polygonItem"].Name = "polygonItem";
-            items["polygonItem"].Text = "Polygon";
-            //
             // deploayAttachmentItem
             //
             items.Add("deploayAttachmentItem", new System.Windows.Forms.ToolStripMenuItem());
@@ -788,7 +764,6 @@ namespace Diagram
                 items["nodeItem"],
                 items["lineItem"],
                 items["imageItem"],
-                items["polygonItem"],
                 items["attachmentItem"],
                 items["viewItem"],
                 items["layerItem"],
@@ -958,8 +933,8 @@ namespace Diagram
             }
 
             // UNDO REDO
-            items["undoItem"].Enabled = this.diagramView.diagram.undoOperations.canUndo();
-            items["redoItem"].Enabled = this.diagramView.diagram.undoOperations.canRedo();
+            items["undoItem"].Enabled = this.diagramView.diagram.undoOperations.CanUndo();
+            items["redoItem"].Enabled = this.diagramView.diagram.undoOperations.CanRedo();
 
             // REMOVE SHORTCUT
             if (this.diagramView.selectedNodes.Count() > 0)
@@ -1382,20 +1357,6 @@ namespace Diagram
             this.diagramView.MakeImagesEmbedded();
         }
 
-        // POLYGON
-
-        // MENU POLYGON image embedded to diagram
-        private void PolygonCreateItem_Click(object sender, EventArgs e)
-        {
-            this.diagramView.SwitchPolygon();
-        }
-
-        // MENU POLYGON image embedded to diagram
-        private void PolygonRemoveItem_Click(object sender, EventArgs e)
-        {
-            this.diagramView.RemovePolygon();
-        }
-
         // ATTACHMENT
 
         // MENU NODE deploy attachment to system
@@ -1593,7 +1554,7 @@ namespace Diagram
         // MENU visit homepage
         private void VisitWebsiteItem_Click(object sender, EventArgs e) //UID6474020819
         {
-            Network.openUrl(this.diagramView.main.options.home_page);
+            Network.OpenUrl(this.diagramView.main.options.home_page);
         }
 
         // MENU show About form

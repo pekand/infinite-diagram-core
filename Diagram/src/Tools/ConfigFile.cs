@@ -107,11 +107,8 @@ namespace Diagram
 
             try
             {
-                using (XmlReader xr = XmlReader.Create(new StringReader(xml), xws))
-                {
-
-                    root = XElement.Load(xr);
-                }
+                using XmlReader xr = XmlReader.Create(new StringReader(xml), xws);
+                root = XElement.Load(xr);
             }
             catch (Exception ex)
             {
@@ -123,7 +120,7 @@ namespace Diagram
         {
             string[] parts = Name.Split('/');
 
-            XElement element = new XElement(parts[parts.Length-1], Value);
+            XElement element = new XElement(parts[^1], Value);
             SetElement(Name, element);
         }        
 

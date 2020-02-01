@@ -20,22 +20,21 @@ namespace Diagram
          
         public DiagramView diagramView = null;
 
-        private List<BreadcrumbItem> items = new List<BreadcrumbItem>();
+        private readonly List<BreadcrumbItem> items = new List<BreadcrumbItem>();
 
         // resources
-        private Font font = new Font("Arial", 12);
-        private SolidBrush brush = new SolidBrush(Color.Gray);
-        private SolidBrush logoBlackBrash = new SolidBrush(Color.FromArgb(80, 0, 0, 0));
-        private SolidBrush redBrash = new SolidBrush(Color.FromArgb(200, 255, 102, 0));
-        private SolidBrush yellowBrash = new SolidBrush(Color.FromArgb(200, 255, 255, 0));
-        private SolidBrush barBrash =  new SolidBrush(Color.FromArgb(50, 0, 0, 0));
-        private SolidBrush separatorBrash = new SolidBrush(Color.FromArgb(100, 0, 0, 0));
+        private readonly Font font = new Font("Arial", 12);
+        private readonly SolidBrush brush = new SolidBrush(Color.Gray);
+        private readonly SolidBrush redBrash = new SolidBrush(Color.FromArgb(200, 255, 102, 0));
+        private readonly SolidBrush yellowBrash = new SolidBrush(Color.FromArgb(200, 255, 255, 0));
+        private readonly SolidBrush barBrash =  new SolidBrush(Color.FromArgb(50, 0, 0, 0));
+        private readonly SolidBrush separatorBrash = new SolidBrush(Color.FromArgb(100, 0, 0, 0));
 
         private long left = 10;
         private long top = 10;
         private long width = 0;
         private long height = 0;
-        private long itemSpace = 5;
+        private readonly long itemSpace = 5;
 
         public Breadcrumbs(DiagramView diagramView)
         {

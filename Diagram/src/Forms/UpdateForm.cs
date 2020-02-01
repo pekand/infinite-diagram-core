@@ -49,7 +49,7 @@ namespace Diagram
             this.buttonYes.TabIndex = 1;
             this.buttonYes.Text = "Yes";
             this.buttonYes.UseVisualStyleBackColor = true;
-            this.buttonYes.Click += new System.EventHandler(this.buttonYes_Click);
+            this.buttonYes.Click += new System.EventHandler(this.ButtonYes_Click);
             // 
             // buttonNo
             // 
@@ -59,7 +59,7 @@ namespace Diagram
             this.buttonNo.TabIndex = 2;
             this.buttonNo.Text = "No";
             this.buttonNo.UseVisualStyleBackColor = true;
-            this.buttonNo.Click += new System.EventHandler(this.buttonNo_Click);
+            this.buttonNo.Click += new System.EventHandler(this.ButtonNo_Click);
             // 
             // checkBoxNewVersion
             // 
@@ -71,7 +71,7 @@ namespace Diagram
             this.checkBoxNewVersion.TabIndex = 3;
             this.checkBoxNewVersion.Text = "don\'t  check for new version";
             this.checkBoxNewVersion.UseVisualStyleBackColor = true;
-            this.checkBoxNewVersion.CheckedChanged += new System.EventHandler(this.checkBoxNewVersion_CheckedChanged);
+            this.checkBoxNewVersion.CheckedChanged += new System.EventHandler(this.CheckBoxNewVersion_CheckedChanged);
             // 
             // linkLabelVisit
             // 
@@ -125,13 +125,13 @@ namespace Diagram
             base.Dispose(disposing);
         }
 
-        private void buttonYes_Click(object sender, EventArgs e)
+        private void ButtonYes_Click(object sender, EventArgs e)
         {
             this.update = "Yes";
             this.Close();
         }
 
-        private void buttonNo_Click(object sender, EventArgs e)
+        private void ButtonNo_Click(object sender, EventArgs e)
         {
             this.update = "No";
             this.Close();
@@ -142,7 +142,7 @@ namespace Diagram
             return this.update == "Yes";
         }
 
-        private void checkBoxNewVersion_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxNewVersion_CheckedChanged(object sender, EventArgs e)
         {
             this.checkVersion = "Yes";
             if (checkBoxNewVersion.Checked) {

@@ -98,13 +98,13 @@ namespace Diagram
 
         public Node(Node node)
         {
-            this.set(node);
+            this.Set(node);
         }
 
         /*************************************************************************************************************************/
         // SETTERS AND GETTERS
 
-        public void set(Node node)
+        public void Set(Node node)
         {
             this.id = node.id;
 
@@ -149,7 +149,7 @@ namespace Diagram
 
         /// <summary>
         /// node copy from another node to current node</summary>
-        public void copyNode(Node node, bool skipPosition = false, bool skipSize = false) 
+        public void CopyNode(Node node, bool skipPosition = false, bool skipSize = false) 
         {
             this.color.Set(node.color);
             this.font = node.font;
@@ -193,7 +193,7 @@ namespace Diagram
 
         /// <summary>
         /// node copy style from another node to current node</summary>
-        public void copyNodeStyle(Node node)
+        public void CopyNodeStyle(Node node)
         {
             this.color.Set(node.color);
             this.font = node.font;
@@ -210,12 +210,12 @@ namespace Diagram
 
             this.protect = node.protect;
 
-            this.resize();
+            this.Resize();
         }
 
         /// <summary>
         /// clone node to new node</summary>
-        public Node clone()
+        public Node Clone()
         {
             return new Node(this);
         }
@@ -223,21 +223,21 @@ namespace Diagram
         /*************************************************************************************************************************/
         // RESIZE
 
-        public void setName(string name)
+        public void SetName(string name)
         {
             this.name = name;
 
             if (this.protect)
             {
-                this.resizeProtect();
+                this.ResizeProtect();
             }
             else
             {
-                this.resize();
+                this.Resize();
             }
         }
 
-        public SizeF measure()
+        public SizeF Measure()
         {
             SizeF s;
 
@@ -255,25 +255,25 @@ namespace Diagram
             return s;
         }
 
-        public void resize()
+        public void Resize()
         {
             if (!this.isimage)
             {
                 if (!this.protect)
                 {
-                    SizeF s = measure();
+                    SizeF s = Measure();
 
                     this.width = (int)s.Width;
                     this.height = (int)s.Height;
                 }
                 else
                 {
-                    this.resizeProtect();
+                    this.ResizeProtect();
                 }
             }
         }
 
-        public void resizeProtect()
+        public void ResizeProtect()
         {
             SizeF s = Fonts.MeasureString(Node.protectedName, this.font);
             s.Height += 2 * Node.NodePadding;
@@ -283,24 +283,24 @@ namespace Diagram
             this.height = (int)s.Height;
         }
 
-        public void setProtect(bool protect)
+        public void SetProtect(bool protect)
         {
             this.protect = protect;
 
             if (this.protect)
             {
-                this.resizeProtect();
+                this.ResizeProtect();
             }
             else
             {
-                this.resize();
+                this.Resize();
             }
         }
 
         /*************************************************************************************************************************/
         // IMAGE
 
-        public void loadImage()
+        public void LoadImage()
         {
             if (this.imagepath != "" && Os.FileExists(this.imagepath))
             {

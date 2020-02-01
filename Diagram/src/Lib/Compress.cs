@@ -30,7 +30,7 @@ namespace Diagram
         /*************************************************************************************************************************/
         // ZIP STRING
 
-        public static void stringToStream(string s, MemoryStream stream)
+        public static void StringToStream(string s, MemoryStream stream)
         {
             StreamWriter writer = new StreamWriter(stream);
             writer.Write(s);
@@ -38,10 +38,10 @@ namespace Diagram
             stream.Seek(0, SeekOrigin.Begin);
         }
 
-        public static string streamToString(MemoryStream stream)
+        public static string StreamToString(MemoryStream stream)
         {
             stream.Seek(0, SeekOrigin.Begin);
-            StreamReader reader = new StreamReader(stream);
+            using StreamReader reader = new StreamReader(stream);
             return reader.ReadToEnd();
         }
 
@@ -50,7 +50,7 @@ namespace Diagram
         public static string Zip(string str)
         {
             MemoryStream stream = new MemoryStream();
-            stringToStream(str, stream);
+            StringToStream(str, stream);
             return ZipStream(stream);            
         }
 
@@ -60,35 +60,29 @@ namespace Diagram
         {
             MemoryStream stream = new MemoryStream(); ;
             UnzipStream(str, stream);
-            return streamToString(stream);
+            return StreamToString(stream);
         }
 
         public static string ZipStream(MemoryStream input)
         {
             input.Seek(0, SeekOrigin.Begin);
 
-            using (var gzipOutput = new MemoryStream())
+            using var gzipOutput = new MemoryStream();
+            using (var gzip = new GZipStream(gzipOutput, CompressionMode.Compress))
             {
-                using (var gzip = new GZipStream(gzipOutput, CompressionMode.Compress))
-                {
-                    input.CopyTo(gzip);
-                }
-
-                return Convert.ToBase64String(gzipOutput.ToArray());
+                input.CopyTo(gzip);
             }
+
+            return Convert.ToBase64String(gzipOutput.ToArray());
         }
 
         public static void UnzipStream(string str, MemoryStream output)
         {
             byte[] bytes = Convert.FromBase64String(str);
 
-            using (MemoryStream gzipInput = new MemoryStream(bytes))
-            {
-                using (GZipStream gzip = new GZipStream(gzipInput, CompressionMode.Decompress))
-                {
-                    gzip.CopyTo(output);
-                }
-            }
+            using MemoryStream gzipInput = new MemoryStream(bytes);
+            using GZipStream gzip = new GZipStream(gzipInput, CompressionMode.Decompress);
+            gzip.CopyTo(output);
         }
 
         /*************************************************************************************************************************/
@@ -96,7 +90,7 @@ namespace Diagram
 
         /// <summary>
         /// compress directory with files to string</summary>
-        public static string compress(string path)
+        public static string CompressPath(string path)
         {
             if (!Os.Exists(path)) {
                 return "";
@@ -108,11 +102,13 @@ namespace Diagram
             List<EFile> files = new List<EFile>();
 
             if (Os.IsFile(path)) {
-                EFile eFile = new EFile();
-                eFile.name = Os.GetFileName(path);
-                eFile.data = Convert.ToBase64String(
+                EFile eFile = new EFile
+                {
+                    name = Os.GetFileName(path),
+                    data = Convert.ToBase64String(
                     Os.ReadAllBytes(path)
-                );
+                )
+                };
                 files.Add(eFile);
             }
 
@@ -127,18 +123,22 @@ namespace Diagram
 
                 foreach (string dirPath in directoryPaths)
                 {
-                    EDirectory eDirectory = new EDirectory();
-                    eDirectory.name = dirPath.Substring(pathLength);
+                    EDirectory eDirectory = new EDirectory
+                    {
+                        name = dirPath.Substring(pathLength)
+                    };
                     directories.Add(eDirectory);
                 }
 
                 foreach (string filePath in filePaths)
                 {
-                    EFile eFile = new EFile();
-                    eFile.name = filePath.Substring(pathLength);
-                    eFile.data = Convert.ToBase64String(
+                    EFile eFile = new EFile
+                    {
+                        name = filePath.Substring(pathLength),
+                        data = Convert.ToBase64String(
                         File.ReadAllBytes(filePath)
-                    );
+                    )
+                    };
                     files.Add(eFile);
                 }
             }
@@ -188,10 +188,12 @@ namespace Diagram
             xRoot.Add(xFiles);
 
             StringBuilder sb = new StringBuilder();
-            XmlWriterSettings xws = new XmlWriterSettings();
-            xws.OmitXmlDeclaration = true;
-            xws.CheckCharacters = false;
-            xws.Indent = true;
+            XmlWriterSettings xws = new XmlWriterSettings
+            {
+                OmitXmlDeclaration = true,
+                CheckCharacters = false,
+                Indent = true
+            };
 
             using (XmlWriter xw = XmlWriter.Create(sb, xws))
             {
@@ -203,7 +205,7 @@ namespace Diagram
 
         /// <summary>
         /// decompress string with directory structure to path</summary>
-        public static void decompress(string compressedData, string destinationPath)
+        public static void DecompressPath(string compressedData, string destinationPath)
         {
             if (!Os.DirectoryExists(destinationPath))
             {
@@ -214,8 +216,10 @@ namespace Diagram
 
             string xml = Unzip(compressedData);
 
-            XmlReaderSettings xws = new XmlReaderSettings();
-            xws.CheckCharacters = false;
+            XmlReaderSettings xws = new XmlReaderSettings
+            {
+                CheckCharacters = false
+            };
 
             string version = "";
             List<EDirectory> directories = new List<EDirectory>();
@@ -223,74 +227,76 @@ namespace Diagram
 
             try
             {
-                using (XmlReader xr = XmlReader.Create(new StringReader(xml), xws))
+                using XmlReader xr = XmlReader.Create(new StringReader(xml), xws);
+                XElement xRoot = XElement.Load(xr);
+                if (xRoot.Name.ToString() == "archive")
                 {
-
-                    XElement xRoot = XElement.Load(xr);
-                    if (xRoot.Name.ToString() == "archive") {
-                        foreach (XElement xEl in xRoot.Elements())
+                    foreach (XElement xEl in xRoot.Elements())
+                    {
+                        if (xEl.Name.ToString() == "version")
                         {
-                            if (xEl.Name.ToString() == "version")
-                            {
-                                version = xEl.Value;
-                            }
+                            version = xEl.Value;
+                        }
 
-                            if (xEl.Name.ToString() == "directories")
+                        if (xEl.Name.ToString() == "directories")
+                        {
+                            foreach (XElement xDirectory in xEl.Descendants())
                             {
-                                foreach (XElement xDirectory in xEl.Descendants())
+                                if (xDirectory.Name.ToString() == "directory")
                                 {
-                                    if (xDirectory.Name.ToString() == "directory")
+
+                                    string name = "";
+
+                                    foreach (XElement xData in xDirectory.Descendants())
                                     {
-
-                                        string name = "";
-
-                                        foreach (XElement xData in xDirectory.Descendants())
+                                        if (xData.Name.ToString() == "name")
                                         {
-                                            if (xData.Name.ToString() == "name")
-                                            {
-                                                name = xData.Value;
-                                            }
+                                            name = xData.Value;
                                         }
+                                    }
 
-                                        if (name.Trim() != "")
+                                    if (name.Trim() != "")
+                                    {
+                                        EDirectory eDirectory = new EDirectory
                                         {
-                                            EDirectory eDirectory = new EDirectory();
-                                            eDirectory.name = name;
-                                            directories.Add(eDirectory);
-                                        }
+                                            name = name
+                                        };
+                                        directories.Add(eDirectory);
                                     }
                                 }
                             }
+                        }
 
-                            if (xEl.Name.ToString() == "files")
+                        if (xEl.Name.ToString() == "files")
+                        {
+                            foreach (XElement xFile in xEl.Descendants())
                             {
-                                foreach (XElement xFile in xEl.Descendants())
+                                if (xFile.Name.ToString() == "file")
                                 {
-                                    if (xFile.Name.ToString() == "file")
+                                    string name = "";
+                                    string data = "";
+
+                                    foreach (XElement xData in xFile.Descendants())
                                     {
-                                        string name = "";
-                                        string data = "";
-
-                                        foreach (XElement xData in xFile.Descendants())
+                                        if (xData.Name.ToString() == "name")
                                         {
-                                            if (xData.Name.ToString() == "name")
-                                            {
-                                                name = xData.Value;
-                                            }
-
-                                            if (xData.Name.ToString() == "data")
-                                            {
-                                                data = xData.Value;
-                                            }
+                                            name = xData.Value;
                                         }
 
-                                        if (name.Trim() != "" && data.Trim() != "")
+                                        if (xData.Name.ToString() == "data")
                                         {
-                                            EFile eFile = new EFile();
-                                            eFile.name = name;
-                                            eFile.data = data;
-                                            files.Add(eFile);
+                                            data = xData.Value;
                                         }
+                                    }
+
+                                    if (name.Trim() != "" && data.Trim() != "")
+                                    {
+                                        EFile eFile = new EFile
+                                        {
+                                            name = name,
+                                            data = data
+                                        };
+                                        files.Add(eFile);
                                     }
                                 }
                             }

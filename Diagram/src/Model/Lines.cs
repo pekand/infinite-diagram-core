@@ -30,7 +30,7 @@ namespace Diagram
 
             foreach (Line line in lines)
             {
-                this.Add(line.clone());
+                this.Add(line.Clone());
             }
 
         }

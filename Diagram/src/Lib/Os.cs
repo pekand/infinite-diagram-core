@@ -445,7 +445,7 @@ namespace Diagram
                     WindowStyle = ProcessWindowStyle.Hidden
                 };
 
-                string[] parts = Patterns.splitCommand(cmd);
+                string[] parts = Patterns.SplitCommand(cmd);
                 startInfo.FileName = parts[0];
                 startInfo.Arguments = parts[1];
 
@@ -514,20 +514,14 @@ namespace Diagram
 
         public static void CopyByBlock(string inputPath, string outputPath, CopyProgressDelegate callback = null)
         {
-            using (FileStream input = File.Open(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (FileStream output = File.Open(outputPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
+            using FileStream input = File.Open(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using FileStream output = File.Open(outputPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+            byte[] buffer = new byte[1024 * 1024];
+            int bytesRead;
+            while ((bytesRead = input.Read(buffer, 0, buffer.Length)) != 0)
             {
-
-                byte[] buffer = new byte[1024 * 1024];
-                int bytesRead;
-                while ((bytesRead = input.Read(buffer, 0, buffer.Length)) != 0)
-                {
-                    output.Write(buffer, 0, bytesRead);
-                    if (callback != null)
-                    {
-                        callback(bytesRead);
-                    }
-                }
+                output.Write(buffer, 0, bytesRead);
+                callback?.Invoke(bytesRead);
             }
         }
 
@@ -676,10 +670,8 @@ namespace Diagram
         {
             try
             {
-                using (StreamReader streamReader = new StreamReader(file, Encoding.UTF8))
-                {
-                    return streamReader.ReadToEnd();
-                }
+                using StreamReader streamReader = new StreamReader(file, Encoding.UTF8);
+                return streamReader.ReadToEnd();
             }
             catch (System.IO.IOException ex)
             {

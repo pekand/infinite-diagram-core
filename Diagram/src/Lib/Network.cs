@@ -35,7 +35,7 @@ namespace Diagram
 
             string title = "";
             try {
-                title = Patterns.matchWebPageTitle(page);
+                title = Patterns.MatchWebPageTitle(page);
 
             }
             catch (Exception ex)
@@ -143,20 +143,19 @@ namespace Diagram
 
                 // read stream with utf8
                 memoryStream.Seek(0, SeekOrigin.Begin);
-                StreamReader reader = new StreamReader(memoryStream);
+                using StreamReader reader = new StreamReader(memoryStream);
                 page = reader.ReadToEnd();
 
-                string encoding = Patterns.matchWebPageEncoding(page);
+                string encoding = Patterns.MatchWebPageEncoding(page);
 
                 // try redirect 
                 if (level < 10)
                 {
-                    string redirect = Patterns.matchWebPageRedirectUrl(page);
+                    string redirect = Patterns.MatchWebPageRedirectUrl(page);
 
                     if (redirect.Trim() != "")
                     {
-                        Uri result = null;
-                        Uri.TryCreate(new Uri(url), redirect, out result);
+                        Uri.TryCreate(new Uri(url), redirect, out Uri result);
                         return Network.GetWebPage(
                             result.ToString(),
                             proxy_uri,
@@ -173,7 +172,7 @@ namespace Diagram
                 if (encoding.Trim() != "" && encoding.ToLower() != "utf-8")
                 {
                     memoryStream.Seek(0, SeekOrigin.Begin);
-                    StreamReader reader2 = new StreamReader(memoryStream, System.Text.Encoding.GetEncoding(encoding));
+                    using StreamReader reader2 = new StreamReader(memoryStream, System.Text.Encoding.GetEncoding(encoding));
                     page = reader2.ReadToEnd();
                 }
             }
@@ -208,7 +207,7 @@ namespace Diagram
 
         /// <summary>
         /// open url in os default browser </summary>
-        public static void openUrl(String url)
+        public static void OpenUrl(String url)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

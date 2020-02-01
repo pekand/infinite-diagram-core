@@ -40,7 +40,7 @@ namespace Diagram
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(451, 416);
             this.tabControl1.TabIndex = 0;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControl1_SelectedIndexChanged);
             // 
             // tabConsole
             // 
@@ -108,26 +108,26 @@ namespace Diagram
         {
             logedit.Text = Program.log.GetText();
 
-            Program.log.logUpdateEvent += logUpdate;
+            Program.log.logUpdateEvent += LogUpdate;
            
         }
 
         private void Console_Closed(object sender, System.EventArgs e)
         {
-            Program.log.logUpdateEvent -= logUpdate;
+            Program.log.logUpdateEvent -= LogUpdate;
         }
 
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        private void TabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
             if (tabControl1.SelectedTab == tabControl1.TabPages["tabFeatures"])//your specific tabname
             {
-                featuresTextBox.Text = Features.getFeatures();
+                featuresTextBox.Text = Features.GetFeatures();
             }
 
         }
 
-        private void logUpdate(string log) {
+        private void LogUpdate(string log) {
             logedit.Text = Program.log.GetText();
         }
     }

@@ -29,8 +29,10 @@ namespace Diagram
         /// <returns></returns>
         public static Timer Timer(int interval, EventHandler tick)
         {
-            Timer timer = new Timer();            
-            timer.Interval = 200;
+            Timer timer = new Timer
+            {
+                Interval = interval
+            };
             timer.Tick += tick;
             timer.Enabled = true;
             return timer;

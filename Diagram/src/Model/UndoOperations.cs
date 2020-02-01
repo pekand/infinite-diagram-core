@@ -14,7 +14,6 @@ namespace Diagram
         
         public Nodes nodes = new Nodes(); // affected nodes
         public Lines lines = new Lines(); // affected lines
-        public Polygons polygons = new Polygons(); // affected polygons
         public decimal scale = 0;
 
         public Position position = new Position(); // position in diagram when change occurred
@@ -27,7 +26,6 @@ namespace Diagram
             string type, 
             Nodes nodes, 
             Lines lines,
-            Polygons polygons,
             long group, 
             Position position,
             decimal scale,
@@ -52,14 +50,6 @@ namespace Diagram
                 foreach (Line line in lines)
                 {
                     this.lines.Add(new Line(line));
-                }
-            }
-            
-            if (polygons != null)
-            {
-                foreach (Polygon polygon in polygons)
-                {
-                    this.polygons.Add(new Polygon(polygon));
                 }
             }
         }
@@ -91,27 +81,27 @@ namespace Diagram
         /*************************************************************************************************************************/
         // ADD UNDO OPERATIONS
 
-        public void add(string type, Node node, Position position = null, decimal scale = 0, long layer = 0)
+        public void Add(string type, Node node, Position position = null, decimal scale = 0, long layer = 0)
         {
             Nodes nodes = new Nodes();
             if (node != null)
             {
                 nodes.Add(new Node(node));
             }
-            this.add(type, nodes, null, null, position, scale, layer);
+            this.Add(type, nodes, null, position, scale, layer);
         }
 
-        public void add(string type, Line line, Position position = null, decimal scale = 0, long layer = 0)
+        public void Add(string type, Line line, Position position = null, decimal scale = 0, long layer = 0)
         {
             Lines lines = new Lines();
             if (line != null)
             {
                 lines.Add(new Line(line));
             }
-            this.add(type, null, lines, null, position, scale, layer);
+            this.Add(type, null, lines, position, scale, layer);
         }
 
-        public void add(string type, Node node, Line line, Position position = null, decimal scale = 0, long layer = 0)
+        public void Add(string type, Node node, Line line, Position position = null, decimal scale = 0, long layer = 0)
         {
             Nodes nodes = new Nodes();
             if (node != null)
@@ -124,22 +114,16 @@ namespace Diagram
             {
                 lines.Add(new Line(line));
             }
-            this.add(type, nodes, lines, null, position, scale, layer);
+            this.Add(type, nodes, lines, position, scale, layer);
         }
 
-        public void add(string type, Nodes nodes = null, Lines lines = null, Position position = null, decimal scale = 0, long layer = 0)
-        {
-            this.add(type, nodes, lines, null, position, scale, layer);
-        }
-
-        public void add(string type, Nodes nodes = null, Lines lines = null, Polygons polygons = null, Position position = null, decimal scale = 0, long layer = 0)
+        public void Add(string type, Nodes nodes = null, Lines lines = null, Position position = null, decimal scale = 0, long layer = 0)
         {
             operations.Push(
                 new UndoOperation(
                     type, 
                     (nodes != null) ? new Nodes(nodes) : null, 
                     (lines != null) ? new Lines(lines) : null,
-                    (polygons != null) ? new Polygons(polygons) : null,
                     (grouping) ? group : 0, // add multiple operations into one undo group
                     position.Clone(),
                     scale,
@@ -163,17 +147,17 @@ namespace Diagram
         /*************************************************************************************************************************/
         // UNDO OPERATIONS
 
-        public bool canUndo()
+        public bool CanUndo()
         {
             return this.operations.Count() > 0;
         }
 
-        public bool canRedo()
+        public bool CanRedo()
         {
             return this.reverseOperations.Count() > 0;
         }
 
-        public bool doUndo(DiagramView view = null)
+        public bool DoUndo(DiagramView view = null)
         {
 
             if (operations.Count() == 0)
@@ -208,13 +192,13 @@ namespace Diagram
 
                 if (operation.type == "delete")
                 {
-                    this.doUndoDelete(operation);
+                    this.DoUndoDelete(operation);
                     reverseOperations.Push(operation);
                 }
 
                 if (operation.type == "create")
                 {
-                    this.doUndoCreate(operation);
+                    this.DoUndoCreate(operation);
                     reverseOperations.Push(operation);
                 }
 
@@ -241,14 +225,13 @@ namespace Diagram
                         operation.type,
                         nodes,
                         lines,
-                        null,
                         operation.group,
                         operation.position,
                         operation.scale,
                         operation.layer
                     );
                     reverseOperations.Push(roperation);
-                    this.doUndoEdit(operation);
+                    this.DoUndoEdit(operation);
                 }
 
                 operations.Pop();
@@ -271,7 +254,7 @@ namespace Diagram
             return result;
         }
 
-        public bool doRedo(DiagramView view = null)
+        public bool DoRedo(DiagramView view = null)
         {
             if (reverseOperations.Count() == 0)
             {
@@ -304,13 +287,13 @@ namespace Diagram
 
                 if (operation.type == "delete")
                 {
-                    this.doUndoCreate(operation);
+                    this.DoUndoCreate(operation);
                     operations.Push(operation);
                 }
 
                 if (operation.type == "create")
                 {
-                    this.doUndoDelete(operation);
+                    this.DoUndoDelete(operation);
                     operations.Push(operation);
                 }
 
@@ -338,7 +321,6 @@ namespace Diagram
                         operation.type,
                         nodes,
                         lines,
-                        null,
                         operation.group,
                         operation.position,
                         operation.scale,
@@ -346,7 +328,7 @@ namespace Diagram
                     );
 
                     operations.Push(roperation);
-                    this.doUndoEdit(operation);
+                    this.DoUndoEdit(operation);
                 }
 
                 reverseOperations.Pop();
@@ -374,7 +356,7 @@ namespace Diagram
         /*************************************************************************************************************************/
         // EVERSE OPERATION BY TYPE
 
-        private void doUndoDelete(UndoOperation operation)
+        private void DoUndoDelete(UndoOperation operation)
         {
             if (operation.nodes != null)
             {
@@ -393,18 +375,9 @@ namespace Diagram
                     this.diagram.layers.AddLine(line);
                 }
             }
-
-            if (operation.polygons != null)
-            {
-                foreach (Polygon polygon in operation.polygons)
-                {
-                    this.diagram.layers.AddPolygon(polygon);
-                }
-            }
-
         }
 
-        private void doUndoCreate(UndoOperation operation)
+        private void DoUndoCreate(UndoOperation operation)
         {
             if (operation.lines != null)
             {
@@ -421,17 +394,9 @@ namespace Diagram
                     this.diagram.layers.RemoveNode(node.id);
                 }
             }
-
-            if (operation.polygons != null)
-            {
-                foreach (Polygon polygon in operation.polygons)
-                {
-                    this.diagram.layers.RemovePolygon(polygon);
-                }
-            }
         }
 
-        private void doUndoEdit(UndoOperation operation)
+        private void DoUndoEdit(UndoOperation operation)
         {
             if (operation.lines != null)
             {
@@ -443,7 +408,7 @@ namespace Diagram
 
                     if (line != null)
                     {
-                        line.set(lineOld);
+                        line.Set(lineOld);
                     }
                 }
             }
@@ -456,7 +421,7 @@ namespace Diagram
 
                     if (node != null)
                     {
-                        node.set(nodeOld);
+                        node.Set(nodeOld);
                     }
                 }
             }
@@ -465,13 +430,13 @@ namespace Diagram
         /*************************************************************************************************************************/
         // GROUPING OF UNDO OPERATIONS
 
-        public long startGroup()
+        public long StartGroup()
         {
             grouping = true;
             return ++this.group;
         }
 
-        public long endGroup()
+        public long EndGroup()
         {
             grouping = false;
             return ++this.group;
@@ -481,7 +446,7 @@ namespace Diagram
         /// Check if operation is same as previous operation 
         /// If previous operation is move node (by arrow forexample) is better group operation like one big move instead of many small moves.
         /// </summary>
-        public bool isSame(string type, Nodes nodes, Lines lines)
+        public bool IsSame(string type, Nodes nodes, Lines lines)
         {
             
             if (operations.Count()>0)
@@ -550,7 +515,7 @@ namespace Diagram
         /// Save current state as state where file is saved and save is not needed.
         /// When undo or redo is executed and after it file is already savet in curent state asterisk from title can be removed.
         /// </summary>
-        public void rememberSave()
+        public void RememberSave()
         {
             saveLost = false;
             saved = 0;

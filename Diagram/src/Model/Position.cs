@@ -255,8 +255,8 @@ namespace Diagram
         /// scale vector</summary>
         public Position Scale(long scale)
         {
-            this.x = this.x * (decimal)scale;
-            this.y = this.y * (decimal)scale;
+            this.x *= (decimal)scale;
+            this.y *= (decimal)scale;
             return this;
         }
 
@@ -264,8 +264,8 @@ namespace Diagram
         /// scale vector</summary>
         public Position Scale(double scale)
         {
-            this.x = this.x * (decimal)scale;
-            this.y = this.y * (decimal)scale;
+            this.x *= (decimal)scale;
+            this.y *= (decimal)scale;
             return this;
         }
 
@@ -273,8 +273,8 @@ namespace Diagram
         /// scale vector</summary>
         public Position Scale(decimal scale)
         {
-            this.x = this.x * scale;
-            this.y = this.y * scale;
+            this.x *= scale;
+            this.y *= scale;
             return this;
         }
 
@@ -282,8 +282,8 @@ namespace Diagram
         /// zoom vector</summary>
         public Position Split(long scale)
         {
-            this.x = this.x / (decimal)scale;
-            this.y = this.y / (decimal)scale;
+            this.x /= (decimal)scale;
+            this.y /= (decimal)scale;
             return this;
         }
 
@@ -291,8 +291,8 @@ namespace Diagram
         /// zoom vector</summary>
         public Position Split(double scale)
         {
-            this.x = this.x / (decimal)scale;
-            this.y = this.y / (decimal)scale;
+            this.x /= (decimal)scale;
+            this.y /= (decimal)scale;
             return this;
         }
 
@@ -300,8 +300,8 @@ namespace Diagram
         /// zoom vector</summary>
         public Position Split(decimal scale)
         {
-            this.x = this.x / scale;
-            this.y = this.y / scale;
+            this.x /= scale;
+            this.y /= scale;
             return this;
         }
 

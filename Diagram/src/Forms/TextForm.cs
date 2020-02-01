@@ -135,25 +135,25 @@ namespace Diagram
                 this.TextFormNoteTextBox.ReadOnly = false;
             }
 
-            this.resizePanel();
+            this.ResizePanel();
         }
 
-        public void setDiagram(Diagram diagram)
+        public void SetDiagram(Diagram diagram)
         {
             this.diagram = diagram;
         }
 
-        public Diagram getDiagram()
+        public Diagram GetDiagram()
         {
             return this.diagram;
         }
 
         public void TextForm_Resize(object sender, EventArgs e)
         {
-            this.resizePanel();
+            this.ResizePanel();
         }
 
-        private void resizePanel()
+        private void ResizePanel()
         {
             this.TextFormTextBox.Height = this.ClientSize.Height - 100;
             this.TextFormNoteTextBox.Height = SplitContainer1.Panel2.Height - this.TextFormLinkTextBox.Height;
@@ -169,17 +169,16 @@ namespace Diagram
                     node.note != this.TextFormNoteTextBox.Text ||
                     node.link != this.TextFormLinkTextBox.Text
                 ) {
-                    this.diagram.undoOperations.add("edit", node, node.position, node.layer);
+                    this.diagram.undoOperations.Add("edit", node, node.position, node.layer);
                     node.name = this.TextFormTextBox.Text;
                     node.note = this.TextFormNoteTextBox.Text;
                     node.link = this.TextFormLinkTextBox.Text;
-                    node.resize();
+                    node.Resize();
                     
                     DateTime dt = DateTime.Now;
                     node.timemodify = String.Format("{0:yyyy-M-d HH:mm:ss}", dt);
 
-                    if (this.TextFormSave != null)
-                        this.TextFormSave(node);
+                    this.TextFormSave?.Invoke(node);
                 }
             }
         }

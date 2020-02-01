@@ -51,13 +51,13 @@ namespace Diagram
             this.textBoxSearch.Name = "textBoxSearch";
             this.textBoxSearch.Size = new System.Drawing.Size(100, 13);
             this.textBoxSearch.TabIndex = 0;
-            this.textBoxSearch.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxSearch_KeyUp);
-            this.textBoxSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxSearch_KeyDown);
+            this.textBoxSearch.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxSearch_KeyUp);
+            this.textBoxSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxSearch_KeyDown);
             //
             // SearchPanel
             //
             this.Controls.Add(this.textBoxSearch);
-            this.VisibleChanged += new System.EventHandler(this.panel_VisibleChanged);
+            this.VisibleChanged += new System.EventHandler(this.Panel_VisibleChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -79,10 +79,10 @@ namespace Diagram
             textBoxSearch.Height = size.Height;
             this.Height = size.Height + 5;
 
-            this.centerPanel();
+            this.CenterPanel();
         }
 
-        private void textBoxSearch_KeyUp(object sender, KeyEventArgs e)
+        private void TextBoxSearch_KeyUp(object sender, KeyEventArgs e)
         {
             string action = "";
             string currentText = textBoxSearch.Text;
@@ -115,22 +115,19 @@ namespace Diagram
                 action = "cancel";
             }
 
-            if (this.SearchpanelStateChanged != null)
-                this.SearchpanelStateChanged(action, currentText);
+            this.SearchpanelStateChanged?.Invoke(action, currentText);
 
-            this.centerPanel();
+            this.CenterPanel();
         }
 
-        public void searchNext() //UID3222624449
+        public void SearchNext() //UID3222624449
         {
             string currentText = textBoxSearch.Text;
 
-            if (this.SearchpanelStateChanged != null) { 
-                this.SearchpanelStateChanged("searchNext", currentText);
-            }
+            this.SearchpanelStateChanged?.Invoke("searchNext", currentText);
         }
 
-        private void textBoxSearch_KeyDown(object sender, KeyEventArgs e)
+        private void TextBoxSearch_KeyDown(object sender, KeyEventArgs e)
         {
             // remove ding sound
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape || e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
@@ -140,7 +137,7 @@ namespace Diagram
             }
         }
 
-        public void centerPanel()
+        public void CenterPanel()
         {
             Form parentForm = (this.diagramView as Form);
             this.Top = parentForm.Height - 100;
@@ -163,24 +160,24 @@ namespace Diagram
         {
             if (this.Visible)
             {
-                this.centerPanel();
+                this.CenterPanel();
             }
         }
 
-        private void panel_VisibleChanged(object sender, EventArgs e)
+        private void Panel_VisibleChanged(object sender, EventArgs e)
         {
-            this.centerPanel();
+            this.CenterPanel();
         }
 
         public void ShowPanel()
         {
             this.Show();
-            this.centerPanel();
+            this.CenterPanel();
             this.textBoxSearch.Focus();
             this.textBoxSearch.SelectAll();
         }
 
-        public void highlight(bool state)
+        public void Highlight(bool state)
         {
             if (state)
             {

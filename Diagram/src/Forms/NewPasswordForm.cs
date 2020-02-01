@@ -79,7 +79,7 @@ namespace Diagram
             this.buttonOk.TabIndex = 7;
             this.buttonOk.Text = "Ok";
             this.buttonOk.UseVisualStyleBackColor = true;
-            this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
+            this.buttonOk.Click += new System.EventHandler(this.ButtonOk_Click);
             //
             // buttonCancel
             //
@@ -90,7 +90,7 @@ namespace Diagram
             this.buttonCancel.TabIndex = 8;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            this.buttonCancel.Click += new System.EventHandler(this.ButtonCancel_Click);
             //
             // NewPasswordForm
             //
@@ -124,7 +124,7 @@ namespace Diagram
             return this.editNewPassword1.Text;
         }
 
-        private void buttonOk_Click(object sender, EventArgs e)
+        private void ButtonOk_Click(object sender, EventArgs e)
         {
             if (this.editNewPassword1.Text != this.editNewPassword2.Text)
             {
@@ -137,7 +137,7 @@ namespace Diagram
             this.Close();
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void ButtonCancel_Click(object sender, EventArgs e)
         {
             this.cancled = true;
             this.Close();

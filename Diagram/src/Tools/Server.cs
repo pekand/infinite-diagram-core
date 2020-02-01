@@ -158,8 +158,10 @@ namespace Diagram
             try
             {
                 // connect to server
-                TcpClient client = new TcpClient();
-                client.SendTimeout = 1000;
+                TcpClient client = new TcpClient
+                {
+                    SendTimeout = 1000
+                };
                 IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(main.options.server_default_ip), (Int32)main.options.server_default_port);
                 client.Connect(serverEndPoint);
                 NetworkStream clientStream = client.GetStream();
@@ -182,7 +184,7 @@ namespace Diagram
                     // get response from server
                     clientStream.ReadTimeout = 1000;
                     byte[] resp = new byte[2048];
-                    var memStream = new MemoryStream();
+                    using var memStream = new MemoryStream();
                     int bytesread = clientStream.Read(resp, 0, resp.Length);
                     while (bytesread > 0)
                     {

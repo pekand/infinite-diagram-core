@@ -100,22 +100,22 @@ namespace Diagram
 
             if (bold)
             {
-                fontStyle = fontStyle | FontStyle.Bold;
+                fontStyle |= FontStyle.Bold;
             }
 
             if (italic)
             {
-                fontStyle = fontStyle | FontStyle.Italic;
+                fontStyle |= FontStyle.Italic;
             }
 
             if (underline)
             {
-                fontStyle = fontStyle | FontStyle.Underline;
+                fontStyle |= FontStyle.Underline;
             }
 
             if (strikeout)
             {
-                fontStyle = fontStyle | FontStyle.Strikeout;
+                fontStyle |= FontStyle.Strikeout;
             }
 
             Font font = new Font(fontName, (int)fontSize, fontStyle);
@@ -143,7 +143,7 @@ namespace Diagram
 
         /// <summary>
         /// compare fonts by attributes</summary>
-        public static bool compare(Font font1, Font font2)
+        public static bool Compare(Font font1, Font font2)
         {
             if (font1.Name != font2.Name) return false;
             if (font1.Size != font2.Size) return false;
