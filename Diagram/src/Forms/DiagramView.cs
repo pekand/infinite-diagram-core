@@ -4280,7 +4280,7 @@ namespace Diagram
                         try
                         {
                             Program.log.Write("diagram: openlink: open directory " + Os.NormalizePath(rec.link));
-                            Os.RunProcess(rec.link);
+                            Os.OpenDirectory(rec.link);
                         }
                         catch (Exception ex)
                         {

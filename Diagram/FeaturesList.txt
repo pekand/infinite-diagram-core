@@ -1,3 +1,6 @@
+Open link in browser
+Open directory node in explorer
+Migration o .net core
 Color picker in to one square
 Improve performance of uid plugin, search files by size. Small files first.
 Restore window after open already oppened diagram.

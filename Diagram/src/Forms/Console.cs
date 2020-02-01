@@ -96,6 +96,7 @@ namespace Diagram
             this.Text = "Console";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.Console_Load);
+            this.Closed += new System.EventHandler(this.Console_Closed);
             this.tabControl1.ResumeLayout(false);
             this.tabConsole.ResumeLayout(false);
             this.tabFeatures.ResumeLayout(false);
@@ -106,11 +107,14 @@ namespace Diagram
         private void Console_Load(object sender, EventArgs e)
         {
             logedit.Text = Program.log.GetText();
+
+            Program.log.logUpdateEvent += logUpdate;
+           
         }
 
-        public void RefreshWindow()
+        private void Console_Closed(object sender, System.EventArgs e)
         {
-            logedit.Text = Program.log.GetText();
+            Program.log.logUpdateEvent -= logUpdate;
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -121,6 +125,10 @@ namespace Diagram
                 featuresTextBox.Text = Features.getFeatures();
             }
 
+        }
+
+        private void logUpdate(string log) {
+            logedit.Text = Program.log.GetText();
         }
     }
 }

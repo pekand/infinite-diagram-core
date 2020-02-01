@@ -7,9 +7,10 @@ namespace Diagram
     /// This informations can be show in console form </summary>
     public class Log //UID8455348623
     {
-        /// <summary>
-        /// form for displaying errors </summary>
-        private Console console = null;
+
+        public delegate void logUpdate(string log);
+
+        public logUpdate logUpdateEvent;
 
         /// <summary>
         /// All messages saved in log </summary>
@@ -23,11 +24,9 @@ namespace Diagram
         {
             log = message + "\n" + log;
 
-            /// If console window is displayes then actualize data
-            if (this.console != null)
-            {
-                this.console.Invoke(new Action(() => this.console.RefreshWindow()));
-            }
+            if (logUpdateEvent != null)
+                logUpdateEvent(log);
+
         }
 
         /// <summary> 
@@ -36,35 +35,6 @@ namespace Diagram
         public string GetText()
         {
             return log;
-        }
-
-        /// <summary>
-        /// clear log test</summary>
-        public void ClearLog()
-        {
-            log = "";
-            this.Write("Log clear");
-        }
-
-        /// <summary>
-        /// save  current log to file
-        /// for crash log</summary>
-        public void SaveLogToFile(string logPath = "")
-        {
-            if (logPath == "") {
-                string tempDir = Os.GetTempPath();
-                string tempFile = "infinite-diagram-" + DateTime.Now.ToString("MM-dd-yyyy-HH-MM-ss") + ".log";
-                logPath = Os.Combine(tempDir, tempFile);
-            }
-
-            Os.WriteAllText(logPath, this.log);
-        }
-
-        /// <summary> 
-        /// use console form for view errors</summary>
-        public void SetConsole(Console console)
-        {
-            this.console = console;
         }
     }
 }

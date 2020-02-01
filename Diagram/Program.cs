@@ -30,7 +30,6 @@ namespace Diagram
         static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
         {
             Program.log.Write("Fatal error: " + e.ExceptionObject.ToString());
-            log.SaveLogToFile();
 
             MessageBox.Show(e.ExceptionObject.ToString());
 
@@ -61,7 +60,7 @@ namespace Diagram
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // prevent catch global exception in debug mode
+            // prevent catch global exception in production mode
 #if !DEBUG
             try
             {
@@ -78,7 +77,6 @@ namespace Diagram
             catch (Exception e) // global exception handling
             {
                 log.Write("Application crash: message:" + e.Message);
-                log.SaveLogToFile();
 
                 MessageBox.Show("Application crash: message:" + e.Message);
 

@@ -372,8 +372,16 @@ namespace Diagram
         /// run application in current os </summary>
         public static void RunProcess(string path)
         {
+            path = NormalizePath(path);            
+            System.Diagnostics.Process.Start("explorer.exe", path);
+        }
+
+        /// <summary>
+        /// open path in explorer in current os </summary>
+        public static void OpenDirectory(string path)
+        {
             path = NormalizePath(path);
-            System.Diagnostics.Process.Start(path);
+            System.Diagnostics.Process.Start("explorer.exe", path);
         }
 
         /// <summary>

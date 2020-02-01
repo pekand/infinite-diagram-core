@@ -435,7 +435,6 @@ namespace Diagram
             {
                 this.console = new Console(this);
                 this.console.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CloseConsole);
-                Program.log.SetConsole(this.console);
             }
 
             this.console.Show();
@@ -445,7 +444,6 @@ namespace Diagram
         /// clean after error console close</summary>
         private void CloseConsole(object sender, FormClosedEventArgs e)
         {
-            Program.log.SetConsole(null);
             this.console = null;
             this.CloseEmptyApplication();
         }
@@ -698,21 +696,10 @@ namespace Diagram
         {
             // get command line arguments
             this.args = Environment.GetCommandLineArgs();
-#if DEBUG
-            // custom debug arguments
-            if (this.args.Length == 1 && Os.FileExists("test.diagram")) // if not argument is added from system ad some testing arguments
-            {
-                // comand line arguments testing
-                this.args = new string[] {
-                    Os.GetThisAssemblyLocation()
-                    ,"test.diagram"
-                };
-            }
-#endif
+
             // process comand line arguments
             this.ParseCommandLineArguments(this.args);
         }
-
 
         /// <summary>
         /// register power save event </summary>
@@ -730,11 +717,6 @@ namespace Diagram
         {
             Program.log.Write("Program: Main");
 
-#if DEBUG
-            Program.log.Write("program: debug mode");
-#else
-			Program.log.Write("program: release mode");
-#endif
             this.LoadOptionFiles();
 
             this.LoadPugins();

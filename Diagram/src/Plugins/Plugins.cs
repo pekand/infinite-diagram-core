@@ -22,6 +22,31 @@ namespace Diagram
         public ICollection<ISavePlugin> savePlugins = new List<ISavePlugin>();
         public ICollection<ILoadPlugin> loadPlugins = new List<ILoadPlugin>();
 
+        internal sealed class AssemblyResolver : IDisposable
+        {
+            AssemblyLoadContext loadContext;
+
+            public AssemblyResolver(string path)
+            {
+                Assembly assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
+                AssemblyLoadContext loadContext = AssemblyLoadContext.GetLoadContext(assembly);
+                loadContext.Resolving += OnResolving;
+            }
+
+
+            public void Dispose()
+            {
+                
+            }
+
+            private Assembly OnResolving(AssemblyLoadContext context, AssemblyName name)
+            {
+                loadContext.LoadFromAssemblyPath("NCalc.dll");
+
+                return null;
+            }
+        }
+
         /// <summary>
         /// load plugins from path</summary>
         public void LoadPlugins(string path)
@@ -33,15 +58,14 @@ namespace Diagram
                 IEnumerable<string> dllFileNames = null;
                 if (Directory.Exists(path))
                 {
-                    dllFileNames = Directory.EnumerateFiles(path, "*Plugin.dll", SearchOption.AllDirectories);
+                    dllFileNames = Directory.EnumerateFiles(path, "*.dll", SearchOption.AllDirectories);
                 }
 
                 ICollection<Assembly> assemblies = new List<Assembly>(dllFileNames.Count());
                 foreach (string dllFile in dllFileNames)
                 {
                     try
-                    { 
-                        //AssemblyName an = AssemblyName.GetAssemblyName(dllFile);
+                    {
                         Assembly assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(dllFile);
 
 

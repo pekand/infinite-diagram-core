@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Runtime.InteropServices;
 
 namespace Diagram
 {
@@ -208,9 +210,12 @@ namespace Diagram
         /// open url in os default browser </summary>
         public static void openUrl(String url)
         {
-			url = url.Replace(" ", "%20");
-			System.Diagnostics.Process.Start(url);
-		}
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                url = url.Replace("&", "^&");
+                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+            }
+        }
 		
     }
 }
