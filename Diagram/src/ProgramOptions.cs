@@ -57,15 +57,10 @@ namespace Diagram
         public long server_default_port = 13000;
 #endif
 
-#if MONO
-        /// <summary>
-        /// command for open editor on line position</summary>
-        public String texteditor = "'subl %FILENAME%:%LINE%'";
-#else
+
         /// <summary>
         /// command for open editor on line position</summary>
         public String texteditor = "subl \"%FILENAME%\":%LINE%";
-#endif
 
         /// <summary>
         /// recently opened files</summary>

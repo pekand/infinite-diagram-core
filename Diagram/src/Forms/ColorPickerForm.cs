@@ -8,21 +8,20 @@ namespace Diagram
     public partial class ColorPickerForm : Form //UID2354438225
     {
         public delegate void ColorPickerFormChangeColor(ColorType color);
-        public event ColorPickerFormChangeColor changeColor;
+        public event ColorPickerFormChangeColor ChangeColor;
 
         public ColorType color = new ColorType();
 
         private int actualBitmap = 0;
         private int scrollState = 0;
-        private List<Bitmap> bitmaps = new List<Bitmap>();
+        private readonly List<Bitmap> bitmaps = new List<Bitmap>();
 
         bool selecting = false;
 
         bool keyshift = false;
 
         private PictureBox pictureBox1;
-        private Position position = new Position();
-
+  
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -43,7 +42,7 @@ namespace Diagram
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ColorPickerForm_MouseDown);
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ColorPickerForm_MouseMove);
             this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ColorPickerForm_MouseUp);
-            this.pictureBox1.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseWhell);
+            this.pictureBox1.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseWhell);
             // 
             // ColorPickerForm
             // 
@@ -60,35 +59,35 @@ namespace Diagram
             this.Load += new System.EventHandler(this.ColorPickerForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ColorPickerForm_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ColorPickerForm_KeyUp);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ColorPickerForm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
-        private int cv(int i)
+        private void ColorPickerForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            return (int)(255.0 * ((i * 5.0) / 255.0));
+
         }
 
-        private SolidBrush br(int r, int g, int b)
+        private SolidBrush Br(int r, int g, int b)
         {
             return new SolidBrush(Color.FromArgb(r, g, b));
         }
 
-        private void rc(Graphics gr, int r, int g, int b, int x, int y)
+        private void Rc(Graphics gr, int r, int g, int b, int x, int y)
         {
-            gr.FillRectangle(br(r, g, b), x, y, 5, 5);
+            gr.FillRectangle(Br(r, g, b), x, y, 5, 5);
         }
 
 
-        public void render()
+        public void Render()
         {
-            int cr = 0;
-            int cg = 0;
-            int cb = 0;
+            int cr;
+            int cg;
+            int cb;
 
             int px = 0;
-            int py = 0;
 
             for (int i = 0; i < 64; i++)
             {
@@ -102,14 +101,14 @@ namespace Diagram
                     for (int k = 0; k < 64; k++)
                     {
                         cr = k * 4;
-                        rc(g,
+                        Rc(g,
                             cr, cg, cb,
                             k * 4,
                             j * 4
                         );
                     }
                 }
-                px = px + 256;
+                px += 256;
                 g.Flush();
                 this.bitmaps.Add(bmp);
             }
@@ -120,11 +119,8 @@ namespace Diagram
             InitializeComponent();
 
             // draw image into box
-            render();
+            Render();
             pictureBox1.Image = this.bitmaps[actualBitmap];
-
-            Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
-            int titleHeight = screenRectangle.Top - this.Top;
 
             // create scrollbar
             pictureBox1.Width = 256;
@@ -136,30 +132,6 @@ namespace Diagram
             this.Top = Screen.FromControl(this).Bounds.Height - this.Height - 100;
         }
 
-        private Color convert(int x, int y)
-        {
-            int r, g, b;
-
-            int t = y * x;
-
-            b = t % 256;
-            g = t / 256 % 256;
-            r = t / 256 / 256 % 256;
-
-            return Color.FromArgb(r, g, b);
-        }
-
-        private Color convert(int t)
-        {
-            int r, g, b;
-
-            b = t % 256;
-            g = t / 256 % 256;
-            r = t / 256 / 256 % 256;
-
-            return Color.FromArgb(r, g, b);
-        }
-
         private void ColorPickerForm_MouseUp(object sender, MouseEventArgs e)
         {
             selecting = false;
@@ -169,13 +141,12 @@ namespace Diagram
                 try
                 {
                     this.color.Set(this.bitmaps[actualBitmap].GetPixel(e.X, e.Y));
-                } catch(Exception ex) { 
-
+                } catch(Exception ex) {
+                    Program.log.Write("Colorpicker error: " + ex.Message);
                 }
             }
 
-            if (this.changeColor != null)
-                this.changeColor(this.color);
+            this.ChangeColor?.Invoke(this.color);
         }
 
         private void ColorPickerForm_MouseDown(object sender, MouseEventArgs e)
@@ -195,12 +166,11 @@ namespace Diagram
                     }
                     catch (Exception ex)
                     {
-
+                        Program.log.Write("Colorpicker error: " + ex.Message);
                     }
                 }
 
-                if (this.changeColor != null)
-                    this.changeColor(this.color);
+                this.ChangeColor?.Invoke(this.color);
             }
         }
 
@@ -209,7 +179,7 @@ namespace Diagram
 
         }
 
-        private void pictureBox1_MouseWhell(object sender, MouseEventArgs e)
+        private void PictureBox1_MouseWhell(object sender, MouseEventArgs e)
         {
 
             int speed = 4;
@@ -220,11 +190,11 @@ namespace Diagram
 
             if (e.Delta > 0) // MWHELL
             {
-                scrollState = scrollState + speed;
+                scrollState += speed;
             }
             else
             {
-                scrollState = scrollState - speed;
+                scrollState -= speed;
             }
 
 

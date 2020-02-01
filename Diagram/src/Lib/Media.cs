@@ -3,10 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using System.ComponentModel;
-
-#if !MONO
 using System.Runtime.InteropServices;
-#endif
 
 namespace Diagram
 {
@@ -177,7 +174,7 @@ namespace Diagram
         /// extract icon from executable</summary>
         public static Bitmap ExtractSystemIcon(string path)
         {
-#if !MONO
+
             try
             {
                 Icon ico = Icon.ExtractAssociatedIcon(path);
@@ -189,9 +186,6 @@ namespace Diagram
             }
 
             return null;
-#else
-            return null;
-#endif
 
         }
 
@@ -199,7 +193,7 @@ namespace Diagram
         /// extract icon from link file</summary>
         public static Bitmap ExtractLnkIcon(string path)
         {
-#if !MONO
+
             try
             {
                 var shl = new Shell32.Shell();
@@ -219,10 +213,6 @@ namespace Diagram
             }
 
             return null;
-#else
-            return null;
-#endif
-
         }
 
         /// <summary>

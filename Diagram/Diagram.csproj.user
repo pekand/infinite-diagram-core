@@ -2,9 +2,6 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Compile Update="src\Components\DisplayInfo.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Update="src\Components\EditLinkPanel.cs">
       <SubType>Component</SubType>
     </Compile>

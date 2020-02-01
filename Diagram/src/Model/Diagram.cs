@@ -2144,7 +2144,7 @@ namespace Diagram
             if (this.DiagramViews.Count() != 0)
             {
                 this.DiagramViews[0].Show();
-                this.DiagramViews[0].restoreFormWindowState(); //UID4510272262
+                this.DiagramViews[0].RestoreFormWindowState(); //UID4510272262
                 return true;
             }
 

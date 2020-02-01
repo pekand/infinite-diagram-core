@@ -117,20 +117,20 @@ namespace Diagram
         public Breadcrumbs breadcrumbs = null;
 
         // MOVETIMER
-        private Timer animationTimer = new Timer(); //timer for all animations (goto node animation)
-        private Position animationTimerSpeed = new Position();
+        private readonly Timer animationTimer = new Timer(); //timer for all animations (goto node animation)
+        private readonly Position animationTimerSpeed = new Position();
         private int animationTimerCounter = 0;
 
         // ZOOMTIMER
-        private Timer zoomTimer = new Timer(); //zooming animation
+        private readonly Timer zoomTimer = new Timer(); //zooming animation
         public double zoomTimerScale = 1;
         public double zoomTimerStep = 0;
 
         // LINEWIDTHFORM
-        private LineWidthForm lineWidthForm = new LineWidthForm();
+        private readonly LineWidthForm lineWidthForm = new LineWidthForm();
 
         // COLORPICKERFORM
-        private ColorPickerForm colorPickerForm = new ColorPickerForm();
+        private readonly ColorPickerForm colorPickerForm = new ColorPickerForm();
 
         private FormWindowState oldFormWindowState = new FormWindowState();
 
@@ -271,7 +271,7 @@ namespace Diagram
             this.lineWidthForm.trackbarStateChanged += this.ResizeLineWidth;
 
             //colorPickerForm
-            this.colorPickerForm.changeColor += this.ChangeColor;
+            this.colorPickerForm.ChangeColor += this.ChangeColor;
 
             // custom diagram icon
             if (this.diagram.options.icon != "")
@@ -366,9 +366,7 @@ namespace Diagram
         // FORM Quit Close
         public void DiagramApp_FormClosing(object sender, FormClosingEventArgs e) //UID8741811919
         {
-            bool close = true;
-
-            close = this.diagram.CloseDiagramWithDialog(this);
+            bool close = this.diagram.CloseDiagramWithDialog(this);
 
             if (close)
             {
@@ -549,18 +547,18 @@ namespace Diagram
         // FORM get window state role
         public void SetWindowsStateCode(int code = 0)
         {
-            if (this.diagram.options.WindowState == 1)
+            if (code == 1)
             {
                 this.WindowState = FormWindowState.Maximized;
             }
 
-            if (this.diagram.options.WindowState == 2)
+            if (code == 2)
             {
                 this.WindowState = FormWindowState.Normal;
             }
 
 
-            if (this.diagram.options.WindowState == 3)
+            if (code == 3)
             {
                 this.WindowState = FormWindowState.Minimized;
             }
@@ -616,6 +614,8 @@ namespace Diagram
                     this.diagram.Unsave();
                 }
             }
+
+            openIconDialog.Dispose();
         }
 
         // FORM set icon
@@ -652,6 +652,8 @@ namespace Diagram
                     this.diagram.Unsave();
                 }
             }
+
+            openIconDialog.Dispose();
         }
 
         public void RefreshBackgroundImage()
@@ -2168,7 +2170,7 @@ namespace Diagram
                 );
 
                 this.currentScale = this.scale;
-                this.scale = this.scale + 2;
+                this.scale += 2;
 
                 tmp.Add(
                     (this.ClientSize.Width / 2 - this.ClientSize.Width / 2 / Tools.GetScale(this.scale)) * Tools.GetScale(this.scale),
@@ -2322,7 +2324,6 @@ namespace Diagram
                             newrec.height = newrec.image.Height;
                             newrec.width = newrec.image.Width;
                         }
-#if !MONO
                         else
                         if (ext == ".lnk") // [LINK] [DROP] extract target
                         {
@@ -2375,7 +2376,6 @@ namespace Diagram
                                 newrec.width = newrec.image.Width;
                             }
                         }
-#endif
                     }
                 }
 
@@ -2436,7 +2436,7 @@ namespace Diagram
         }
 
         // RESTORE FORM
-        public void restoreFormWindowState()
+        public void RestoreFormWindowState()
         {
             Media.BringToFront(this);
 
@@ -2569,7 +2569,7 @@ namespace Diagram
                 }
                 else
                 {
-                    TextForm textform = this.diagram.EditNode(this.selectedNodes[0]);
+                    this.diagram.EditNode(this.selectedNodes[0]);
                 }
             }
         }
@@ -2717,8 +2717,8 @@ namespace Diagram
             Position middle = new Position();
             middle.Copy(this.currentPosition);
 
-            middle.x = middle.x - this.ClientSize.Width / 2;
-            middle.y = middle.y - this.ClientSize.Height / 2;
+            middle.x -= this.ClientSize.Width / 2;
+            middle.y -= this.ClientSize.Height / 2;
 
             long currentLayerId = this.currentLayer.id;
 
@@ -2959,8 +2959,8 @@ namespace Diagram
 
             if (minx != decimal.MaxValue && maxx != decimal.MinValue)
             {
-                minx = minx - 100 * Tools.GetScale(this.scale);
-                maxx = maxx + 100 * Tools.GetScale(this.scale) - this.ClientSize.Width * Tools.GetScale(this.scale);
+                minx -= 100 * Tools.GetScale(this.scale);
+                maxx += 100 * Tools.GetScale(this.scale) - this.ClientSize.Width * Tools.GetScale(this.scale);
                 this.shift.x = (-(minx + (maxx - minx) * (decimal)per));
             }
             else
@@ -2972,7 +2972,7 @@ namespace Diagram
         // SCROLLBAR GET POSITION LEFT-RIGHT calculate current position in view as relative (0-1) number
         public double GetPositionHorizontal()
         {
-            decimal per = 0;
+            decimal per;
             decimal minx = decimal.MaxValue;
             decimal maxx = decimal.MinValue;
             foreach (Node rec in this.currentLayer.nodes)
@@ -2986,8 +2986,8 @@ namespace Diagram
 
             if (minx != decimal.MaxValue && maxx != decimal.MinValue)
             {
-                minx = minx - 100 * Tools.GetScale(this.scale);
-                maxx = maxx + 100 * Tools.GetScale(this.scale) - this.ClientSize.Width * Tools.GetScale(this.scale);
+                minx -= 100 * Tools.GetScale(this.scale);
+                maxx += 100 * Tools.GetScale(this.scale) - this.ClientSize.Width * Tools.GetScale(this.scale);
                 per = (-this.shift.x - minx) / (maxx - minx);
                 if (per < 0) per = 0;
                 if (per > 1) per = 1;
@@ -3016,8 +3016,8 @@ namespace Diagram
 
             if (miny != decimal.MaxValue && maxy != decimal.MinValue)
             {
-                miny = miny - 100 * Tools.GetScale(this.scale);
-                maxy = maxy + 100 * Tools.GetScale(this.scale) - this.ClientSize.Height * Tools.GetScale(this.scale);
+                miny -= 100 * Tools.GetScale(this.scale);
+                maxy += 100 * Tools.GetScale(this.scale) - this.ClientSize.Height * Tools.GetScale(this.scale);
                 this.shift.y = -(miny + (maxy - miny) * (decimal)per);
             }
             else
@@ -3029,7 +3029,7 @@ namespace Diagram
         // SCROLLBAR GET POSITION LEFT-RIGHT calculate current position in view as relative (0-1) number
         public double GetPositionVertical()
         {
-            decimal per = 0;
+            decimal per;
             decimal miny = decimal.MaxValue;
             decimal maxy = decimal.MinValue;
             foreach (Node rec in this.currentLayer.nodes)
@@ -3043,8 +3043,8 @@ namespace Diagram
 
             if (miny != decimal.MaxValue && maxy != decimal.MinValue)
             {
-                miny = miny - 100 * Tools.GetScale(this.scale);
-                maxy = maxy + 100 * Tools.GetScale(this.scale) - this.ClientSize.Height * Tools.GetScale(this.scale);
+                miny -= 100 * Tools.GetScale(this.scale);
+                maxy += 100 * Tools.GetScale(this.scale) - this.ClientSize.Height * Tools.GetScale(this.scale);
                 per = (decimal)(-this.shift.y - miny) / (maxy - miny);
                 if (per < 0) per = 0;
                 if (per > 1) per = 1;
@@ -3142,7 +3142,7 @@ namespace Diagram
         // EXPORT Export diagram to png
         public void ExportDiagramToPng()
         {
-            Nodes nodes = null;
+            Nodes nodes;
 
             if (this.selectedNodes.Count == 0)
             {
@@ -3184,10 +3184,10 @@ namespace Diagram
                     }
                 }
 
-                minx = minx - 100;
-                maxx = maxx + 100;
-                miny = miny - 100;
-                maxy = maxy + 100;
+                minx -= 100;
+                maxx += 100;
+                miny -= 100;
+                maxy += 100;
 
                 Bitmap bmp = new Bitmap((int)(maxx - minx), (int)(maxy - miny));
                 Graphics g = Graphics.FromImage(bmp);
@@ -3203,7 +3203,7 @@ namespace Diagram
         public void ExportDiagramToTxt(string filePath)
         {
 
-            Nodes nodes = null;
+            Nodes nodes;
 
             if (this.selectedNodes.Count == 0)
             {
@@ -3239,8 +3239,6 @@ namespace Diagram
             {
                 return;
             }
-
-            this.DrawPolygons(gfx, this.currentLayer.polygons, correction, export);
 
             this.DrawLines(gfx, this.currentLayer.lines, correction, export);
 
@@ -3298,7 +3296,7 @@ namespace Diagram
         private void DrawGrid(Graphics gfx)
         {
             decimal s = Tools.GetScale(this.scale);
-            Pen myPen = new Pen(Color.FromArgb(201, 201, 201), 1);
+           
 
             decimal sw = this.ClientSize.Width;  // get windows dize
             decimal sh = this.ClientSize.Height;
@@ -3325,26 +3323,30 @@ namespace Diagram
             decimal six = this.shift.x / s % m; // calculate first line position
             decimal siy = this.shift.y / s % m;
 
-            for (int i = 0; i <= lwc; i++) // dreaw vertical lines
+            Pen myPen = new Pen(Color.FromArgb(201, 201, 201), 1);
+            using (myPen)
             {
-                 PointF[] points =
-                 {
+                for (int i = 0; i <= lwc; i++) // dreaw vertical lines
+                {
+                    PointF[] points =
+                    {
                      new PointF((float)(six + i * m),  0),
                      new PointF((float)(six + i * m), (float)sh),
                  };
 
-                gfx.DrawLines(myPen, points);
-            }
+                    gfx.DrawLines(myPen, points);
+                }
 
-            for (int i = 0; i <= lhc; i++) // draw horizontal lines
-            {
-                 PointF[] points =
-                 {
+                for (int i = 0; i <= lhc; i++) // draw horizontal lines
+                {
+                    PointF[] points =
+                    {
                      new PointF(0, (float)(siy + i * m)),
                      new PointF((float)sw, (float)(siy + i * m)),
                  };
 
-                gfx.DrawLines(myPen, points);
+                    gfx.DrawLines(myPen, points);
+                }
             }
         }
 
@@ -3352,9 +3354,7 @@ namespace Diagram
         private void DrawMiniScreen(Graphics gfx)
         {
             decimal s = Tools.GetScale(this.scale);
-            Pen myPen = new Pen(Color.FromArgb(201, 201, 201), 1);
-
-            myPen = new Pen(Color.Gray, 1);
+            Pen myPen = new Pen(Color.Gray, 1);
 
             RectangleF rectBorder = new RectangleF(
                 (float)((this.ClientSize.Width / 2 - this.ClientSize.Width / 2 / s * Tools.GetScale(this.currentScale))),
@@ -3426,8 +3426,6 @@ namespace Diagram
                     (float)((d - b) / Tools.GetScale(this.scale))
             );
 
-            RectangleF[] rects = { rect };
-
             gfx.FillRectangle(brush, rect);
         }
 
@@ -3474,52 +3472,10 @@ namespace Diagram
             }
         }
 
-        // DRAW lines UID4936881338
-        private void DrawPolygons(Graphics gfx, Polygons polygons, Position correction = null, bool export = false)
-        {
-            decimal s = Tools.GetScale(this.scale);
-
-            // fix position for image file export
-            decimal cx = 0;
-            decimal cy = 0;
-            if (correction != null)
-            {
-                cx = correction.x;
-                cy = correction.y;
-            }
-
-            FillMode newFillMode = FillMode.Winding;
-
-            // DRAW polygons
-            foreach (Polygon polygon in polygons) // Loop through List with foreach
-            {
-                // Create pen.
-                Pen blackPen = new Pen(Color.Black, 3);
-
-
-                List<PointF> polyPoints = new List<PointF>();
-
-                foreach (Node node in polygon.nodes) {
-                    polyPoints.Add(
-                        new PointF(
-                           (float)((this.shift.x + cx + node.position.x + (node.width * Tools.GetScale(node.scale)) / 2) / s),
-                           (float)((this.shift.y + cy + node.position.y + (node.height * Tools.GetScale(node.scale)) / 2) / s)
-                        )
-                     );
-                }
-                gfx.FillPolygon(
-                    new SolidBrush(polygon.color.color),
-                    polyPoints.ToArray(),
-                    newFillMode
-                );
-
-            }
-        }
-
         // DRAW nodes UID4202302087
         private void DrawNodes(Graphics gfx, Nodes nodes, Position correction = null, bool export = false)
         {
-            bool isvisible = false; // drawonly visible elements
+            bool isvisible; // drawonly visible elements
             decimal s = Tools.GetScale(this.scale);
 
             Pen nodeBorder = new Pen(Color.Black, 1);
@@ -3754,12 +3710,18 @@ namespace Diagram
                     }
                 }
             }
+
+
+            nodeBorder.Dispose();
+            nodeSelectBorder.Dispose();
+            nodeLinkBorder.Dispose();
+            nodeMarkBorder.Dispose();
         }
 
         // DRAW lines UID4936881338
         private void DrawLines(Graphics gfx, Lines lines, Position correction = null, bool export = false)
         {
-            bool isvisible = false; // drawonly visible elements
+            bool isvisible; // drawonly visible elements
             decimal s = Tools.GetScale(this.scale);
 
             // fix position for image file export
@@ -3912,14 +3874,14 @@ namespace Diagram
         // VIEW page up
         public void PageUp()
         {
-            this.shift.y = this.shift.y + this.ClientSize.Height;
+            this.shift.y += this.ClientSize.Height;
             this.diagram.InvalidateDiagram();
         }
 
         // VIEW page down
         public void PageDown()
         {
-            this.shift.y = this.shift.y - this.ClientSize.Height;
+            this.shift.y -= this.ClientSize.Height;
             this.diagram.InvalidateDiagram();
         }
 
@@ -4670,11 +4632,11 @@ namespace Diagram
                 string copytext = "";
                 foreach (Node rec in this.selectedNodes)
                 {
-                    copytext = copytext + rec.name;
+                    copytext += rec.name;
 
                     if (this.selectedNodes.Count() > 1)
                     {
-                        copytext = copytext + "\n";
+                        copytext += "\n";
                     }
                 }
 
@@ -5043,11 +5005,11 @@ namespace Diagram
                 {
                     if (rec.link != null)
                     {
-                        copytext = copytext + rec.link;
+                        copytext += rec.link;
 
                         if (this.selectedNodes.Count() > 1)
                         { //separate nodes
-                            copytext = copytext + "\n";
+                            copytext += "\n";
                         }
                     }
                 }
@@ -5071,11 +5033,11 @@ namespace Diagram
                 {
                     if (rec.note != null)
                     {
-                        copytext = copytext + rec.note;
+                        copytext += rec.note;
 
                         if (this.selectedNodes.Count() > 1)
                         { //separate nodes
-                            copytext = copytext + "\n";
+                            copytext += "\n";
                         }
                     }
                 }
@@ -5192,7 +5154,6 @@ namespace Diagram
                 {
                     DateTime theDate = Converter.ToDate(expression);                    
                     theDate = theDate.AddDays(1);
-                    string dateValue = matchesFloat[0].Groups[1].Value;
                     string newnDateValue = Converter.DateToString(theDate);
                     newrec.setName(newnDateValue);
                 }
@@ -5392,7 +5353,7 @@ namespace Diagram
             else // MOVE SCREEN
             {
                 long speed = (quick) ? this.ClientSize.Width : this.diagram.options.keyArrowSlowSpeed;
-                this.shift.x = this.shift.x + speed;
+                this.shift.x += speed;
                 this.diagram.InvalidateDiagram();
             }
         }
@@ -5417,7 +5378,7 @@ namespace Diagram
             else // MOVE SCREEN
             {
                 long speed = (quick) ? this.ClientSize.Width : this.diagram.options.keyArrowSlowSpeed;
-                this.shift.x = this.shift.x - speed;
+                this.shift.x -= speed;
                 this.diagram.InvalidateDiagram();
             }
         }
@@ -5442,7 +5403,7 @@ namespace Diagram
             else // MOVE SCREEN
             {
                 long speed = (quick) ? this.ClientSize.Height : this.diagram.options.keyArrowSlowSpeed;
-                this.shift.y = this.shift.y + speed;
+                this.shift.y += speed;
                 this.diagram.InvalidateDiagram();
             }
         }
@@ -5467,7 +5428,7 @@ namespace Diagram
             else // MOVE SCREEN
             {
                 long speed = (quick) ? this.ClientSize.Height : this.diagram.options.keyArrowSlowSpeed;
-                this.shift.y = this.shift.y - speed;
+                this.shift.y -= speed;
                 this.diagram.InvalidateDiagram();
             }
         }
@@ -5606,7 +5567,7 @@ namespace Diagram
         public Lines GetSelectedLines()
         {
             Lines SelectedLinesTemp = new Lines();
-            long id = 0;
+            long id;
 
             foreach (Node srec in this.selectedNodes) {
                 id = srec.id;
@@ -5713,7 +5674,7 @@ namespace Diagram
 
             //lastMarkNode position in markedNodes
             bool found = false;
-            int i = 0;
+            int i;
             for (i = 0; i < markedNodes.Count; i++)
             {
                 if (lastMarkNode == markedNodes[i].id)
@@ -5779,7 +5740,7 @@ namespace Diagram
 
             //lastMarkNode position in markedNodes
             bool found = false;
-            int i = 0;
+            int i;
             for (i = 0; i < markedNodes.Count; i++)
             {
                 if (lastMarkNode == markedNodes[i].id)

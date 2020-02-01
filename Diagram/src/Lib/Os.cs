@@ -4,10 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Text;
-
-#if !MONO
 using Shell32;
-#endif
 
 namespace Diagram
 {
@@ -199,12 +196,7 @@ namespace Diagram
         /// convert slash dependent on current os </summary>
         public static string NormalizePath(string path)
         {
-
-#if MONO
-            return path.Replace("\\","/");
-#else
             return path.Replace("/", "\\");
-#endif
         }
 
         /// <summary>
@@ -311,8 +303,6 @@ namespace Diagram
         /*************************************************************************************************************************/
         // SHORTCUTS
 
-#if !MONO
-
         /// <summary>
         /// get path from lnk file in windows  </summary>
         public static string[] GetShortcutTargetFile(string shortcutFilename)
@@ -363,7 +353,6 @@ namespace Diagram
 
             return String.Empty;
         }
-#endif
 
         /*************************************************************************************************************************/
         // OPEN
@@ -456,17 +445,10 @@ namespace Diagram
                     WindowStyle = ProcessWindowStyle.Hidden
                 };
 
-#if !MONO
                 string[] parts = Patterns.splitCommand(cmd);
                 startInfo.FileName = parts[0];
                 startInfo.Arguments = parts[1];
 
-                /*startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = "/c " + "\"" + cmd + "\"";*/
-#else
-				startInfo.FileName = "/bin/bash";
-				startInfo.Arguments = "-c \"" + cmd + "\"";
-#endif
                 startInfo.WorkingDirectory = workdir;
                 startInfo.UseShellExecute = false;
                 startInfo.RedirectStandardOutput = true;
@@ -495,13 +477,9 @@ namespace Diagram
             {
                 WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
             };
-#if MONO
-			startInfo.FileName = "/bin/bash";
-			startInfo.Arguments =  "-c \"" + cmd + "\"";
-#else
+
             startInfo.FileName = "cmd.exe";
             startInfo.Arguments = "/C " + "\"" + cmd + ((parameters!="")?" "+ parameters:"") + "\"";
-#endif
 
             process.StartInfo = startInfo;
             process.Start();

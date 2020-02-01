@@ -21,7 +21,6 @@
   <ItemGroup>
     <Reference Include="Diagram">
       <HintPath>..\..\Diagram\bin\x64\Release\netcoreapp3.0\Diagram.dll</HintPath>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
     </Reference>
     <Reference Include="System.Drawing.Common">
       <HintPath>C:\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\3.0.0\ref\netcoreapp3.0\System.Drawing.Common.dll</HintPath>

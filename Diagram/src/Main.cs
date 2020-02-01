@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Security;
-
-#if !MONO
 using Microsoft.Win32;
-#endif
+
 
 namespace Diagram
 {
@@ -60,7 +58,7 @@ namespace Diagram
 
         /// <summary>
         /// all opened diagrams models</summary>
-        private List<Diagram> Diagrams = new List<Diagram>();
+        private readonly List<Diagram> Diagrams = new List<Diagram>();
 
         /// <summary>
         /// add diagram to list of all diagrams</summary>
@@ -172,7 +170,7 @@ namespace Diagram
 
         /// <summary>
         /// all opened form views to diagrams models</summary>
-        private List<DiagramView> DiagramViews = new List<DiagramView>();
+        private readonly List<DiagramView> DiagramViews = new List<DiagramView>();
 
         /// <summary>
         /// add diagram view to list of all views</summary>
@@ -256,7 +254,7 @@ namespace Diagram
 
         /// <summary>
         /// all opened node edit forms for all diagrams models</summary>
-        private List<TextForm> TextWindows = new List<TextForm>();
+        private readonly List<TextForm> TextWindows = new List<TextForm>();
 
         /// <summary>
         /// add text form to list of all text forms</summary>
@@ -363,7 +361,7 @@ namespace Diagram
 
         /*************************************************************************************************************************/
         // LOCK DIAGRAM
-#if !MONO
+
 
         /// <summary>
         /// lock encrypted diagrams if computer go to sleep or hibernation</summary>
@@ -398,7 +396,7 @@ namespace Diagram
                 diagram.UnlockDiagram();
             }
         }
-#endif
+
         /*************************************************************************************************************************/
         // ABOUT FORM        
 
@@ -551,7 +549,7 @@ namespace Diagram
             // list of diagram files names for open
             List<String> CommandLineOpen = new List<String>();
 
-            String arg = "";
+            String arg;
             for (int i = 0; i < args.Length; i++)
             {
 
@@ -684,10 +682,7 @@ namespace Diagram
             // create local server for comunication between local instances UID2964640610
             server = new Server(this);
 
-            if (server.StartServer())
-            {
-                Update.UpdateApplication(this);
-            }
+            server.StartServer();
         }
 
         /// <summary>
@@ -705,10 +700,8 @@ namespace Diagram
         /// register power save event </summary>
         public void RegisterPowerChangeEvent()
         {
-#if !MONO
             // sleep or hibernate event UID7641650028
             SystemEvents.PowerModeChanged += OnPowerChange;
-#endif
         }
 
         /// <summary>

@@ -22,31 +22,6 @@ namespace Diagram
         public ICollection<ISavePlugin> savePlugins = new List<ISavePlugin>();
         public ICollection<ILoadPlugin> loadPlugins = new List<ILoadPlugin>();
 
-        internal sealed class AssemblyResolver : IDisposable
-        {
-            AssemblyLoadContext loadContext;
-
-            public AssemblyResolver(string path)
-            {
-                Assembly assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
-                AssemblyLoadContext loadContext = AssemblyLoadContext.GetLoadContext(assembly);
-                loadContext.Resolving += OnResolving;
-            }
-
-
-            public void Dispose()
-            {
-                
-            }
-
-            private Assembly OnResolving(AssemblyLoadContext context, AssemblyName name)
-            {
-                loadContext.LoadFromAssemblyPath("NCalc.dll");
-
-                return null;
-            }
-        }
-
         /// <summary>
         /// load plugins from path</summary>
         public void LoadPlugins(string path)
@@ -117,8 +92,7 @@ namespace Diagram
                         }
 
                         // create plugin instance
-                        IDiagramPlugin plugin = Activator.CreateInstance(type) as IDiagramPlugin;
-                        if (plugin == null)
+                        if (!(Activator.CreateInstance(type) is IDiagramPlugin plugin))
                         {
                             continue;
                         }

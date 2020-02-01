@@ -17,7 +17,13 @@
 
   <PropertyGroup>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <ApplicationIcon>diagram.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="src\Forms\Form1.cs" />
+    <Compile Remove="src\Forms\Form1.Designer.cs" />
+  </ItemGroup>
   
   <ItemGroup>
     <None Remove="FeaturesList.txt" />
