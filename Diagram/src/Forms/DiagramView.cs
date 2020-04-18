@@ -296,15 +296,20 @@ namespace Diagram
             }
             else
             {
+
+                            
+
+
+
                 // DEFAULT_WINDOW_POSITION_AND_SIZE
                 this.Left = 50;
                 this.Top = 40;
 
-                int screenWidth = Media.ScreenWidth(this);
-                int sreenHeight = Media.ScreenHeight(this);
+                int screenWidth = Media.ScreenWorkingAreaWidth(this);
+                int sreenHeight = Media.ScreenWorkingAreaHeight(this);
 
-                int windowWidth = screenWidth - 100;
-                int windowHeight = sreenHeight - 100;
+                int windowWidth = screenWidth - 150;
+                int windowHeight = sreenHeight - 150;
 
                 if (screenWidth > 1920 ) {
                     windowWidth = 1920;
@@ -322,6 +327,8 @@ namespace Diagram
                 this.Top = (sreenHeight - windowHeight) / 2;
 
                 this.WindowState = FormWindowState.Normal;
+
+                this.CenterToScreen();
             }
 
             //Load Events

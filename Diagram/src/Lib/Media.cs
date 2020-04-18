@@ -29,6 +29,20 @@ namespace Diagram
             return Screen.FromControl(form).Bounds.Size.Height;
         }
 
+        /// <summary>
+        /// get active form screen width </summary>
+        public static int ScreenWorkingAreaWidth(Form form)
+        {
+            return Screen.FromControl(form).WorkingArea.Width;
+        }
+
+        /// <summary>
+        /// get active form screenn height </summary>
+        public static int ScreenWorkingAreaHeight(Form form)
+        {
+            return Screen.FromControl(form).WorkingArea.Height;
+        }
+
         /*************************************************************************************************************************/
         // COLOR
 
