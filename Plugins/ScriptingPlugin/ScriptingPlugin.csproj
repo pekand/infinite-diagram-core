@@ -29,11 +29,14 @@
       <HintPath>..\..\Diagram\bin\x64\Release\netcoreapp3.0\Diagram.dll</HintPath>
       <EmbedInteropTypes>false</EmbedInteropTypes>
     </Reference>
+    <Reference Include="System.Drawing">
+      <HintPath>..\..\..\..\..\..\Users\root\.nuget\packages\microsoft.windowsdesktop.app.ref\3.0.0\ref\netcoreapp3.0\System.Drawing.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing.Common">
-      <HintPath>C:\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\3.0.0\ref\netcoreapp3.0\System.Drawing.Common.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Users\root\.nuget\packages\microsoft.windowsdesktop.app.ref\3.0.0\ref\netcoreapp3.0\System.Drawing.Common.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms">
-      <HintPath>C:\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\3.0.0\ref\netcoreapp3.0\System.Windows.Forms.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Users\root\.nuget\packages\microsoft.windowsdesktop.app.ref\3.0.0\ref\netcoreapp3.0\System.Windows.Forms.dll</HintPath>
     </Reference>
   </ItemGroup>
 

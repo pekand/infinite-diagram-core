@@ -64,7 +64,7 @@ namespace Plugin
         public void Random(DiagramView diagramView)
         {
             Node node = diagramView.CreateNode(diagramView.GetMousePosition(), true);
-            node.setName(Encrypt.GetRandomString());
+            node.SetName(Encrypt.GetRandomString());
 
             diagramView.diagram.Unsave("create", node, diagramView.shift, diagramView.currentLayer.id);
             diagramView.diagram.InvalidateDiagram();
@@ -104,7 +104,7 @@ namespace Plugin
                 if (expressionResult != "")
                 {
                     Node newrec = diagramView.CreateNode(diagramView.GetMousePosition());
-                    newrec.setName(expressionResult);
+                    newrec.SetName(expressionResult);
                     newrec.color.Set("#8AC5FF");
 
                     diagramView.diagram.InvalidateDiagram();
@@ -127,7 +127,7 @@ namespace Plugin
                 }
 
                 Node newrec = diagramView.CreateNode(diagramView.GetMousePosition());
-                newrec.setName(sum.ToString());
+                newrec.SetName(sum.ToString());
                 newrec.color.Set("#8AC5FF");
 
                 diagramView.diagram.InvalidateDiagram();

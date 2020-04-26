@@ -5,6 +5,7 @@ using IronPython.Hosting;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 using System.IO;
+using System.Drawing;
 using Diagram;
 
 

@@ -37,11 +37,11 @@ namespace DropPlugin
 
         public DropPluginStorage getStorage(Diagram.Diagram diagram)
         {
-            IStorage storage = diagram.dataStorage.getStorage("DropPlugin");
+            IStorage storage = diagram.dataStorage.GetStorage("DropPlugin");
 
             if (storage == null) {
                 storage = new DropPluginStorage();
-                diagram.dataStorage.setStorage("DropPlugin", storage);
+                diagram.dataStorage.SetStorage("DropPlugin", storage);
             }
 
             return storage as DropPluginStorage;
@@ -85,7 +85,7 @@ namespace DropPlugin
                 {
                     Node newrec = diagramview.CreateNode(diagramview.GetMousePosition());
                     newNodes.Add(newrec);
-                    newrec.setName(Os.GetFileName(file));
+                    newrec.SetName(Os.GetFileName(file));
 
                     if (Os.DirectoryExists(file) || Os.Exists(file)) // directory
                     {
@@ -95,12 +95,9 @@ namespace DropPlugin
                 }
 
                 diagramview.diagram.Unsave("create", newNodes, null, diagramview.shift, diagramview.scale, diagramview.currentLayer.id);
-
-
-                DisplayInfo displayInfo = new DisplayInfo(diagramview);
                 
 
-                Job.doJob(
+                Job.DoJob(
                    new DoWorkEventHandler(
                        delegate (object o, DoWorkEventArgs args)
                        {
@@ -121,8 +118,6 @@ namespace DropPlugin
                                }
                            }
 
-                           displayInfo.SetText("");
-
                            foreach (String file in fileList)
                            {
                               
@@ -132,7 +127,6 @@ namespace DropPlugin
                                    {
                                        int currentStatus =(int)((double)transferedSize / (double)fullSize * 100.0);
                                        if (currentStatus != status) {
-                                           displayInfo.SetText(currentStatus.ToString() + "%");
                                            status = currentStatus;
                                        }
                                    }
@@ -143,7 +137,6 @@ namespace DropPlugin
                    new RunWorkerCompletedEventHandler(
                        delegate (object o, RunWorkerCompletedEventArgs args)
                        {                           
-                           displayInfo.RemoveComponent();
                            diagramview.Invalidate();
                        }
                    )

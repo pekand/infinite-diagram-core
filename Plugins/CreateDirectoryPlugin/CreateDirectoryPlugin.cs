@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
-using System.IO;
 using System.Windows.Forms;
 using Diagram;
 
@@ -62,15 +56,15 @@ namespace Plugin
 
             Node newrec = diagramview.CreateNode(diagramview.shift.Add(diagramview.Width, diagramview.Height));
 
-            newrec.setName("test");
+            newrec.SetName("test");
             newrec.link = NewDirectoryPath;
             diagramview.diagram.Unsave("create", newrec, diagramview.shift, diagramview.currentLayer.id);
 
         }
 
-        public void PopupAddItemsAction(Diagram.DiagramView diagramview, System.Windows.Forms.ToolStripMenuItem pluginsItem)
+        public void PopupAddItemsAction(Diagram.DiagramView diagramview, ToolStripMenuItem pluginsItem)
         {
-            System.Windows.Forms.ToolStripMenuItem createDirectoryItem = new System.Windows.Forms.ToolStripMenuItem();
+            ToolStripMenuItem createDirectoryItem = new ToolStripMenuItem();
             createDirectoryItem.Name = "editItem";
             createDirectoryItem.Text = "CreateDirectory";
             createDirectoryItem.Click += new System.EventHandler((sender, e) => this.CreateDirectoryItem_Click(sender, e, diagramview));
@@ -78,7 +72,7 @@ namespace Plugin
             pluginsItem.DropDownItems.Add(createDirectoryItem);
         }
 
-        public void PopupOpenAction(Diagram.DiagramView diagramview, System.Windows.Forms.ToolStripMenuItem pluginsItem)
+        public void PopupOpenAction(Diagram.DiagramView diagramview,ToolStripMenuItem pluginsItem)
         {
 
         }

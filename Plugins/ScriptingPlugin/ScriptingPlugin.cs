@@ -90,7 +90,7 @@ namespace Plugin
             String clipboard = Os.GetTextFormClipboard();
 
 #if !DEBUG
-            Job.doJob(
+            Job.DoJob(
                 new DoWorkEventHandler(
                     delegate (object o, DoWorkEventArgs args)
                     {
