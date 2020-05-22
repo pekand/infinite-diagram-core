@@ -3814,7 +3814,7 @@ namespace Diagram
                     }
                     else
                     {
-                        int linewidth = linewidth = lin.width * Tools.GetScale(lin.scale) / s > 1 ? (int)(lin.width * Tools.GetScale(lin.scale) / s) : 1;
+                        int linewidth = lin.width * Tools.GetScale(lin.scale) / s > 1 ? (int)(lin.width * Tools.GetScale(lin.scale) / s) : 1;
 
                         if (linewidth>100) {
                             linewidth = 100;

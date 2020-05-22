@@ -693,6 +693,13 @@ namespace Diagram
             items["openConfigDirItem"].Text = "Open config dir";
             items["openConfigDirItem"].Click += new System.EventHandler(this.OpenConfigDirItem_Click);
             //
+            // openLastFileItem
+            //
+            items.Add("openLastFileItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["openLastFileItem"].Name = "openLastFileItem";
+            items["openLastFileItem"].Text = "Open last file";
+            items["openLastFileItem"].Click += new System.EventHandler(this.openLastFileItem_Click);
+            //
             // optionItem
             //
             items.Add("optionItem", new System.Windows.Forms.ToolStripMenuItem());
@@ -709,7 +716,8 @@ namespace Diagram
                 items["setIconItem"],
                 items["setBackgroundItem"],
                 items["openLayerInNewViewItem"],
-                items["openConfigDirItem"]
+                items["openConfigDirItem"],
+                items["openLastFileItem"]
             });
             items["optionItem"].Name = "optionItem";
             items["optionItem"].Text = "Option";
@@ -836,6 +844,7 @@ namespace Diagram
             items["removeAttachmentItem"].Enabled = !readOnly;
             items["protectItem"].Enabled = !readOnly;
             items["openLayerInNewViewItem"].Checked = this.diagramView.diagram.options.openLayerInNewView;
+            items["openLastFileItem"].Checked = this.diagramView.main.options.openLastFile;
 
             // NEW FILE
             if (this.diagramView.diagram.IsNew())
@@ -1541,6 +1550,13 @@ namespace Diagram
         private void OpenConfigDirItem_Click(object sender, EventArgs e) //UID8429947533
         {
             this.diagramView.main.OpenConfigDir();
+        }
+
+        // MENU reset font
+        private void openLastFileItem_Click(object sender, EventArgs e) //UID8429947533
+        {
+            items["openLastFileItem"].Checked = !items["openLastFileItem"].Checked;
+            this.diagramView.main.options.openLastFile = items["openLastFileItem"].Checked;
         }
 
         // HELP

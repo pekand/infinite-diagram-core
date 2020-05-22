@@ -66,6 +66,8 @@ namespace Diagram
             if (main.mainform != null)
             {
                 Application.Run(main.mainform);
+            } else {
+                main.ExitApplication();
             }
 
 #if !DEBUG

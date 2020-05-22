@@ -66,6 +66,10 @@ namespace Diagram
         /// recently opened files</summary>
         public List<String> recentFiles = new List<String>();
 
+        /// <summary>
+        /// proxy auth password</summary>
+        public bool openLastFile = false;
+
         /*************************************************************************************************************************/
 
         /// <summary>
@@ -78,6 +82,7 @@ namespace Diagram
             this.proxy_password = configFile.Get("proxy_password");
             this.server_default_port = Converter.ToInt(configFile.Get("server_default_port"));
             this.texteditor = configFile.Get("texteditor");
+            this.openLastFile = configFile.Get("openLastFile") == "1";
             IList<String> recentFiles = Serialization.XElementToList(configFile.GetElement("recentFiles"));
 
             if (recentFiles != null) { 
@@ -102,6 +107,7 @@ namespace Diagram
             configFile.Set("proxy_password", this.proxy_password);
             configFile.Set("server_default_port", this.server_default_port.ToString());
             configFile.Set("texteditor", this.texteditor);
+            configFile.Set("openLastFile", this.openLastFile ? "1":"0");
             configFile.SetElement("recentFiles", Serialization.ListToXElement("recentFiles", this.recentFiles));
 
             this.RemoveOldRecentFiles();

@@ -77,13 +77,13 @@ namespace Diagram
         /// <summary>
         /// open existing diagram or create new empty diagram
         /// Create diagram model and then open diagram view on this model</summary>
-        public void OpenDiagram(String FilePath = "") //UID1771511767
+        public bool OpenDiagram(String FilePath = "") //UID1771511767
         {
             Program.log.Write("Program : OpenDiagram: " + FilePath);
 
             if (passwordForm != null) // prevent open diagram if another diagram triing open 
             {
-                return;
+                return false;
             }
             
             // open new empty diagram
@@ -91,7 +91,7 @@ namespace Diagram
             {
                 // if server already exist in system, send him message whitch open empty diagram
                 server.SendMessage("open:");
-                return;
+                return false;
             }
             
             // open diagram in current program instance
@@ -102,14 +102,14 @@ namespace Diagram
                 Diagrams.Add(emptyDiagram);
                 // open diagram view on diagram model
                 emptyDiagram.OpenDiagramView();
-                return;
+                return false;
             }
               
             // open existing diagram file
             
             if (!Os.FileExists(FilePath))
             {
-                return;
+                return false;
             }
             
             FilePath = Os.NormalizedFullPath(FilePath);
@@ -119,7 +119,7 @@ namespace Diagram
             {
                 FilePath = Os.GetFullPath(FilePath);
                 server.SendMessage("open:" + FilePath); //UID1105610325
-                return;
+                return false;
             }  
 
             // open diagram in current program instance
@@ -141,7 +141,7 @@ namespace Diagram
 
             if (alreadyOpen)
             {
-                return;
+                return false;
             }
             
             Diagram diagram = new Diagram(this); //UID8780020416
@@ -150,7 +150,7 @@ namespace Diagram
                 // create new model
                 if (!diagram.OpenFile(FilePath))
                 {
-                    return;
+                    return false;
                 }
                 
                 this.options.AddRecentFile(FilePath);
@@ -163,6 +163,8 @@ namespace Diagram
                 Program.log.Write("bring focus");
                 Media.BringToFront(newDiagram); //UID4510272263
             }
+
+            return true;
         }
 
         /*************************************************************************************************************************/
@@ -303,6 +305,10 @@ namespace Diagram
             {
                 password = this.passwordForm.GetPassword();
                 this.passwordForm.Clear();
+            }
+            else 
+            {
+                return null;
             }
 
             this.passwordForm = null;
@@ -611,7 +617,15 @@ namespace Diagram
             if (CommandLineOpen.Count == 0)
             {
                 //open empty diagram UID5981683893
-                this.OpenDiagram();
+                
+
+                if (this.options.openLastFile && this.options.recentFiles.Count > 0 &&  Os.FileExists(this.options.recentFiles[0]))
+                {
+                    this.OpenDiagram(this.options.recentFiles[0]); //UID2130542088
+                } else {
+                    this.OpenDiagram();
+                }
+
                 return;
             }
 
@@ -722,7 +736,7 @@ namespace Diagram
 
             // check if this program instance created server (is main application)
             // or if running debug console from command line parameter
-            if (server.mainProcess || this.console != null)
+            if ((server.mainProcess && this.Diagrams.Count > 0 ) || this.console != null)
             {
                 this.mainform = new MainForm(this);
             }
