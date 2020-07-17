@@ -1,3 +1,5 @@
+Save dialog before closing diagram with deleted file
+Move last open file in recent files history to top.
 Closse application after password orm is cancled 
 Open window position avoid task bar
 Open link in browser

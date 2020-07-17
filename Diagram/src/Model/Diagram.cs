@@ -119,32 +119,33 @@ namespace Diagram
         // save diagram
         public bool Save() //UID8354947577
         {
-            if (!this.IsLocked() && this.FileName != "" && Os.FileExists(this.FileName))
+            if (this.IsLocked() || this.FileName == "" || !Os.FileExists(this.FileName))
             {
-                this.SaveXMLFile(this.FileName);
-                this.NewFile = false;
-                this.SavedFile = true;
-                this.undoOperations.RememberSave();
-                this.SetTitle();
-
-                return true;
+                return false;
             }
 
-            return false;
+            this.SaveXMLFile(this.FileName);
+            this.NewFile = false;
+            this.SavedFile = true;
+            this.undoOperations.RememberSave();
+            this.SetTitle();
+            return true;
         }
 
         // save diagram as
         public void Saveas(String FileName) //UID9358805584
         {
-            if (!this.IsLocked())
+            if (this.IsLocked())
             {
-                this.SaveXMLFile(FileName);
-                this.FileName = FileName;
-                this.SavedFile = true;
-                this.NewFile = false;
-
-                this.SetTitle();
+                return;
             }
+
+            this.SaveXMLFile(FileName);
+            this.FileName = FileName;
+            this.SavedFile = true;
+            this.NewFile = false;
+
+            this.SetTitle();
         }
 
         // set default options for file like new file 
@@ -236,7 +237,7 @@ namespace Diagram
             }
         }
 
-        public XElement SaveInnerXmlOptions() 
+        public XElement SaveInnerXmlOptions() //UID8029528026
         {
             // [options] [config]
             XElement option = new XElement("option");
@@ -280,7 +281,7 @@ namespace Diagram
             return option;
         }
         
-        public XElement SaveInnerXmlRectangles(Nodes nodes) 
+        public XElement SaveInnerXmlRectangles(Nodes nodes) //UID0137352615
         {
             XElement rectangles = new XElement("rectangles");
             foreach (Node rec in nodes)
@@ -338,7 +339,7 @@ namespace Diagram
             return rectangles;
         }
         
-        public XElement SaveInnerXmlLines(Lines lines) 
+        public XElement SaveInnerXmlLines(Lines lines) //UID2182227651
         {
             XElement xlines = new XElement("lines");
             foreach (Line lin in lines)
@@ -357,7 +358,6 @@ namespace Diagram
             return xlines;
         }
       
-        
         // XML SAVE create xml from current diagram file state
         public string SaveInnerXMLFile() //UID8716692347
         {
@@ -1827,57 +1827,76 @@ namespace Diagram
             this.CloseDiagram();
         }
 
-        // UID3110763859
-        public bool CloseDiagramWithDialog(DiagramView diagramView)
+        private bool isEmptyDiagram()
         {
-            // save as new file
-            bool close = true;
-            if (!this.SavedFile &&
-                (this.FileName == "" || !Os.FileExists(this.FileName)) &&
-                this.DiagramViews.Count() == 1 // can't close if other views alredy opened
-            )
-            {
-                var res = MessageBox.Show(Translations.saveBeforeExit, Translations.confirmExit, MessageBoxButtons.YesNoCancel);
+            Nodes nodes = this.GetAllNodes();
 
-                if (res == DialogResult.Yes)
+            return nodes.Count == 0;
+        }
+
+        // UID3110763859
+        public bool CloseDiagramViewWithDialog(DiagramView diagramView)
+        {
+
+            // multiple views already open, save is not needed now
+            if (this.DiagramViews.Count() > 1) {
+                return true;
+            }
+
+            // new empty file
+            if (this.NewFile && this.isEmptyDiagram())
+            {
+                return true;
+            }
+
+            // file is already saved
+            if (this.SavedFile && this.FileName != "" && Os.FileExists(this.FileName)) 
+            {
+                return true;
+            }
+
+            var res = MessageBox.Show(Translations.saveBeforeExit, Translations.confirmExit, MessageBoxButtons.YesNoCancel);
+
+            if (res == DialogResult.Yes)
+            {
+
+                // save as new file with save dialog
+                if ((this.FileName == "" || !Os.FileExists(this.FileName)))
                 {
-                    close = false;
+
+                    // set last open 
+                    if (this.FileName != "") {
+                        diagramView.DSave.FileName = this.FileName;
+                    }
+
                     if (diagramView.DSave.ShowDialog() == DialogResult.OK)
                     {
                         this.SaveXMLFile(diagramView.DSave.FileName);
                         this.SetTitle();
-                        close = true;
+                        return true;
                     }
                 }
 
-                if (res == DialogResult.Cancel)
-                {
-                    close = false;
-                }
-            }
-
-            //save to current file
-            if (!this.SavedFile &&
-                this.FileName != "" &&
-                Os.FileExists(this.FileName) &&
-                this.DiagramViews.Count() == 1 // can close if other views alredy opened
-            )
-            {
-
-                var res = MessageBox.Show(Translations.saveBeforeExit, Translations.confirmExit, MessageBoxButtons.YesNoCancel);
-
-                if (res == DialogResult.Yes)
+                //save to current file without dialog
+                if (this.FileName != "" && Os.FileExists(this.FileName))
                 {
                     this.SaveXMLFile(this.FileName);
-                }
-
-                if (res == DialogResult.Cancel)
-                {
-                    close = false;
+                    return true;
                 }
             }
 
-            return close;
+            if (res == DialogResult.No)
+            {
+                return true;
+            }
+
+
+            if (res == DialogResult.Cancel)
+            {
+                return  false;
+            }
+
+            return false;
         }
 
         // close diagram UID4103426891

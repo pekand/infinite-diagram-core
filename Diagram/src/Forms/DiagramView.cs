@@ -373,7 +373,7 @@ namespace Diagram
         // FORM Quit Close
         public void DiagramApp_FormClosing(object sender, FormClosingEventArgs e) //UID8741811919
         {
-            bool close = this.diagram.CloseDiagramWithDialog(this);
+            bool close = this.diagram.CloseDiagramViewWithDialog(this);
 
             if (close)
             {
@@ -1851,7 +1851,7 @@ namespace Diagram
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.save, keyData))  // [KEY] [CTRL+S] save diagram
+            if (KeyMap.ParseKey(KeyMap.save, keyData))  // [KEY] [CTRL+S] save diagram UID4672553712
             {
                 this.Save();
                 return true;
@@ -3072,7 +3072,7 @@ namespace Diagram
         /*************************************************************************************************************************/
 
         // FILE Save - Save diagram
-        public void Save()
+        public void Save() //UID1784785672
         {
             if (!this.diagram.IsLocked()) {
                 if (!this.diagram.Save())
@@ -3082,19 +3082,17 @@ namespace Diagram
             }
         }
 
-        // FILE SAVEAS - Save as diagram
-        public bool Saveas()
+        // FILE SAVEAS - Save as diagram 
+        public bool Saveas() //UID4040264682
         {
-            if (this.DSave.ShowDialog() == DialogResult.OK)
+            if (this.DSave.ShowDialog() != DialogResult.OK)
             {                
-                this.diagram.Saveas(this.DSave.FileName);
-                this.main.options.AddRecentFile(this.DSave.FileName);
-                return true;
-            }
-            else
-            {
                 return false;
             }
+            
+            this.diagram.Saveas(this.DSave.FileName);
+            this.main.options.AddRecentFile(this.DSave.FileName);
+            return true;
         }
 
         // FILE Open - Open diagram dialog UID5922343203

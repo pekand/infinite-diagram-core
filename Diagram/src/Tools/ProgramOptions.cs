@@ -122,10 +122,8 @@ namespace Diagram
         {
             if (Os.FileExists(path))
             {
-                if (!this.recentFiles.Contains(path))
-                {
-                    this.recentFiles.Add(path);                                        
-                }
+                this.recentFiles.Remove(path);
+                this.recentFiles.Insert(0, path);
             }
         }
 
