@@ -70,6 +70,9 @@ namespace Diagram
             this.TextFormTextBox.Size = new System.Drawing.Size(393, 72);
             this.TextFormTextBox.TabIndex = 0;
             this.TextFormTextBox.Text = "";
+            this.TextFormTextBox.AutoWordSelection = false;
+            this.TextFormTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextFormTextBox_KeyDown);
+
             // 
             // TextFormNoteTextBox
             // 
@@ -81,6 +84,9 @@ namespace Diagram
             this.TextFormNoteTextBox.Size = new System.Drawing.Size(393, 404);
             this.TextFormNoteTextBox.TabIndex = 0;
             this.TextFormNoteTextBox.Text = "";
+            this.TextFormNoteTextBox.AutoWordSelection = false;
+            this.TextFormNoteTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextFormNoteTextBox_KeyDown);
+
             // 
             // TextFormLinkTextBox
             // 
@@ -111,6 +117,26 @@ namespace Diagram
             this.ResumeLayout(false);
 
         }
+
+        private void TextFormTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                this.TextFormTextBox.Text += (string)Clipboard.GetData("Text");
+                e.Handled = true;
+            }
+        }
+
+        private void TextFormNoteTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                this.TextFormNoteTextBox.Text += (string)Clipboard.GetData("Text");
+                e.Handled = true;
+            }
+        }
+
+        
 
         public void TextForm_Load(object sender, EventArgs e)
         {
