@@ -4255,7 +4255,7 @@ namespace Diagram
                             if (Os.IsDiagram(rec.link))
                             {
                                 Program.log.Write("diagram: openlink: open diagram " + Os.NormalizePath(rec.link));
-                                Os.OpenDiagram(rec.link);
+                                this.main.OpenDiagram(rec.link);
                             }
                             else
                             {

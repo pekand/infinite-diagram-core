@@ -1,13 +1,14 @@
-Paste plain text to text boxies
-Csharp scripting plugin
-Save dialog before closing diagram with deleted file
+Open link to diagram as new view instead open by system.
+Paste plain text to text boxies.
+Csharp scripting plugin.
+Save dialog before closing diagram with deleted file.
 Move last open file in recent files history to top.
-Closse application after password orm is cancled 
-Open window position avoid task bar
-Open link in browser
-Open directory node in explorer
-Migration o .net core
-Color picker in to one square
+Closse application after password orm is cancled .
+Open window position avoid task bar.
+Open link in browser.
+Open directory node in explorer.
+Migration o .net core.
+Color picker in to one square.
 Improve performance of uid plugin, search files by size. Small files first.
 Restore window after open already oppened diagram.
 Add features tab to console with last features list.
