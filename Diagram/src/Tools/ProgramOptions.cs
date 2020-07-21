@@ -67,8 +67,12 @@ namespace Diagram
         public List<String> recentFiles = new List<String>();
 
         /// <summary>
-        /// proxy auth password</summary>
+        /// when application start as empty and this option is set then open last file</summary>
         public bool openLastFile = false;
+
+        /// <summary>
+        /// when application start as empty and this option is set then open default diagram if exist instead of empty file</summary>
+        public string defaultDiagram = "";
 
         /*************************************************************************************************************************/
 
@@ -83,6 +87,7 @@ namespace Diagram
             this.server_default_port = Converter.ToInt(configFile.Get("server_default_port"));
             this.texteditor = configFile.Get("texteditor");
             this.openLastFile = configFile.Get("openLastFile") == "1";
+            this.defaultDiagram = configFile.Get("defaultDiagram");
             IList<String> recentFiles = Serialization.XElementToList(configFile.GetElement("recentFiles"));
 
             if (recentFiles != null) { 
@@ -108,6 +113,7 @@ namespace Diagram
             configFile.Set("server_default_port", this.server_default_port.ToString());
             configFile.Set("texteditor", this.texteditor);
             configFile.Set("openLastFile", this.openLastFile ? "1":"0");
+            configFile.Set("defaultDiagram", this.defaultDiagram);
             configFile.SetElement("recentFiles", Serialization.ListToXElement("recentFiles", this.recentFiles));
 
             this.RemoveOldRecentFiles();

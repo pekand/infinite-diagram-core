@@ -616,8 +616,11 @@ namespace Diagram
 
             if (CommandLineOpen.Count == 0)
             {
-                
-                if (this.options.openLastFile && this.options.recentFiles.Count > 0 &&  Os.FileExists(this.options.recentFiles[0]))
+                if (this.options.defaultDiagram != "" && Os.FileExists(this.options.defaultDiagram))
+                {
+                    this.OpenDiagram(this.options.defaultDiagram); // open default diagram if default diagram is set
+                }
+                else if (this.options.openLastFile && this.options.recentFiles.Count > 0 &&  Os.FileExists(this.options.recentFiles[0]))
                 {
                     this.OpenDiagram(this.options.recentFiles[0]); // open last file if user option is enabled UID2130542088
                 } else {

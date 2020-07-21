@@ -700,6 +700,13 @@ namespace Diagram
             items["openLastFileItem"].Text = "Open last file";
             items["openLastFileItem"].Click += new System.EventHandler(this.openLastFileItem_Click);
             //
+            // setAsDefaultDiagramItem
+            //
+            items.Add("setAsDefaultDiagramItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["setAsDefaultDiagramItem"].Name = "setAsDefaultDiagramItem";
+            items["setAsDefaultDiagramItem"].Text = "Set as default Diagram";
+            items["setAsDefaultDiagramItem"].Click += new System.EventHandler(this.setAsDefaultDiagram_Click);
+            //
             // optionItem
             //
             items.Add("optionItem", new System.Windows.Forms.ToolStripMenuItem());
@@ -717,7 +724,8 @@ namespace Diagram
                 items["setBackgroundItem"],
                 items["openLayerInNewViewItem"],
                 items["openConfigDirItem"],
-                items["openLastFileItem"]
+                items["openLastFileItem"],
+                items["setAsDefaultDiagramItem"]
             });
             items["optionItem"].Name = "optionItem";
             items["optionItem"].Text = "Option";
@@ -845,6 +853,7 @@ namespace Diagram
             items["protectItem"].Enabled = !readOnly;
             items["openLayerInNewViewItem"].Checked = this.diagramView.diagram.options.openLayerInNewView;
             items["openLastFileItem"].Checked = this.diagramView.main.options.openLastFile;
+            items["setAsDefaultDiagramItem"].Checked = this.diagramView.main.options.defaultDiagram != "";
 
             // NEW FILE
             if (this.diagramView.diagram.IsNew())
@@ -1557,6 +1566,34 @@ namespace Diagram
         {
             items["openLastFileItem"].Checked = !items["openLastFileItem"].Checked;
             this.diagramView.main.options.openLastFile = items["openLastFileItem"].Checked;
+
+            if (items["openLastFileItem"].Checked)
+            {
+                // cancel open last file if default diagram is set
+                items["setAsDefaultDiagramItem"].Checked = false;
+                this.diagramView.main.options.defaultDiagram = "";
+            }
+        }
+
+        private void setAsDefaultDiagram_Click(object sender, EventArgs e) //UID8429947533
+        {
+            items["setAsDefaultDiagramItem"].Checked = !items["setAsDefaultDiagramItem"].Checked;
+
+
+            if (items["setAsDefaultDiagramItem"].Checked)
+            {
+                
+
+                if (this.diagramView.diagram.FileName != "") {
+                    this.diagramView.main.options.defaultDiagram = this.diagramView.diagram.FileName;
+                }
+
+                // cancel open last file if default diagram is set
+                items["openLastFileItem"].Checked = false;
+                this.diagramView.main.options.openLastFile = false;
+            } else {
+                this.diagramView.main.options.defaultDiagram = "";
+            }
         }
 
         // HELP

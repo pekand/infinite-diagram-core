@@ -1,3 +1,4 @@
+Set diagram as default and open it instead of empty file.
 Open link to diagram as new view instead open by system.
 Paste plain text to text boxies.
 Csharp scripting plugin.
