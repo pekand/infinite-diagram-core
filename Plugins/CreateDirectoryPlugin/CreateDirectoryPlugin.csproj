@@ -1,17 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Platforms>AnyCPU;x64</Platforms>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath>..\..\Diagram\bin\x64\Debug\netcoreapp3.0\plugins\CreateDirectoryPlugin\</OutputPath>
+    <OutputPath>..\..\Diagram\bin\x64\Debug\netcoreapp3.1\plugins\CreateDirectoryPlugin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath>..\..\Diagram\bin\x64\Release\netcoreapp3.0\plugins\CreateDirectoryPlugin\</OutputPath>
+    <OutputPath>..\..\Diagram\bin\x64\Release\netcoreapp3.1\plugins\CreateDirectoryPlugin\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -20,16 +21,7 @@
 
   <ItemGroup>
     <Reference Include="Diagram">
-      <HintPath>..\..\Diagram\bin\x64\Release\netcoreapp3.0\Diagram.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Drawing">
-      <HintPath>..\..\..\..\..\..\Users\root\.nuget\packages\microsoft.windowsdesktop.app.ref\3.0.0\ref\netcoreapp3.0\System.Drawing.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Drawing.Common">
-      <HintPath>..\..\..\..\..\..\Users\root\.nuget\packages\microsoft.windowsdesktop.app.ref\3.0.0\ref\netcoreapp3.0\System.Drawing.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Forms">
-      <HintPath>..\..\..\..\..\..\Users\root\.nuget\packages\microsoft.windowsdesktop.app.ref\3.0.0\ref\netcoreapp3.0\System.Windows.Forms.dll</HintPath>
+      <HintPath>..\..\Diagram\bin\x64\Release\netcoreapp3.1\Diagram.dll</HintPath>
     </Reference>
   </ItemGroup>
 

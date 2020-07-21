@@ -71,6 +71,17 @@ Source: "plugins\ScriptingPlugin\Microsoft.Dynamic.dll"; DestDir: "{userappdata}
 Source: "plugins\ScriptingPlugin\Microsoft.Scripting.dll"; DestDir: "{userappdata}\Diagram\plugins\ScriptingPlugin\"; Flags: ignoreversion createallsubdirs recursesubdirs comparetimestamp
 Source: "plugins\ScriptingPlugin\Microsoft.Scripting.Metadata.dll"; DestDir: "{userappdata}\Diagram\plugins\ScriptingPlugin\"; Flags: ignoreversion createallsubdirs recursesubdirs comparetimestamp
 
+Source: "plugins\CScriptingPlugin\CScriptingPlugin.dll"; DestDir: "{userappdata}\Diagram\plugins\CScriptingPlugin\"; Flags: ignoreversion createallsubdirs recursesubdirs comparetimestamp
+
+Source: "plugins\CScriptingPlugin\Microsoft.CodeAnalysis.dll"; DestDir: "{userappdata}\Diagram\plugins\CScriptingPlugin\"; Flags: ignoreversion createallsubdirs recursesubdirs comparetimestamp
+
+Source: "plugins\CScriptingPlugin\Microsoft.CodeAnalysis.CSharp.dll"; DestDir: "{userappdata}\Diagram\plugins\CScriptingPlugin\"; Flags: ignoreversion createallsubdirs recursesubdirs comparetimestamp
+
+Source: "plugins\CScriptingPlugin\Microsoft.CodeAnalysis.CSharp.Scripting.dll"; DestDir: "{userappdata}\Diagram\plugins\CScriptingPlugin\"; Flags: ignoreversion createallsubdirs recursesubdirs comparetimestamp
+
+Source: "plugins\CScriptingPlugin\Microsoft.CodeAnalysis.Scripting.dll"; DestDir: "{userappdata}\Diagram\plugins\CScriptingPlugin\"; Flags: ignoreversion createallsubdirs recursesubdirs comparetimestamp
+
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

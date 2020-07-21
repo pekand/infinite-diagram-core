@@ -45,7 +45,7 @@ namespace Plugin
 
         public bool ClickOnNodeAction(Diagram.Diagram diagram, DiagramView diagramView, Node node)
         {
-            if (node.link.Trim() == "script" || node.link.Trim() == "macro" || node.link.Trim() == "$")  // OPEN SCRIPT node with link "script" is executed as script
+            if (node.link.Trim() == "#ironpython")  // OPEN SCRIPT node with link "script" is executed as script
             {
                 this.Evaluate(diagram, diagramView, node, "");
                 return true;
