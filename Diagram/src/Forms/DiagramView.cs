@@ -172,8 +172,7 @@ namespace Diagram
             //
             // DImage
             //
-            this.DImage.Filter = "All|*.bmp;*.jpg;*.jpeg;*.png;*.ico|Bmp|*.bmp|Jpg|*.jpg;*.jpeg|Png|*.png|Ico|*.ico" +
-    "";
+            this.DImage.Filter = "All|*.bmp;*.jpg;*.jpeg;*.png;*.ico|Bmp|*.bmp|Jpg|*.jpg;*.jpeg|Png|*.png|Ico|*.ico";
             //
             // MoveTimer
             //
@@ -224,7 +223,12 @@ namespace Diagram
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DiagramApp_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DiagramApp_MouseUp);
             this.Resize += new System.EventHandler(this.DiagramApp_Resize);
+            this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.DiagramApp_MouseWheel);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.DiagramApp_DragEnter);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.DiagramApp_DragDrop);
+            this.AllowDrop = true;
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -277,7 +281,7 @@ namespace Diagram
             if (this.diagram.options.icon != "")
             {
                 this.Icon = Media.StringToIcon(this.diagram.options.icon);
-            }           
+            }
         }
 
         // FORM Load event - UID0112423443
@@ -296,11 +300,6 @@ namespace Diagram
             }
             else
             {
-
-                            
-
-
-
                 // DEFAULT_WINDOW_POSITION_AND_SIZE
                 this.Left = 50;
                 this.Top = 40;
@@ -330,13 +329,6 @@ namespace Diagram
 
                 this.CenterToScreen();
             }
-
-            //Load Events
-            this.MouseWheel += new MouseEventHandler(DiagramApp_MouseWheel);
-
-            this.DragEnter += new DragEventHandler(DiagramApp_DragEnter);
-            this.DragDrop += new DragEventHandler(DiagramApp_DragDrop);
-            this.AllowDrop = true;
 
             // scrollbars
             bottomScrollBar = new ScrollBar(this, this.ClientRectangle.Width, this.ClientRectangle.Height, true);
@@ -1259,7 +1251,7 @@ namespace Diagram
                     && !keyshift)
                 {
                     this.ResetStates();
-                    this.OpenLinkAsync(this.sourceNode);
+                    this.OpenLink(this.sourceNode);
                 }
                 else
                 // KEY SHIFT+DBLCLICK open node edit form
@@ -2264,7 +2256,7 @@ namespace Diagram
                     && this.key != '\r'
                     && this.key != '\n'
                     && this.key != '`'
-                    && this.key != (char)27) // KEY OTHER Pisanie textu - Vytvorenie novej nody
+                    && this.key != (char)27) // KEY OTHER create new node
                 {
                     this.editPanel.ShowEditPanel(this.CursorPosition(), this.key);
                 }
@@ -4116,47 +4108,7 @@ namespace Diagram
         }
 
         // NODE Open Link
-        public void OpenLinkAsync(Node rec) //UID3758665113
-        {
-            Program.log.Write("diagram: openlink");
-            String clipboard = Os.GetTextFormClipboard();
-
-#if DEBUG
-            long result = this.OpenLink(rec);
-            if ((int)result == 1)
-            {
-                this.diagram.EditNode(rec);
-            }
-#else
-            var worker = new BackgroundWorker {
-                WorkerSupportsCancellation = true
-            };
-
-            worker.DoWork += (sender, e) =>
-            {
-                Program.log.Write("diagram: openlink: run worker");
-                e.Result = this.OpenLink(rec);
-            };
-            worker.RunWorkerCompleted += (sender, e) =>
-            {
-                var result = e.Result;
-                if ((long)result == 1)
-                {
-                    this.diagram.EditNode(rec);
-                }
-
-                if ((long)result == 2)
-                {
-                   this.SelectOnlyOneNode(rec);
-                   this.AttachmentDeploy();
-                }
-            };
-            worker.RunWorkerAsync();
-#endif
-        }
-
-        // NODE Open Link
-        public long OpenLink(Node rec) //UID9292140736
+        public void OpenLink(Node rec) //UID9292140736
         {
             if (rec != null)
             {
@@ -4165,7 +4117,7 @@ namespace Diagram
 
                 if (stopNextAction) {
                     // stop execution from plugin
-                    return 0;
+                    return;
                 } else if (rec.haslayer) {
                     if (this.diagram.options.openLayerInNewView) //UID1964118363
                     {
@@ -4182,8 +4134,10 @@ namespace Diagram
                     }
                 } 
                 else if (rec.attachment != "") 
-                { //deploy attachment                    
-                    return 2; // deploy attachment
+                {
+                    this.SelectOnlyOneNode(rec); // deploy attachment
+                    this.AttachmentDeploy();
+                    return;
                 }
                 else if (rec.shortcut > 0) // GO TO LINK
                 {
@@ -4334,10 +4288,9 @@ namespace Diagram
                 }
                 else // EDIT NODE
                 {
-                    return 1;
+                    this.diagram.EditNode(rec);
                 }
             }
-            return 0;
         }
 
         // NODE Remove shortcuts

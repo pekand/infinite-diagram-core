@@ -1088,7 +1088,7 @@ namespace Diagram
         {
             if (this.diagramView.selectedNodes.Count() > 0)
             {
-                this.diagramView.OpenLinkAsync(this.diagramView.selectedNodes[0]);
+                this.diagramView.OpenLink(this.diagramView.selectedNodes[0]);
             }
         }
 

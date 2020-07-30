@@ -49,7 +49,8 @@ namespace Diagram
             try
             {
                 if (!this.ServerExists()) // check if server exists
-                {                    
+                {
+                    Program.log.Write("Server: StartServer");
                     long port = main.options.server_default_port;
                     IPAddress localAddr = IPAddress.Parse(main.options.server_default_ip);
 
@@ -88,6 +89,7 @@ namespace Diagram
                     //blocks until a client has connected to the server
                     TcpClient client = this.tcpListener.AcceptTcpClient(); // wait for message from client
 
+                    Program.log.Write("Server: ListenForClients");
                     //create a thread to handle communication
                     //with connected client
                     Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientCommunication)); // process message from client in thread
@@ -107,6 +109,8 @@ namespace Diagram
         {
             try
             {
+                Program.log.Write("Server: HandleClientCommunication");
+
                 TcpClient tcpClient = (TcpClient)client;
                 NetworkStream clientStream = tcpClient.GetStream();
 
@@ -153,7 +157,7 @@ namespace Diagram
         // send message to server UID8096061355
         public bool SendMessage(String Messsage)
         {
-			Program.log.Write("Server: SendMessage: "+Messsage);
+			Program.log.Write("Server: SendMessage: " + Messsage);
 
             try
             {
@@ -213,7 +217,7 @@ namespace Diagram
         public bool ParseMessage(String Messsage)
         {
             // send message
-			Program.log.Write("Server: ParseMessage: "+Messsage);
+			Program.log.Write("Server: ParseMessage: " + Messsage);
 
             if (Messsage == "ping") // check if server is live
             {
