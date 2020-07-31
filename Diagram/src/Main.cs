@@ -154,6 +154,11 @@ namespace Diagram
                 }
                 
                 this.options.AddRecentFile(FilePath);
+
+#if !MONO
+                RecentFiles.AddToRecentlyUsedDocs(FilePath); // add to system recent files
+#endif
+
                 Diagrams.Add(diagram);
                 // open diagram view on diagram model
                 DiagramView newDiagram = diagram.OpenDiagramView(); //UID3015837184
