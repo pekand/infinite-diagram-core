@@ -163,7 +163,7 @@ namespace Diagram
             {
                 if (t is Timer)
                 {
-                    Program.log.Write("bringToFront: tick");
+                    Program.log.Write("bringToFront: timer tick");
 
                     Timer timer = t as Timer;                    
 					timer.Enabled = false;

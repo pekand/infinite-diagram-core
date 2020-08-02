@@ -131,7 +131,11 @@ namespace Diagram
         {
             if (e.Control && e.KeyCode == Keys.V)
             {
-                this.TextFormNoteTextBox.Text += (string)Clipboard.GetData("Text");
+                String insertText = (string)Clipboard.GetData("Text");
+                var selectionIndex = TextFormNoteTextBox.SelectionStart;
+                TextFormNoteTextBox.Text = TextFormNoteTextBox.Text.Insert(selectionIndex, insertText);
+                TextFormNoteTextBox.SelectionStart = selectionIndex + insertText.Length;
+
                 e.Handled = true;
             }
         }

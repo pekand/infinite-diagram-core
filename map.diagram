@@ -1224,8 +1224,8 @@
                     
 #endif</text>
       <layer>0</layer>
-      <x>-1859.5039000000000000000</x>
-      <y>2502.8776200000000000000</y>
+      <x>-2143.50390000000000000000000</x>
+      <y>2330.8776200000000000000000000</y>
       <width>91</width>
       <height>97</height>
       <scale>0</scale>
@@ -1310,8 +1310,8 @@
       <fontcolor>Black</fontcolor>
       <text>foreach(Node node in nodes) {}</text>
       <layer>0</layer>
-      <x>-1873.7048000000000000000</x>
-      <y>2641.2421900000000000000</y>
+      <x>-2157.70480000000000000000000</x>
+      <y>2469.2421900000000000000000000</y>
       <width>214</width>
       <height>36</height>
       <scale>0</scale>
@@ -2629,8 +2629,8 @@ and send response</text>
 
 }</text>
       <layer>0</layer>
-      <x>-1874.3281000000000000000</x>
-      <y>1964.9687600000000000000</y>
+      <x>-2158.32810000000000000000000</x>
+      <y>1792.9687600000000000000000000</y>
       <width>196</width>
       <height>82</height>
       <scale>0</scale>
@@ -2649,8 +2649,8 @@ and send response</text>
     }
 }</text>
       <layer>0</layer>
-      <x>-1874.9349000000000000000</x>
-      <y>2067.6953000000000000000</y>
+      <x>-2158.93490000000000000000000</x>
+      <y>1895.6953000000000000000000000</y>
       <width>234</width>
       <height>127</height>
       <scale>0</scale>
@@ -2667,8 +2667,8 @@ and send response</text>
             
 #endif</text>
       <layer>0</layer>
-      <x>-1874.3906200000000000000</x>
-      <y>2248.8776200000000000000</y>
+      <x>-2158.39062000000000000000000</x>
+      <y>2076.8776200000000000000000000</y>
       <width>85</width>
       <height>97</height>
       <scale>0</scale>
@@ -2683,8 +2683,8 @@ and send response</text>
 
 #endif</text>
       <layer>0</layer>
-      <x>-1738.2057200000000000000</x>
-      <y>2263.0599100000000000000</y>
+      <x>-2022.20572000000000000000000</x>
+      <y>2091.0599100000000000000000000</y>
       <width>89</width>
       <height>66</height>
       <scale>0</scale>
@@ -2699,8 +2699,8 @@ and send response</text>
 
 #endif</text>
       <layer>0</layer>
-      <x>-1633.5039000000000000000</x>
-      <y>2263.0599100000000000000</y>
+      <x>-1917.50390000000000000000000</x>
+      <y>2091.0599100000000000000000000</y>
       <width>91</width>
       <height>66</height>
       <scale>0</scale>
@@ -2713,8 +2713,8 @@ and send response</text>
       <fontcolor>Black</fontcolor>
       <text>Program.log.write("message");</text>
       <layer>0</layer>
-      <x>-1874.6293000000000000000</x>
-      <y>2404.2421900000000000000</y>
+      <x>-2158.62930000000000000000000</x>
+      <y>2232.2421900000000000000000000</y>
       <width>210</width>
       <height>36</height>
       <scale>0</scale>
@@ -2727,8 +2727,8 @@ and send response</text>
       <fontcolor>Black</fontcolor>
       <text>Snippets</text>
       <layer>0</layer>
-      <x>-1874.9665700000000000000</x>
-      <y>1874.2421900000000000000</y>
+      <x>-2158.96657000000000000000000</x>
+      <y>1702.2421900000000000000000000</y>
       <width>77</width>
       <height>36</height>
       <scale>0</scale>
@@ -2740,8 +2740,8 @@ and send response</text>
       <id>1410</id>
       <fontcolor>Black</fontcolor>
       <layer>0</layer>
-      <x>-1947.0000000000000000000</x>
-      <y>1811.0000000000000000000</y>
+      <x>-2231.00000000000000000000000</x>
+      <y>1639.0000000000000000000000000</y>
       <width>20</width>
       <height>20</height>
       <scale>0</scale>
@@ -2754,8 +2754,8 @@ and send response</text>
       <id>1411</id>
       <fontcolor>Black</fontcolor>
       <layer>0</layer>
-      <x>-1947.0000000000000000000</x>
-      <y>3086.0000000000000000000</y>
+      <x>-2231.00000000000000000000000</x>
+      <y>2914.0000000000000000000000000</y>
       <width>20</width>
       <height>20</height>
       <scale>0</scale>
@@ -2768,8 +2768,8 @@ and send response</text>
       <id>1412</id>
       <fontcolor>Black</fontcolor>
       <layer>0</layer>
-      <x>-1947.0000000000000000000</x>
-      <y>1883.0000000000000000000</y>
+      <x>-2231.00000000000000000000000</x>
+      <y>1711.0000000000000000000000000</y>
       <width>20</width>
       <height>20</height>
       <scale>0</scale>
@@ -2782,8 +2782,8 @@ and send response</text>
       <id>1413</id>
       <fontcolor>Black</fontcolor>
       <layer>0</layer>
-      <x>-1946.0000000000000000000</x>
-      <y>1996.0000000000000000000</y>
+      <x>-2230.00000000000000000000000</x>
+      <y>1824.0000000000000000000000000</y>
       <width>20</width>
       <height>20</height>
       <scale>0</scale>
@@ -2796,8 +2796,8 @@ and send response</text>
       <id>1414</id>
       <fontcolor>Black</fontcolor>
       <layer>0</layer>
-      <x>-1946.0000000000000000000</x>
-      <y>2121.0000000000000000000</y>
+      <x>-2230.00000000000000000000000</x>
+      <y>1949.0000000000000000000000000</y>
       <width>20</width>
       <height>20</height>
       <scale>0</scale>
@@ -2810,8 +2810,8 @@ and send response</text>
       <id>1415</id>
       <fontcolor>Black</fontcolor>
       <layer>0</layer>
-      <x>-1946.0000000000000000000</x>
-      <y>2287.0000000000000000000</y>
+      <x>-2230.00000000000000000000000</x>
+      <y>2115.0000000000000000000000000</y>
       <width>20</width>
       <height>20</height>
       <scale>0</scale>
@@ -2824,8 +2824,8 @@ and send response</text>
       <id>1416</id>
       <fontcolor>Black</fontcolor>
       <layer>0</layer>
-      <x>-1946.0000000000000000000</x>
-      <y>2413.0000000000000000000</y>
+      <x>-2230.00000000000000000000000</x>
+      <y>2241.0000000000000000000000000</y>
       <width>20</width>
       <height>20</height>
       <scale>0</scale>
@@ -2838,8 +2838,8 @@ and send response</text>
       <id>1417</id>
       <fontcolor>Black</fontcolor>
       <layer>0</layer>
-      <x>-1947.0000000000000000000</x>
-      <y>2541.0000000000000000000</y>
+      <x>-2231.00000000000000000000000</x>
+      <y>2369.0000000000000000000000000</y>
       <width>20</width>
       <height>20</height>
       <scale>0</scale>
@@ -2852,8 +2852,8 @@ and send response</text>
       <id>1418</id>
       <fontcolor>Black</fontcolor>
       <layer>0</layer>
-      <x>-1947.0000000000000000000</x>
-      <y>2650.0000000000000000000</y>
+      <x>-2231.00000000000000000000000</x>
+      <y>2478.0000000000000000000000000</y>
       <width>20</width>
       <height>20</height>
       <scale>0</scale>
@@ -3077,8 +3077,8 @@ rec = Diagram.CreateNode(Position(selected.position.x+200, selected.position.y),
 DiagramView.Invalidate();</note>
       <link>$</link>
       <layer>0</layer>
-      <x>-1207.3298</x>
-      <y>2756.242190</y>
+      <x>-1452.32980000000000000000000</x>
+      <y>2746.2421900000000000000000000</y>
       <width>105</width>
       <height>36</height>
       <scale>0</scale>
@@ -3092,8 +3092,8 @@ DiagramView.Invalidate();</note>
       <text>IronPython.net /</text>
       <link>http://ironpython.net/</link>
       <layer>0</layer>
-      <x>-1344.2218</x>
-      <y>2760.242190</y>
+      <x>-1589.22180000000000000000000</x>
+      <y>2750.2421900000000000000000000</y>
       <width>121</width>
       <height>36</height>
       <scale>0</scale>
@@ -3105,8 +3105,8 @@ DiagramView.Invalidate();</note>
       <id>1463</id>
       <fontcolor>Black</fontcolor>
       <layer>0</layer>
-      <x>-1403</x>
-      <y>2566</y>
+      <x>-1648.00000000000000000000000</x>
+      <y>2556.0000000000000000000000000</y>
       <width>20</width>
       <height>20</height>
       <scale>0</scale>
@@ -3119,8 +3119,8 @@ DiagramView.Invalidate();</note>
       <id>1464</id>
       <fontcolor>Black</fontcolor>
       <layer>0</layer>
-      <x>-1403</x>
-      <y>2883</y>
+      <x>-1648.00000000000000000000000</x>
+      <y>2873.0000000000000000000000000</y>
       <width>20</width>
       <height>20</height>
       <scale>0</scale>
@@ -3133,8 +3133,8 @@ DiagramView.Invalidate();</note>
       <id>1465</id>
       <fontcolor>Black</fontcolor>
       <layer>0</layer>
-      <x>-1008</x>
-      <y>2883</y>
+      <x>-1253.00000000000000000000000</x>
+      <y>2873.0000000000000000000000000</y>
       <width>20</width>
       <height>20</height>
       <scale>0</scale>
@@ -3147,8 +3147,8 @@ DiagramView.Invalidate();</note>
       <id>1466</id>
       <fontcolor>Black</fontcolor>
       <layer>0</layer>
-      <x>-1008</x>
-      <y>2566</y>
+      <x>-1253.00000000000000000000000</x>
+      <y>2556.0000000000000000000000000</y>
       <width>20</width>
       <height>20</height>
       <scale>0</scale>
@@ -3160,11 +3160,11 @@ DiagramView.Invalidate();</note>
     <rectangle>
       <id>1467</id>
       <fontcolor>Black</fontcolor>
-      <text>ironPython</text>
+      <text>ironPython plugin</text>
       <layer>0</layer>
-      <x>-1375.1736</x>
-      <y>2544.242190</y>
-      <width>90</width>
+      <x>-1620.17360000000000000000000</x>
+      <y>2534.2421900000000000000000000</y>
+      <width>130</width>
       <height>36</height>
       <scale>0</scale>
       <color>#FFFFB8</color>
@@ -3193,8 +3193,8 @@ DiagramView.Invalidate();
 print 'uid created'</note>
       <link>$</link>
       <layer>0</layer>
-      <x>-1204.0512000000000000000000000</x>
-      <y>2815.2421900000000000000000000</y>
+      <x>-1449.0512000000000000000000000</x>
+      <y>2805.2421900000000000000000000</y>
       <width>93</width>
       <height>36</height>
       <scale>0</scale>
@@ -3427,8 +3427,8 @@ print 'uid created'</note>
       <fontcolor>Black</fontcolor>
       <text>form</text>
       <layer>0</layer>
-      <x>-374.9053800000000000</x>
-      <y>4378.242190</y>
+      <x>-374.90538000000000000000000</x>
+      <y>4378.2421900000000000000000000</y>
       <width>51</width>
       <height>36</height>
       <scale>0</scale>
@@ -3634,8 +3634,8 @@ for i in range(100):
 DiagramView.Invalidate();</note>
       <link>$</link>
       <layer>0</layer>
-      <x>-1201.651470</x>
-      <y>2683.242190</y>
+      <x>-1446.65147000000000000000000</x>
+      <y>2673.2421900000000000000000000</y>
       <width>56</width>
       <height>36</height>
       <scale>0</scale>
@@ -5480,8 +5480,8 @@ print 'uid created'</note>
       <text>CTRL+O</text>
       <link>UID7674842403</link>
       <layer>0</layer>
-      <x>-437.2269900000000295</x>
-      <y>3377.242190</y>
+      <x>-437.22699000000002950000000</x>
+      <y>3377.242190000000000000000000</y>
       <width>79</width>
       <height>36</height>
       <scale>0</scale>
@@ -8632,8 +8632,8 @@ print 'uid created'</note>
     )
 );</text>
       <layer>0</layer>
-      <x>-1883.4024913665723002000</x>
-      <y>2745.6104194046619637000</y>
+      <x>-2167.40249136657230020000000</x>
+      <y>2573.6104194046619637000000000</y>
       <width>404</width>
       <height>232</height>
       <scale>0.0</scale>
@@ -8645,8 +8645,8 @@ print 'uid created'</note>
       <id>2200</id>
       <fontcolor>Black</fontcolor>
       <layer>0</layer>
-      <x>-1946.2735913665723002000</x>
-      <y>2850.0817694046619637000</y>
+      <x>-2230.27359136657230020000000</x>
+      <y>2678.0817694046619637000000000</y>
       <width>20</width>
       <height>20</height>
       <scale>0.0</scale>
@@ -8876,6 +8876,129 @@ print 'uid created'</note>
       <color>#D9CCFF</color>
       <timecreate>2020-7-17 19:54:54</timecreate>
       <timemodify>2020-7-17 19:55:17</timemodify>
+    </rectangle>
+    <rectangle>
+      <id>2227</id>
+      <fontcolor>Black</fontcolor>
+      <text>@shortcuts</text>
+      <layer>0</layer>
+      <x>-513.71010000000000000000000</x>
+      <y>4722.2421900000000000000000010</y>
+      <width>94</width>
+      <height>36</height>
+      <scale>0.0</scale>
+      <color>#A5A5A5</color>
+      <timecreate>2020-7-31 15:28:58</timecreate>
+      <timemodify>2020-7-31 15:28:58</timemodify>
+    </rectangle>
+    <rectangle>
+      <id>2237</id>
+      <fontcolor>Black</fontcolor>
+      <text>log</text>
+      <note>Log.Write("test");</note>
+      <link>#csharp</link>
+      <layer>0</layer>
+      <x>-1164.71010000000000000000000</x>
+      <y>2590.2421900000000000000000010</y>
+      <width>42</width>
+      <height>36</height>
+      <scale>0.0</scale>
+      <color>#FFFFB8</color>
+      <timecreate>2020-7-31 16:17:55</timecreate>
+      <timemodify>2020-7-31 16:18:17</timemodify>
+    </rectangle>
+    <rectangle>
+      <id>2238</id>
+      <fontcolor>Black</fontcolor>
+      <text>create node</text>
+      <note>using Diagram;
+
+Log.Write("create node");
+
+
+Node selected = DiagramView.selectedNodes[0];
+DiagramView.Invalidate();</note>
+      <link>#csharp</link>
+      <layer>0</layer>
+      <x>-1164.71010000000000000000000</x>
+      <y>2634.2421900000000000000000010</y>
+      <width>96</width>
+      <height>36</height>
+      <scale>0.0</scale>
+      <color>#FFFFB8</color>
+      <timecreate>2020-7-31 16:18:41</timecreate>
+      <timemodify>2020-7-31 16:22:33</timemodify>
+    </rectangle>
+    <rectangle>
+      <id>2230</id>
+      <fontcolor>Black</fontcolor>
+      <layer>0</layer>
+      <x>-1204.00000000000000000000000</x>
+      <y>2548.0000000000000000000000000</y>
+      <width>20</width>
+      <height>20</height>
+      <scale>0</scale>
+      <color>#FFFFB8</color>
+      <transparent>true</transparent>
+      <timecreate>2020-7-31 15:48:03</timecreate>
+      <timemodify>2020-7-31 15:48:03</timemodify>
+    </rectangle>
+    <rectangle>
+      <id>2231</id>
+      <fontcolor>Black</fontcolor>
+      <layer>0</layer>
+      <x>-1204.00000000000000000000000</x>
+      <y>2865.0000000000000000000000000</y>
+      <width>20</width>
+      <height>20</height>
+      <scale>0</scale>
+      <color>#FFFFB8</color>
+      <transparent>true</transparent>
+      <timecreate>2020-7-31 15:48:03</timecreate>
+      <timemodify>2020-7-31 15:48:03</timemodify>
+    </rectangle>
+    <rectangle>
+      <id>2232</id>
+      <fontcolor>Black</fontcolor>
+      <layer>0</layer>
+      <x>-809.00000000000000000000000</x>
+      <y>2865.0000000000000000000000000</y>
+      <width>20</width>
+      <height>20</height>
+      <scale>0</scale>
+      <color>#FFFFB8</color>
+      <transparent>true</transparent>
+      <timecreate>2020-7-31 15:48:03</timecreate>
+      <timemodify>2020-7-31 15:48:03</timemodify>
+    </rectangle>
+    <rectangle>
+      <id>2233</id>
+      <fontcolor>Black</fontcolor>
+      <layer>0</layer>
+      <x>-809.00000000000000000000000</x>
+      <y>2548.0000000000000000000000000</y>
+      <width>20</width>
+      <height>20</height>
+      <scale>0</scale>
+      <color>#FFFFB8</color>
+      <transparent>true</transparent>
+      <timecreate>2020-7-31 15:48:03</timecreate>
+      <timemodify>2020-7-31 15:48:03</timemodify>
+    </rectangle>
+    <rectangle>
+      <id>2234</id>
+      <fontcolor>Black</fontcolor>
+      <text>csharp scripts plugin</text>
+      <layer>0</layer>
+      <x>-1176.17360000000000000000000</x>
+      <y>2526.2421900000000000000000000</y>
+      <width>149</width>
+      <height>36</height>
+      <scale>0</scale>
+      <color>#FFFFB8</color>
+      <transparent>true</transparent>
+      <timecreate>2020-7-31 15:48:03</timecreate>
+      <timemodify>2020-7-31 15:48:13</timemodify>
     </rectangle>
   </rectangles>
   <lines>
@@ -12698,6 +12821,46 @@ print 'uid created'</note>
     <line>
       <start>2225</start>
       <end>2214</end>
+      <scale>0</scale>
+      <arrow>0</arrow>
+      <color>Black</color>
+      <layer>0</layer>
+    </line>
+    <line>
+      <start>2227</start>
+      <end>1486</end>
+      <scale>0.0</scale>
+      <arrow>0</arrow>
+      <color>Black</color>
+      <layer>0</layer>
+    </line>
+    <line>
+      <start>2230</start>
+      <end>2231</end>
+      <scale>0</scale>
+      <arrow>0</arrow>
+      <color>Black</color>
+      <layer>0</layer>
+    </line>
+    <line>
+      <start>2231</start>
+      <end>2232</end>
+      <scale>0</scale>
+      <arrow>0</arrow>
+      <color>Black</color>
+      <layer>0</layer>
+    </line>
+    <line>
+      <start>2232</start>
+      <end>2233</end>
+      <scale>0</scale>
+      <arrow>0</arrow>
+      <color>Black</color>
+      <layer>0</layer>
+    </line>
+    <line>
+      <start>2233</start>
+      <end>2230</end>
       <scale>0</scale>
       <arrow>0</arrow>
       <color>Black</color>
