@@ -5,6 +5,8 @@ using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Reflection;
+using Microsoft.CodeAnalysis.Scripting.Hosting;
 
 namespace Plugin
 {
@@ -12,11 +14,7 @@ namespace Plugin
     public class Globals
     {
         public Tools Script { get; set; }
-        public Log Log { get; set; }
-        public Diagram.Diagram Diagram { get; set; }
-        public Diagram.DiagramView DiagramView { get; set; }
     }
-
 
     public class CScriptingPlugin : INodeOpenPlugin, IKeyPressPlugin //UID0290845814
     {
@@ -83,22 +81,44 @@ namespace Plugin
             return false;
         }
 
+        private InteractiveAssemblyLoader interactiveLoader = null;
+        private ScriptOptions scriptOptions = null;
+
         // SCRIPT evaluate python script in node name or in node note in node
         private async System.Threading.Tasks.Task EvaluateAsync(Diagram.Diagram diagram, DiagramView diagramView, Node node, string clipboard = "")
         {
             string body = node.note;
+
+            if (this.interactiveLoader == null) {
+                this.interactiveLoader = new InteractiveAssemblyLoader();
+            }
+
+            if (this.scriptOptions == null)
+            {
+                this.scriptOptions = ScriptOptions.Default;
+
+                var asms = AppDomain.CurrentDomain.GetAssemblies();
+                foreach (Assembly asm in asms)
+                {
+
+                    if (asm.ManifestModule.Name == "Diagram.dll") {
+                        this.scriptOptions = this.scriptOptions.AddReferences(asm);
+                    }
+                }
+
+                this.scriptOptions = this.scriptOptions.AddImports("Diagram");
+            }
+
             System.Threading.Tasks.Task<ScriptState<object>> task = CSharpScript.Create(
+                options: this.scriptOptions,
                 code: body,
-                globalsType: typeof(Globals))
+                globalsType: typeof(Globals),
+                assemblyLoader: this.interactiveLoader
+            )               
             .RunAsync(new Globals { 
-                Script = new Tools(diagram, diagramView, node, clipboard), 
-                Log = Program.log, 
-                Diagram = diagram, 
-                DiagramView = diagramView 
+                Script = new Tools(diagram, diagramView, node, clipboard)
             }); ;
         }
-        
-
     }
 }
  

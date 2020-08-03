@@ -9000,6 +9000,60 @@ DiagramView.Invalidate();</note>
       <timecreate>2020-7-31 15:48:03</timecreate>
       <timemodify>2020-7-31 15:48:13</timemodify>
     </rectangle>
+    <rectangle>
+      <id>2239</id>
+      <fontcolor>Black</fontcolor>
+      <text>create node</text>
+      <note>using Diagram;
+
+Log.Write("create node");
+
+string outStr = "UID";
+
+long l = diagramView.currentLayer.id;
+
+Diagram.Node selected = diagramView.selectedNodes[0];
+
+rec = diagram.CreateNode(Diagram.Position(selected.position.x+selected.width+20, selected.position.y), outStr, l);
+diagramView.Invalidate();</note>
+      <link>#csharp</link>
+      <layer>0</layer>
+      <x>-1155.71010000000000000000000</x>
+      <y>2696.2421900000000000000000010</y>
+      <width>96</width>
+      <height>36</height>
+      <scale>0.0</scale>
+      <color>#FFFFB8</color>
+      <timecreate>2020-8-3 15:59:13</timecreate>
+      <timemodify>2020-8-3 16:04:00</timemodify>
+    </rectangle>
+    <rectangle>
+      <id>2240</id>
+      <fontcolor>Black</fontcolor>
+      <text>create uid</text>
+      <note>using Diagram;
+
+Log.Write("create node");
+
+string outStr = "UID"+Script.getRandomDigits(10);
+
+long l = Script.getCurrentDiagramView().currentLayer.id;
+
+Diagram.Node selected = Script.getCurrentDiagramView().selectedNodes[0];
+
+Diagram.Node rec = Script.getCurrentDiagram().CreateNode(new Position(selected.position.x+selected.width+20, selected.position.y), outStr, l);
+Script.getCurrentDiagramView().Invalidate();</note>
+      <link>#csharp</link>
+      <layer>0</layer>
+      <x>-1152.00000000000000000000000</x>
+      <y>2772.0000000000000000000000000</y>
+      <width>84</width>
+      <height>36</height>
+      <scale>0.0</scale>
+      <color>#FFFFB8</color>
+      <timecreate>2020-8-3 16:41:24</timecreate>
+      <timemodify>2020-8-3 16:41:30</timemodify>
+    </rectangle>
   </rectangles>
   <lines>
     <line>

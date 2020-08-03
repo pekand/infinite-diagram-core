@@ -1099,12 +1099,12 @@ namespace Diagram
             return this.layers.GetNode(id);
         }
 
-        // NODE find node by link
-        public Node GetNodeByScriptID(string id)
+        // NODE find first node by link
+        public Node GetNodeByLink(string text)
         {
             foreach (Node rec in this.GetAllNodes()) // Loop through List with foreach
             {
-                if (Patterns.IsScriptId(rec.link, id))
+                if (rec.link.Trim() == text)
                 {
                     return rec;
                 }

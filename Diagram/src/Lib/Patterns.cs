@@ -165,7 +165,7 @@ namespace Diagram
         }
         
         /// <summary>
-        /// check if url start on https </summary>
+        /// </summary>
         public static bool IsEmail(String email)
         {
             string validEmailPattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|"
@@ -211,7 +211,7 @@ namespace Diagram
         }
 
         /// <summary>
-        /// check if url start on http or https </summary>
+        /// </summary>
         public static bool IsScriptId(String link, string id)
         {
             Regex regex = new Regex(@"^\s*@(\w+){1}\s*$");

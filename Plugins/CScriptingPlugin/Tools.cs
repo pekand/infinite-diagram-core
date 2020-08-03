@@ -44,7 +44,7 @@ namespace Plugin
         // get node by script id
         public Node Get(string nodeScriptId)
         {
-            return this.diagram.GetNodeByScriptID(nodeScriptId);
+            return this.diagram.GetNodeByLink(nodeScriptId);
         }
 
         // get node by id
@@ -175,6 +175,15 @@ namespace Plugin
             for (int i = 0; i < length; i++)
                 s = String.Concat(s, random.Next(10).ToString());
             return s;
+        }
+
+        public Diagram.Diagram getCurrentDiagram() {
+            return this.diagram;
+        }
+
+        public Diagram.DiagramView getCurrentDiagramView()
+        {
+            return this.diagramView;
         }
 
     }
