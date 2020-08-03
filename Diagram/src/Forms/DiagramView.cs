@@ -2087,7 +2087,16 @@ namespace Diagram
 
             if (KeyMap.ParseKey(KeyMap.alignLeft, keyData)) // [KEY] [TAB] align selected nodes to left
             {
-                this.AlignLeft();
+                
+                if (this.selectedNodes.Count() > 1)
+                {
+                    this.AlignLeft();
+                }
+                else
+                {
+                    this.AddNodeAfterNode();
+                }
+
                 return true;
             }
 
@@ -3345,8 +3354,6 @@ namespace Diagram
         // DRAW lock screen  UID7187365714
         private void DrawLockScreen(Graphics gfx)
         {
-            // mark1
-
             int lockHeight = this.Height / 3;
 
             Bitmap lockimage = SvgAdapter.getLockImage(lockHeight, lockHeight);
@@ -3969,13 +3976,21 @@ namespace Diagram
             {
                 if (!this.editPanel.Visible)
                 {
-                    this.editPanel.prevSelectedNode = this.selectedNodes[0];
+                    int spaceBetweenNodes = 10;
+
+                    Node selectedNode = this.selectedNodes[0];
+
+                    decimal s = Tools.GetScale(this.scale);
+
+                    float x = (float)((this.shift.x + selectedNode.position.x + (Node.NodePadding * Tools.GetScale(selectedNode.scale))) / s);
+                    float y = (float)((this.shift.y + selectedNode.position.y) / s);
+                    float w = (float)((selectedNode.width - Node.NodePadding) / (s / Tools.GetScale(selectedNode.scale)));
+
+                    Position newNodePosition = new Position(x,y);
+
+                    this.editPanel.prevSelectedNode = selectedNode;
                     this.editPanel.ShowEditPanel(
-                        this.selectedNodes[0]
-                            .position
-                            .Clone()
-                            .Add(this.shift)
-                            .Add(this.selectedNodes[0].width + 10, 0),
+                        newNodePosition.Clone().Add(w + spaceBetweenNodes, 0),
                         ' ',
                         false
                     );
@@ -4936,10 +4951,6 @@ namespace Diagram
                 this.diagram.AlignLeft(this.selectedNodes);
                 this.diagram.Unsave();
                 this.diagram.InvalidateDiagram();
-            }
-            else
-            {
-                this.AddNodeAfterNode();
             }
         }
 

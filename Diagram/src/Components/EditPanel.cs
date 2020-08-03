@@ -67,7 +67,8 @@ namespace Diagram
             if (!this.Visible)
             {
                 int padding = Node.NodePadding;
-                this.Left = (int)currentPosition.x; // TODO: scale long to int
+
+                this.Left = (int)currentPosition.x;
                 this.Top = (int)currentPosition.y;
 
                 this.edit.Left = padding + 1;
