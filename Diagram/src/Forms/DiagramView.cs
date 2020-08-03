@@ -3228,6 +3228,7 @@ namespace Diagram
 
             if (this.diagram.IsLocked())
             {
+                this.DrawLockScreen(gfx);
                 return;
             }
 
@@ -3339,6 +3340,17 @@ namespace Diagram
                     gfx.DrawLines(myPen, points);
                 }
             }
+        }
+
+        // DRAW lock screen  UID7187365714
+        private void DrawLockScreen(Graphics gfx)
+        {
+            // mark1
+
+            int lockHeight = this.Height / 3;
+
+            Bitmap lockimage = SvgAdapter.getLockImage(lockHeight, lockHeight);
+            gfx.DrawImage(lockimage, this.Width / 2- lockHeight / 2, (this.Height - 50) / 2 - lockHeight / 2);
         }
 
         // DRAW diagram mini screen in zoom mode UID9733202717

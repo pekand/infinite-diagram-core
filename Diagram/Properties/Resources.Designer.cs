@@ -89,5 +89,15 @@ namespace Diagram.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] lock_svg_image {
+            get {
+                object obj = ResourceManager.GetObject("lock_svg_image", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

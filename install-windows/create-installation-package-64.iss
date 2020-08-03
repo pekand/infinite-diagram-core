@@ -40,17 +40,13 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "files\Diagram.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "files\Diagram.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "files\diagram.ico"; DestDir: "{app}"; Flags: ignoreversion
-Source: "files\Interop.Shell32.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "files\Diagram.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
 
-Source: "files\NCalc.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "files\IronPython.zip"; DestDir: "{app}"; Flags: ignoreversion
-Source: "files\IronPython.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "files\IronPython.Modules.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "files\IronPython.SQLite.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "files\Microsoft.Dynamic.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "files\Microsoft.Scripting.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "files\Microsoft.Scripting.Metadata.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "files\Interop.Shell32.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "files\Fizzler.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "files\runtime.osx.10.10-x64.CoreCompat.System.Drawing.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "files\Svg.dll"; DestDir: "{app}"; Flags: ignoreversion
+
 
 Source: "plugins\CreateDirectoryPlugin\CreateDirectoryPlugin.dll"; DestDir: "{userappdata}\Diagram\plugins\CreateDirectoryPlugin\"; Flags: ignoreversion createallsubdirs recursesubdirs comparetimestamp
 

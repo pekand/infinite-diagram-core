@@ -1,3 +1,4 @@
+Show svg lock on lock page.
 Paste text to ritch text editor.
 Add opened diagram to system recent files.
 Remove async opening link on node.

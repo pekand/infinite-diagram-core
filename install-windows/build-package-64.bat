@@ -9,6 +9,10 @@ copy ..\Diagram\bin\x64\Release\netcoreapp3.1\Diagram.dll .\files\
 copy ..\Diagram\bin\x64\Release\netcoreapp3.1\Diagram.runtimeconfig.json .\files\
 copy ..\Diagram\bin\x64\Release\netcoreapp3.1\Interop.Shell32.dll .\files\
 
+copy ..\Diagram\bin\x64\Release\netcoreapp3.1\Fizzler.dll .\files\
+copy ..\Diagram\bin\x64\Release\netcoreapp3.1\runtime.osx.10.10-x64.CoreCompat.System.Drawing.dll .\files\
+copy ..\Diagram\bin\x64\Release\netcoreapp3.1\Svg.dll .\files\
+
 copy ..\Diagram\bin\x64\Release\netcoreapp3.1\plugins\NcalcPlugin\netcoreapp3.1\NCalc.dll .\files\
 copy ..\Diagram\bin\x64\Release\netcoreapp3.1\plugins\ScriptingPlugin\netcoreapp3.1\IronPython.zip .\files\
 copy ..\Diagram\bin\x64\Release\netcoreapp3.1\plugins\ScriptingPlugin\netcoreapp3.1\IronPython.dll .\files\
