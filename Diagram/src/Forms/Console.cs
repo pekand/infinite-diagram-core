@@ -74,6 +74,8 @@ namespace Diagram
             this.logedit.TabIndex = 1;
             this.logedit.Text = "";
             this.logedit.WordWrap = false;
+            this.logedit.ReadOnly = true;
+
             // 
             // featuresTextBox
             // 
@@ -109,7 +111,9 @@ namespace Diagram
             logedit.Text = Program.log.GetText();
 
             Program.log.logUpdateEvent += LogUpdate;
-           
+
+            this.scrollLogToBottom();
+
         }
 
         private void Console_Closed(object sender, System.EventArgs e)
@@ -129,6 +133,13 @@ namespace Diagram
 
         private void LogUpdate(string log) {
             logedit.Text = Program.log.GetText();
+            this.scrollLogToBottom();
+        }
+
+
+        public void scrollLogToBottom() {
+            this.logedit.SelectionStart = this.logedit.Text.Length;
+            this.logedit.ScrollToCaret();
         }
     }
 }

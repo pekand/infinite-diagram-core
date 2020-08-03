@@ -22,7 +22,7 @@ namespace Diagram
         /// <param name="message">Message witch will by saved in log</param>
         public void Write(string message)
         {
-            log = message + "\n" + log;
+            log = log + message + "\n";
 
             logUpdateEvent?.Invoke(log);
 
