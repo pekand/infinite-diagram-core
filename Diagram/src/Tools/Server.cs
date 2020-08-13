@@ -51,14 +51,14 @@ namespace Diagram
                 if (!this.ServerExists()) // check if server exists
                 {
                     Program.log.Write("Server: StartServer");
-                    long port = main.options.server_default_port;
-                    IPAddress localAddr = IPAddress.Parse(main.options.server_default_ip);
+                    long port = main.programOptions.server_default_port;
+                    IPAddress localAddr = IPAddress.Parse(main.programOptions.server_default_ip);
 
                     this.tcpListener = new TcpListener(localAddr, (Int32)port);
                     this.listenThread = new Thread(new ThreadStart(ListenForClients)); // start thread with server
                     this.listenThread.Start();
                     this.mainProcess = true;
-                    Program.log.Write("Server: start on " + main.options.server_default_ip + ":" + main.options.server_default_port);
+                    Program.log.Write("Server: start on " + main.programOptions.server_default_ip + ":" + main.programOptions.server_default_port);
 
                     return true;
                 }
@@ -166,7 +166,7 @@ namespace Diagram
                 {
                     SendTimeout = 1000
                 };
-                IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(main.options.server_default_ip), (Int32)main.options.server_default_port);
+                IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(main.programOptions.server_default_ip), (Int32)main.programOptions.server_default_port);
                 client.Connect(serverEndPoint);
                 NetworkStream clientStream = client.GetStream();
 

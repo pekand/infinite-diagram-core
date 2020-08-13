@@ -21,11 +21,11 @@ namespace Diagram
 
         /// <summary>
         /// Global program options</summary>
-        public ProgramOptions options = null;
+        public ProgramOptions programOptions = null;
 
         /// <summary>
         /// managing file with global program options</summary>
-        private OptionsFile optionsFile = null;
+        private ProgramOptionsFile programOptionsFile = null;
 
         /// <summary>
         /// keyboard shorcut mapping</summary>
@@ -35,7 +35,7 @@ namespace Diagram
         /// open directori with global configuration</summary>
         public void OpenConfigDir()
         {
-            this.optionsFile.ShowDirectoryWithConfiguration();
+            this.programOptionsFile.ShowDirectoryWithConfiguration();
         }
 
         /*************************************************************************************************************************/
@@ -153,7 +153,7 @@ namespace Diagram
                     return false;
                 }
                 
-                this.options.AddRecentFile(FilePath);
+                this.programOptions.AddRecentFile(FilePath);
 
 #if !MONO
                 RecentFiles.AddToRecentlyUsedDocs(FilePath); // add to system recent files
@@ -527,7 +527,7 @@ namespace Diagram
 
             if (this.server != null && this.server.mainProcess)
             {
-                this.optionsFile.SaveConfigFile();                
+                this.programOptionsFile.SaveConfigFile();                
                 server.RequestStop();
             }
         }
@@ -621,13 +621,13 @@ namespace Diagram
 
             if (CommandLineOpen.Count == 0)
             {
-                if (this.options.defaultDiagram != "" && Os.FileExists(this.options.defaultDiagram))
+                if (this.programOptions.defaultDiagram != "" && Os.FileExists(this.programOptions.defaultDiagram))
                 {
-                    this.OpenDiagram(this.options.defaultDiagram); // open default diagram if default diagram is set
+                    this.OpenDiagram(this.programOptions.defaultDiagram); // open default diagram if default diagram is set
                 }
-                else if (this.options.openLastFile && this.options.recentFiles.Count > 0 &&  Os.FileExists(this.options.recentFiles[0]))
+                else if (this.programOptions.openLastFile && this.programOptions.recentFiles.Count > 0 &&  Os.FileExists(this.programOptions.recentFiles[0]))
                 {
-                    this.OpenDiagram(this.options.recentFiles[0]); // open last file if user option is enabled UID2130542088
+                    this.OpenDiagram(this.programOptions.recentFiles[0]); // open last file if user option is enabled UID2130542088
                 } else {
                     this.OpenDiagram(); //open empty diagram UID5981683893
                 }
@@ -664,10 +664,10 @@ namespace Diagram
 
         /// <summary>
         /// load options from global configuration files</summary>
-        public void LoadOptionFiles() //UID3013916734
+        public void LoadProgramOptionFiles() //UID3013916734
         {
-            options = new ProgramOptions();
-            optionsFile = new OptionsFile(options);
+            this.programOptions = new ProgramOptions();
+            programOptionsFile = new ProgramOptionsFile(this.programOptions);
         }
 
         /// <summary>
@@ -730,7 +730,7 @@ namespace Diagram
         {
             Program.log.Write("Program: Main");
 
-            this.LoadOptionFiles();
+            this.LoadProgramOptionFiles();
 
             this.LoadPugins();
 

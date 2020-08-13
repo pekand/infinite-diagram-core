@@ -852,8 +852,8 @@ namespace Diagram
             items["removeAttachmentItem"].Enabled = !readOnly;
             items["protectItem"].Enabled = !readOnly;
             items["openLayerInNewViewItem"].Checked = this.diagramView.diagram.options.openLayerInNewView;
-            items["openLastFileItem"].Checked = this.diagramView.main.options.openLastFile;
-            items["setAsDefaultDiagramItem"].Checked = this.diagramView.main.options.defaultDiagram != "";
+            items["openLastFileItem"].Checked = this.diagramView.main.programOptions.openLastFile;
+            items["setAsDefaultDiagramItem"].Checked = this.diagramView.main.programOptions.defaultDiagram != "";
 
             // NEW FILE
             if (this.diagramView.diagram.IsNew())
@@ -1042,9 +1042,9 @@ namespace Diagram
                 items["recentItem"].DropDownItems.Clear();
             }
 
-            recentItems = new System.Windows.Forms.ToolStripItem[this.diagramView.main.options.recentFiles.Count()];
+            recentItems = new System.Windows.Forms.ToolStripItem[this.diagramView.main.programOptions.recentFiles.Count()];
             long i = 0;
-            foreach (String path in this.diagramView.main.options.recentFiles)
+            foreach (String path in this.diagramView.main.programOptions.recentFiles)
             {
                 recentItems[i] = new ToolStripMenuItem
                 {
@@ -1565,13 +1565,13 @@ namespace Diagram
         private void openLastFileItem_Click(object sender, EventArgs e) //UID8429947533
         {
             items["openLastFileItem"].Checked = !items["openLastFileItem"].Checked;
-            this.diagramView.main.options.openLastFile = items["openLastFileItem"].Checked;
+            this.diagramView.main.programOptions.openLastFile = items["openLastFileItem"].Checked;
 
             if (items["openLastFileItem"].Checked)
             {
                 // cancel open last file if default diagram is set
                 items["setAsDefaultDiagramItem"].Checked = false;
-                this.diagramView.main.options.defaultDiagram = "";
+                this.diagramView.main.programOptions.defaultDiagram = "";
             }
         }
 
@@ -1585,14 +1585,14 @@ namespace Diagram
                 
 
                 if (this.diagramView.diagram.FileName != "") {
-                    this.diagramView.main.options.defaultDiagram = this.diagramView.diagram.FileName;
+                    this.diagramView.main.programOptions.defaultDiagram = this.diagramView.diagram.FileName;
                 }
 
                 // cancel open last file if default diagram is set
                 items["openLastFileItem"].Checked = false;
-                this.diagramView.main.options.openLastFile = false;
+                this.diagramView.main.programOptions.openLastFile = false;
             } else {
-                this.diagramView.main.options.defaultDiagram = "";
+                this.diagramView.main.programOptions.defaultDiagram = "";
             }
         }
 
@@ -1607,7 +1607,7 @@ namespace Diagram
         // MENU visit homepage
         private void VisitWebsiteItem_Click(object sender, EventArgs e) //UID6474020819
         {
-            Network.OpenUrl(this.diagramView.main.options.home_page);
+            Network.OpenUrl(this.diagramView.main.programOptions.home_page);
         }
 
         // MENU show About form

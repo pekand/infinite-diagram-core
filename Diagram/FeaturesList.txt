@@ -1,3 +1,4 @@
+Save program configuration as xml.
 Csharp script plugin load assemblies.
 Log in chronologic order.
 Add new tab after selected tam in scaled view.

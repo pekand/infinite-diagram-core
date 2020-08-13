@@ -3092,7 +3092,7 @@ namespace Diagram
             }
             
             this.diagram.Saveas(this.DSave.FileName);
-            this.main.options.AddRecentFile(this.DSave.FileName);
+            this.main.programOptions.AddRecentFile(this.DSave.FileName);
             return true;
         }
 
@@ -4267,7 +4267,7 @@ namespace Diagram
                             }
 
                             // get external editor path from global configuration saved in user configuration directory
-                            String editFileCmd = this.main.options.texteditor;
+                            String editFileCmd = this.main.programOptions.texteditor;
                             editFileCmd = editFileCmd.Replace("%FILENAME%", Os.NormalizedFullPath(fileName));
                             editFileCmd = editFileCmd.Replace("%LINE%", searchString);
 
@@ -5760,9 +5760,9 @@ namespace Diagram
                         node.SetName(
                             Network.GetWebPageTitle(
                                 url,
-                                this.main.options.proxy_uri,
-                                this.main.options.proxy_password,
-                                this.main.options.proxy_username
+                                this.main.programOptions.proxy_uri,
+                                this.main.programOptions.proxy_password,
+                                this.main.programOptions.proxy_username
                             )
                         );
 

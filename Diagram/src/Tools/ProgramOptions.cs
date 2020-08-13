@@ -75,51 +75,6 @@ namespace Diagram
         public string defaultDiagram = "";
 
         /*************************************************************************************************************************/
-
-        /// <summary>
-        /// load configuration</summary>
-        public void LoadParams(ConfigFile configFile)
-        {
-
-            this.proxy_uri = configFile.Get("proxy_uri");
-            this.proxy_username = configFile.Get("proxy_username");
-            this.proxy_password = configFile.Get("proxy_password");
-            this.server_default_port = Converter.ToInt(configFile.Get("server_default_port"));
-            this.texteditor = configFile.Get("texteditor");
-            this.openLastFile = configFile.Get("openLastFile") == "1";
-            this.defaultDiagram = configFile.Get("defaultDiagram");
-            IList<String> recentFiles = Serialization.XElementToList(configFile.GetElement("recentFiles"));
-
-            if (recentFiles != null) { 
-                this.recentFiles.Clear();
-                foreach (String path in recentFiles) {
-                    this.recentFiles.Add(path);
-                }
-            }
-
-            this.RemoveOldRecentFiles();
-        }
-
-        /*************************************************************************************************************************/
-
-        /// <summary>
-        /// save configuration </summary>
-        public void SaveParams(ConfigFile configFile)
-        {
-
-            configFile.Set("proxy_uri", this.proxy_uri);
-            configFile.Set("proxy_username", this.proxy_username);
-            configFile.Set("proxy_password", this.proxy_password);
-            configFile.Set("server_default_port", this.server_default_port.ToString());
-            configFile.Set("texteditor", this.texteditor);
-            configFile.Set("openLastFile", this.openLastFile ? "1":"0");
-            configFile.Set("defaultDiagram", this.defaultDiagram);
-            configFile.SetElement("recentFiles", Serialization.ListToXElement("recentFiles", this.recentFiles));
-
-            this.RemoveOldRecentFiles();
-        }
-
-        /*************************************************************************************************************************/
         // Recent files
 
         /// <summary>
