@@ -37,7 +37,7 @@ namespace Diagram
 
         /// <summary>
         /// get sha hash from inputString</summary>
-        public static string CalculateSHAHash(string inputString)
+        public static string CalculateSHA512Hash(string inputString)
         {
             using HashAlgorithm algorithm = SHA512.Create();
             byte[] inputBytes = Encoding.UTF8.GetBytes(inputString);
@@ -127,7 +127,7 @@ namespace Diagram
             try
             {
                 // generate the key from the shared secret and the salt
-                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(Encrypt.CalculateSHAHash(password), salt);
+                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(Encrypt.CalculateSHA512Hash(password), salt);
 
                 // Create a RijndaelManaged object
                 aesAlg = new RijndaelManaged();
@@ -178,7 +178,7 @@ namespace Diagram
             try
             {
                 // generate the key from the shared secret and the salt
-                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(CalculateSHAHash(sharedSecret), salt);
+                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(CalculateSHA512Hash(sharedSecret), salt);
 
                 // Create the streams used for decryption.                
                 byte[] bytes = Convert.FromBase64String(cipherText);

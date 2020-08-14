@@ -52,7 +52,7 @@ namespace Diagram
             // open config file if exist
             if (Os.FileExists(this.optionsFilePath))
             {
-                this.programOptions = this.LoadConfigFile();
+                this.LoadConfigFile();
             }
             else
             {
@@ -74,7 +74,7 @@ namespace Diagram
 
         /// <summary>
         /// load global config file from json file</summary>
-        private ProgramOptions LoadConfigFile()
+        private void LoadConfigFile()
         {
             try
             {
@@ -95,7 +95,7 @@ namespace Diagram
                     using XmlReader xr = XmlReader.Create(new StringReader(xml), xws);
                     XElement root = XElement.Load(xr);
 
-                    return this.LoadParams(root);
+                    this.LoadParams(root);
 
                 }
 
@@ -105,12 +105,11 @@ namespace Diagram
                 Program.log.Write("loadConfigFile: " + ex.Message);
             }
 
-            return null;
         }
 
         /// <summary>
         /// load configuration</summary>
-        public ProgramOptions LoadParams(XElement root)
+        public void LoadParams(XElement root)
         {
             
             foreach (XElement option in root.Elements())
@@ -150,6 +149,16 @@ namespace Diagram
                     this.programOptions.defaultDiagram = option.Value;
                 }
 
+                if (option.Name.ToString() == "signatureSecret")
+                {
+                    this.programOptions.signatureSecret = option.Value;
+                }
+
+                if (option.Name.ToString() == "signatureIV")
+                {
+                    this.programOptions.signatureIV = option.Value;
+                }
+
                 if (option.Name.ToString() == "recentFiles" && option.HasElements)
                 {
                     this.programOptions.recentFiles.Clear();
@@ -164,9 +173,16 @@ namespace Diagram
                 }
             }
 
-            programOptions.RemoveOldRecentFiles();
+            if (this.programOptions.signatureSecret == null || this.programOptions.signatureSecret.Trim() == "") {
+                this.programOptions.signatureSecret = Signature.GenerateSignatureSecret();
+            }
 
-            return programOptions;
+            if (this.programOptions.signatureIV == null || this.programOptions.signatureIV.Trim() == "")
+            {
+                this.programOptions.signatureIV = Signature.generateIV();
+            }
+
+            this.programOptions.RemoveOldRecentFiles();
         }
 
         /// <summary>
@@ -220,6 +236,8 @@ namespace Diagram
             root.Add(new XElement("texteditor", this.programOptions.texteditor));
             root.Add(new XElement("openLastFile", this.programOptions.openLastFile ? "1" : "0"));
             root.Add(new XElement("defaultDiagram", this.programOptions.defaultDiagram));
+            root.Add(new XElement("signatureSecret", this.programOptions.signatureSecret));
+            root.Add(new XElement("signatureIV", this.programOptions.signatureIV));
 
             programOptions.RemoveOldRecentFiles();
 
@@ -246,13 +264,5 @@ namespace Diagram
                 this.configFileDirectory
             );
         }
-
-        /// <summary>
-        /// open directory with configuration file</summary> 
-        public void ShowDirectoryWithConfiguration()
-        {
-            Os.ShowDirectoryInExternalApplication(Os.GetDirectoryName(optionsFilePath));
-        }
-
     }
 }

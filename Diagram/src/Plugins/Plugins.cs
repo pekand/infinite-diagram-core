@@ -157,6 +157,11 @@ namespace Diagram
         /// run event for all registred plugins in NodeOpenPlugins </summary>
         public bool ClickOnNodeAction(Diagram diagram, DiagramView diagramView, Node node) 
         {
+            if (!diagram.isSigned())
+            {
+                return false;
+            }
+
             bool stopNextAction = false;
                            
             if (nodeOpenPlugins.Count > 0)
@@ -185,6 +190,11 @@ namespace Diagram
         /// run event for all registred plugins in KeyPressPlugins </summary>
         public bool KeyPressAction(Diagram diagram, DiagramView diagramView, Keys keyData)
         {
+            if (!diagram.isSigned())
+            {
+                return false;
+            }
+
             bool stopNextAction = false;
 
             if (keyPressPlugins.Count > 0)
@@ -213,6 +223,11 @@ namespace Diagram
         /// run event for all registred plugins in KeyPressPlugins </summary>
         public void OpenDiagramAction(Diagram diagram)
         {
+            if (!diagram.isSigned())
+            {
+                return;
+            }
+
             if (openDiagramPlugins.Count > 0)
             {
                 foreach (IOpenDiagramPlugin plugin in openDiagramPlugins)
@@ -234,6 +249,11 @@ namespace Diagram
         /// </summary>
         public void PopupAddItemsAction(DiagramView diagramView, Popup popup)
         {
+            if (!diagramView.diagram.isSigned())
+            {
+                return;
+            }
+
             if (popupPlugins.Count > 0)
             {
                 foreach (IPopupPlugin plugin in popupPlugins)
@@ -255,6 +275,11 @@ namespace Diagram
         /// </summary>
         public void PopupOpenAction(DiagramView diagramView, Popup popup)
         {
+            if (!diagramView.diagram.isSigned())
+            {
+                return;
+            }
+
             if (popupPlugins.Count > 0)
             {
                 foreach (IPopupPlugin plugin in popupPlugins)
@@ -277,6 +302,11 @@ namespace Diagram
         /// </summary>
         public bool DropAction(DiagramView diagramView, DragEventArgs ev)
         {
+            if (!diagramView.diagram.isSigned())
+            {
+                return false;
+            }
+
             if (dropPlugins.Count > 0)
             {
                 bool acceptAction = false;
@@ -308,6 +338,11 @@ namespace Diagram
         /// </summary>
         public bool SaveAction(Diagram diagram, XElement root)
         {
+            if (!diagram.isSigned())
+            {
+                return false;
+            }
+
             if (dropPlugins.Count > 0)
             {
                 bool acceptAction = false;
@@ -340,6 +375,10 @@ namespace Diagram
         /// </summary>
         public bool LoadAction(Diagram diagram, XElement root)
         {
+            if (!diagram.isSigned()) {
+                return false;
+            }
+
             if (dropPlugins.Count > 0)
             {
                 bool acceptAction = false;

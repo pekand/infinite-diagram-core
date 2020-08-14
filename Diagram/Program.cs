@@ -22,6 +22,7 @@ namespace Diagram
         /// create main class which oppening forms</summary>
         private static Main main = null;
 
+#if !DEBUG
         /// <summary>
         /// Process global unhandled global exceptions</summary>
         static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
@@ -32,6 +33,7 @@ namespace Diagram
 
             Environment.Exit(1);
         }
+#endif
 
         /*************************************************************************************************************************/
         // MAIN APPLICATION START        

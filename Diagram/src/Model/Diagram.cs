@@ -51,6 +51,10 @@ namespace Diagram
         private byte[] salt = null;               // salt
 
         /*************************************************************************************************************************/
+        // ATTRIBUTES SIGNATURE
+        private bool signed = true;              // check if diagram is writen by current user 
+
+        /*************************************************************************************************************************/
         // UNDO
 
         public UndoOperations undoOperations = null;  // undo operations repository        
@@ -76,7 +80,7 @@ namespace Diagram
         }
 
         /*************************************************************************************************************************/
-        // FILE OPERATIONS
+        // LOAD DIAGRAM
 
         // open file. If file is invalid return false UID4610064109
         public bool OpenFile(string FileName)
@@ -89,6 +93,7 @@ namespace Diagram
                 this.FileName = FileName;
                 this.NewFile = false;
                 this.SavedFile = true;
+                this.signed = false;
 
                 string xml = Os.GetFileContent(FileName);
 
@@ -115,383 +120,275 @@ namespace Diagram
 
             return false;
         }
-        
-        // save diagram
-        public bool Save() //UID8354947577
-        {
-            if (this.IsLocked() || this.FileName == "" || !Os.FileExists(this.FileName))
-            {
-                return false;
-            }
-
-            this.SaveXMLFile(this.FileName);
-            this.NewFile = false;
-            this.SavedFile = true;
-            this.undoOperations.RememberSave();
-            this.SetTitle();
-            return true;
-        }
-
-        // save diagram as
-        public void Saveas(String FileName) //UID9358805584
-        {
-            if (this.IsLocked())
-            {
-                return;
-            }
-
-            this.SaveXMLFile(FileName);
-            this.FileName = FileName;
-            this.SavedFile = true;
-            this.NewFile = false;
-
-            this.SetTitle();
-        }
-
-        // set default options for file like new file 
-        public void CloseFile() //UID3849853197
-        {
-            // Prednadstavenie atributov
-            this.NewFile = true;
-            this.SavedFile = true;
-            this.FileName = "";
-
-            // clear nodes and lines lists
-            this.layers.Clear();
-
-            this.options.readOnly = false;
-            this.options.grid = true;
-            this.options.coordinates = false;
-
-            this.TextWindows.Clear();
-        }
-
-        /*************************************************************************************************************************/
-        // XML OPERATIONS
-
-        // XML SAVE file or encrypted file
-        public void SaveXMLFile(string FileName) //UID6023051509
-        {
-            string diagraxml = this.SaveInnerXMLFile();
-
-            // encrypt data if password is set
-            try
-            {
-                if (this.password != null)
-                {
-                    XElement root = new XElement("diagram");
-                    try
-                    {
-                        root.Add(new XElement("version", "1"));
-
-                        // encrypted file is saved allways as different string
-                        this.salt = Encrypt.CreateSalt(14);
-
-                        root.Add(new XElement("encrypted", Encrypt.EncryptStringAES(diagraxml, this.password, this.salt)));
-                        root.Add(new XElement("salt", Encrypt.GetSalt(this.salt)));
-
-                        StringBuilder sb = new StringBuilder();
-                        XmlWriterSettings xws = new XmlWriterSettings
-                        {
-                            OmitXmlDeclaration = true,
-                            CheckCharacters = false,
-                            Indent = true
-                        };
-
-                        using (XmlWriter xw = XmlWriter.Create(sb, xws))
-                        {
-                            root.WriteTo(xw);
-                        }
-
-                        diagraxml = sb.ToString();
-                    }
-                    catch (Exception ex)
-                    {
-                        Program.log.Write("save file error: " + ex.Message);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Program.log.Write("save file error: " + ex.Message);
-            }
-
-            // save data to file
-            try
-            {
-                if (diagraxml != "") { // prevent acidentaly loos data
-                    System.IO.StreamWriter file = new System.IO.StreamWriter(FileName);
-                    file.Write(diagraxml);
-                    file.Close();
-                }
-
-            }
-            catch (System.IO.IOException ex)
-            {
-                Program.log.Write("save file io error: " + ex.Message);
-                MessageBox.Show(Translations.fileIsLocked);
-            }
-            catch (Exception ex)
-            {
-                Program.log.Write("save file error: " + ex.Message);
-            }
-        }
-
-        public XElement SaveInnerXmlOptions() //UID8029528026
-        {
-            // [options] [config]
-            XElement option = new XElement("option");
-            option.Add(new XElement("shiftx", this.options.homePosition.x));
-            option.Add(new XElement("shifty", this.options.homePosition.y));
-            option.Add(new XElement("scale", this.options.homeScale));
-            option.Add(new XElement("endPositionx", this.options.endPosition.x));
-            option.Add(new XElement("endPositiony", this.options.endPosition.y));
-            option.Add(new XElement("endScale", this.options.endScale));
-            option.Add(new XElement("firstLayereShift.x", this.options.firstLayereShift.x));
-            option.Add(new XElement("firstLayereShift.y", this.options.firstLayereShift.y));
-            if (this.options.openLayerInNewView) option.Add(new XElement("openLayerInNewView", this.options.openLayerInNewView));
-            option.Add(new XElement("homelayer", this.options.homeLayer));
-            option.Add(new XElement("endlayer", this.options.endLayer));
-            option.Add(new XElement("diagramreadonly", this.options.readOnly));
-            option.Add(new XElement("grid", this.options.grid));
-            option.Add(new XElement("borders", this.options.borders));
-            option.Add(Fonts.FontToXml(this.FontDefault, "defaultfont"));
-            option.Add(new XElement("coordinates", this.options.coordinates));
-            option.Add(new XElement("window.position.restore", this.options.restoreWindow));
-            option.Add(new XElement("window.position.x", this.options.Left));
-            option.Add(new XElement("window.position.y", this.options.Top));
-            option.Add(new XElement("window.position.width", this.options.Width));
-            option.Add(new XElement("window.position.height", this.options.Height));
-            option.Add(new XElement("window.state", this.options.WindowState));
-            
-            if (this.options.icon != "")
-            {
-                option.Add(new XElement("icon", this.options.icon));
-            }
-
-            if (this.options.backgroundImage != null)
-            {
-                option.Add(new XElement(
-                    "backgroundImage", 
-                    Media.ImageToString(this.options.backgroundImage)
-                    )
-                );
-            }
-            
-            return option;
-        }
-        
-        public XElement SaveInnerXmlRectangles(Nodes nodes) //UID0137352615
-        {
-            XElement rectangles = new XElement("rectangles");
-            foreach (Node rec in nodes)
-            {
-                XElement rectangle = new XElement("rectangle");
-                rectangle.Add(new XElement("id", rec.id));
-                if (!Fonts.Compare(this.FontDefault, rec.font))
-                {
-                    rectangle.Add(Fonts.FontToXml(rec.font));
-                }
-                rectangle.Add(new XElement("fontcolor", rec.fontcolor));
-                if (rec.name != "") rectangle.Add(new XElement("text", rec.name));
-                if (rec.note != "") rectangle.Add(new XElement("note", rec.note));
-                if (rec.link != "") rectangle.Add(new XElement("link", rec.link));
-                if (rec.scriptid != "") rectangle.Add(new XElement("scriptid", rec.scriptid));
-                if (rec.shortcut != 0) rectangle.Add(new XElement("shortcut", rec.shortcut));
-                if (rec.mark) rectangle.Add(new XElement("mark", rec.mark));
-                if (rec.attachment != "") rectangle.Add(new XElement("attachment", rec.attachment));
-
-                rectangle.Add(new XElement("layer", rec.layer));
-
-                if (rec.haslayer)
-                {
-                    rectangle.Add(new XElement("haslayer", rec.haslayer));
-                    rectangle.Add(new XElement("layershiftx", rec.layerShift.x));
-                    rectangle.Add(new XElement("layershifty", rec.layerShift.y));
-                }
-
-                rectangle.Add(new XElement("x", rec.position.x));
-                rectangle.Add(new XElement("y", rec.position.y));
-                rectangle.Add(new XElement("width", rec.width));
-                rectangle.Add(new XElement("height", rec.height));
-                rectangle.Add(new XElement("scale", rec.scale));
-                rectangle.Add(new XElement("color", rec.color));
-                if (rec.transparent) rectangle.Add(new XElement("transparent", rec.transparent));
-                if (rec.embeddedimage) rectangle.Add(new XElement("embeddedimage", rec.embeddedimage));
-
-                if (rec.embeddedimage && rec.image != null) // image is inserted directly to file
-                {
-                    rectangle.Add(new XElement("imagedata", Media.BitmapToString(rec.image)));
-                }
-                else if (rec.imagepath != "")
-                {
-                    rectangle.Add(new XElement("image", rec.imagepath));
-                }
-
-                if (rec.protect) rectangle.Add(new XElement("protect", rec.protect));
-
-                rectangle.Add(new XElement("timecreate", rec.timecreate));
-                rectangle.Add(new XElement("timemodify", rec.timemodify));
-
-                rectangles.Add(rectangle);
-            }
-            
-            return rectangles;
-        }
-        
-        public XElement SaveInnerXmlLines(Lines lines) //UID2182227651
-        {
-            XElement xlines = new XElement("lines");
-            foreach (Line lin in lines)
-            {
-                XElement line = new XElement("line");
-                line.Add(new XElement("start", lin.start));
-                line.Add(new XElement("end", lin.end));
-                line.Add(new XElement("scale", lin.scale));
-                line.Add(new XElement("arrow", (lin.arrow) ? "1" : "0"));
-                line.Add(new XElement("color", lin.color));
-                if (lin.width != 1) line.Add(new XElement("width", lin.width));
-                line.Add(new XElement("layer", lin.layer));
-                xlines.Add(line);
-            }
-
-            return xlines;
-        }
-      
-        // XML SAVE create xml from current diagram file state
-        public string SaveInnerXMLFile() //UID8716692347
-        {
-            bool checkpoint = false;
-            XElement root = new XElement("diagram");
-            try
-            {
-                XElement option = this.SaveInnerXmlOptions();
-                XElement rectangles = this.SaveInnerXmlRectangles(this.GetAllNodes());
-                XElement lines = this.SaveInnerXmlLines(this.GetAllLines());
-                
-                root.Add(option);
-                root.Add(rectangles);
-                root.Add(lines);
-                
-                this.main.plugins.SaveAction(this, root);
-
-                checkpoint = true;
-            }
-            catch (Exception ex)
-            {
-                Program.log.Write("save xml error: " + ex.Message);
-            }
-
-            if (checkpoint)
-            {
-                try
-                {
-                    StringBuilder sb = new StringBuilder();
-                    XmlWriterSettings xws = new XmlWriterSettings { 
-                        OmitXmlDeclaration = true,
-                        CheckCharacters = false,
-                        Indent = true
-                    };
-
-                    using (XmlWriter xw = XmlWriter.Create(sb, xws))
-                    {
-                        root.WriteTo(xw);
-                    }
-
-                    return sb.ToString();
-
-                }
-                catch (Exception ex)
-                {
-                    Program.log.Write("write xml to file error: " + ex.Message);
-                }
-
-            }
-
-            return "";
-        }
 
         // XML LOAD If file is invalid return false UID9397528693
         public bool LoadXML(string xml)
         {
 
-            XmlReaderSettings xws = new XmlReaderSettings
-            {
-                CheckCharacters = false
-            };
+            string version = null;
+            string salt = null;
+            string encrypted = null;
+            string signature = null;
+            string signatureIV = this.main.programOptions.signatureIV;
+            XElement diagram = null;
 
-            string version = "";
-            string salt = "";
-            string encrypted = "";
+            XElement option = null;
+            XElement rectangles = null;
+            XElement lines = null;
+
+
 
             try
             {
-                using XmlReader xr = XmlReader.Create(new StringReader(xml), xws);
-                XElement root = XElement.Load(xr);
-                foreach (XElement diagram in root.Elements())
+
+                XElement root = this.StringToXml(xml);
+
+                foreach (XElement element in root.Elements())
                 {
-                    if (diagram.Name.ToString() == "version")
+                    if (element.Name.ToString() == "version") // version 1
                     {
-                        version = diagram.Value;
+                        version = element.Value;
                     }
 
-                    if (diagram.Name.ToString() == "salt")
+                    if (element.Name.ToString() == "salt") // version 1
                     {
-                        salt = diagram.Value;
+                        salt = element.Value;
                     }
 
-                    if (diagram.Name.ToString() == "encrypted")
+                    if (element.Name.ToString() == "encrypted") // version 1
                     {
-                        encrypted = diagram.Value;
+                        encrypted = element.Value;
                     }
 
+                    if (element.Name.ToString() == "option") // version 1
+                    {
+                        option = element;
+                    }
+
+                    if (element.Name.ToString() == "rectangles") // version 1
+                    {
+                        rectangles = element;
+                    }
+
+                    if (element.Name.ToString() == "lines") // version 1
+                    {
+                        lines = element;
+                    }
+
+                    if (element.Name.ToString() == "signatureIV") // version 2
+                    {
+                        signatureIV = element.Value;
+                    }
+
+                    if (element.Name.ToString() == "signature") // version 2
+                    {
+                        signature = element.Value;
+                    }
+
+                    if (element.Name.ToString() == "diagram")  // version 2
+                    {
+                        diagram = element;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(Translations.fileHasWrongFormat);
                 Program.log.Write("load xml error: " + ex.Message);
+                return false;
             }
 
-            if (version == "1" && salt != "" && encrypted != "")
+            if (version == null || version == "1")
             {
-                bool error = false;
-                do
+                if (salt != null && encrypted != null)
                 {
-                    error = false;
-
-                    string password = this.main.GetPassword(Os.GetFileNameWithoutExtension(this.FileName));
-                    if (password != null)
+                    bool error = false;
+                    do
                     {
-                        try
+                        error = false;
+
+                        string password = this.main.GetPassword(Os.GetFileNameWithoutExtension(this.FileName));
+                        if (password != null)
                         {
-                            this.salt = Encrypt.SetSalt(salt);
-                            this.LoadInnerXML(Encrypt.DecryptStringAES(encrypted, password, this.salt));
-                            this.encrypted = true;
-                            this.SetPassword(password);
+                            try
+                            {
+                                this.salt = Encrypt.SetSalt(salt);
+                                string decryptedXml = Encrypt.DecryptStringAES(encrypted, password, this.salt);
+                                diagram = this.StringToXml(decryptedXml);
+                                this.encrypted = true;
+                                this.SetPassword(password);
+
+                            }
+                            catch (Exception e)
+                            {
+                                // probably invalid password
+                                Program.log.Write("LoadXML: Password or file is invalid: " + e.Message);
+                                error = true;
+                            }
                         }
-                        catch (Exception e)
+                        else
                         {
-                            // probably invalid password
-                            Program.log.Write("LoadXML: Password or file is invalid: " + e.Message);
-                            error = true;
+                            // password dialog is cancled
+                            this.CloseFile();
+                            return false;
                         }
-                    }
-                    else
-                    {
-                        // password dialog is cancled
-                        this.CloseFile();
-                        return false;
+
+                    } while (error);
+                } else {
+                    diagram = new XElement("diagram");
+
+                    if (option != null) {
+                        diagram.Add(option);
                     }
 
-                } while (error);
+                    if (rectangles != null) {
+                        diagram.Add(rectangles);
+                    }
+
+                    if (lines != null) {
+                        diagram.Add(lines);
+                    }
+
+                    this.LoadInnerXML(diagram);
+
+                    string diagraxml = this.XmlToString(diagram);
+                    this.signed = false;
+                }
 
                 return true;
             }
-            else
+
+            if (version == "2" )
             {
-                return LoadInnerXML(xml);
+
+                if (salt != null && encrypted != null) {
+                    bool error = false;
+                    do
+                    {
+                        error = false;
+
+                        string password = this.main.GetPassword(Os.GetFileNameWithoutExtension(this.FileName));
+                        if (password != null)
+                        {
+                            try
+                            {
+                                this.salt = Encrypt.SetSalt(salt);
+                                string decryptedXml = Encrypt.DecryptStringAES(encrypted, password, this.salt);
+                                diagram = this.StringToXml(decryptedXml);
+                                this.encrypted = true;
+                                this.SetPassword(password);
+
+                            }
+                            catch (Exception e)
+                            {
+                                // probably invalid password
+                                Program.log.Write("LoadXML: Password or file is invalid: " + e.Message);
+                                error = true;
+                            }
+                        }
+                        else
+                        {
+                            // password dialog is cancled
+                            this.CloseFile();
+                            return false;
+                        }
+
+                    } while (error);
+                } 
+                
+                if(diagram != null) {
+                    this.LoadInnerXML(diagram);
+                    
+                    string diagraxml = this.XmlToString(diagram);
+                    this.signed = Signature.CheckSignature(this.main.programOptions.signatureSecret, signature, diagraxml, signatureIV);
+
+                    Program.log.Write("Document is: " + (this.signed ? "SIGNED" : "UNSIGNED"));
+                }
+
+                return true;
             }
+
+            return true;
+        }
+
+        // XML LOAD inner part of diagram file. If file is invalid return false UID3586094034
+        public bool LoadInnerXML(XElement root)
+        {
+            string FontDefaultString = Fonts.FontToString(this.FontDefault);
+
+            Nodes nodes = new Nodes();
+            Lines lines = new Lines();
+
+            try
+            {
+                foreach (XElement diagram in root.Elements())
+                {
+                    if (diagram.HasElements)
+                    {
+
+                        if (diagram.Name.ToString() == "option") // [options] [config]
+                        {
+                            this.LoadInnerXmlOptions(diagram, FontDefaultString);
+                        }
+
+                        if (diagram.Name.ToString() == "rectangles")
+                        {
+                            this.LoadInnerXmlRectangles(nodes, diagram, FontDefaultString);
+                        }
+
+                        if (diagram.Name.ToString() == "lines")
+                        {
+                            this.LoadInnerXmlLines(lines, nodes, diagram);
+                        }
+
+                    }
+                }
+
+                this.main.plugins.LoadAction(this, root);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(Translations.fileHasWrongFormat);
+                Program.log.Write("load xml error: " + ex.Message);
+                this.CloseFile();
+                return false;
+            }
+
+            decimal newWidth = 0;
+            decimal newHeight = 0;
+
+            Nodes nodesReordered = new Nodes(); // order nodes parent first (layer must exist when sub node is created)
+            this.NodesReorderNodes(0, null, nodes, nodesReordered);
+
+            foreach (Node rec in nodesReordered)
+            {
+                if (!rec.isimage)
+                {
+                    SizeF s = rec.Measure();
+                    newWidth = (decimal)s.Width;
+                    newHeight = (decimal)s.Height;
+
+                    rec.Resize();
+
+                }
+
+                this.layers.AddNode(rec);
+            }
+
+            this.layers.SetLayersParentsReferences();
+
+            foreach (Line line in lines)
+            {
+                this.Connect(
+                    this.layers.GetNode(line.start),
+                    this.layers.GetNode(line.end),
+                    line.arrow,
+                    line.color,
+                    line.width
+                );
+            }
+
+            return true;
         }
 
         public void LoadInnerXmlOptions(XElement diagram, string FontDefaultString)
@@ -647,7 +544,7 @@ namespace Diagram
                 }
             }
         }
-        
+
         public void LoadInnerXmlRectangles(Nodes nodes, XElement diagram, string FontDefaultString)
         {
             foreach (XElement block in diagram.Descendants())
@@ -827,14 +724,15 @@ namespace Diagram
                 }
             }
         }
-               
+
         public void LoadInnerXmlLines(Lines lines, Nodes nodes, XElement diagram)
         {
             foreach (XElement block in diagram.Descendants())
             {
                 if (block.Name.ToString() == "line")
                 {
-                    Line L = new Line {
+                    Line L = new Line
+                    {
                         layer = -1 // for identification unset layers
                     };
 
@@ -891,7 +789,8 @@ namespace Diagram
 
 
                     Node startNode = nodes.Find(L.start);
-                    if (startNode == null) {
+                    if (startNode == null)
+                    {
                         continue;
                     }
 
@@ -916,91 +815,321 @@ namespace Diagram
                 }
             }
         }
-        
-        // XML LOAD inner part of diagram file. If file is invalid return false UID3586094034
-        public bool LoadInnerXML(string xml)
+
+        /*************************************************************************************************************************/
+        // SAVE DIAGRAM
+
+        // save diagram
+        public bool Save() //UID8354947577
         {
-            string FontDefaultString = Fonts.FontToString(this.FontDefault);
-
-            XmlReaderSettings xws = new XmlReaderSettings {
-                CheckCharacters = false
-            };
-
-            Nodes nodes = new Nodes();
-            Lines lines = new Lines();
-
-            try
+            if (this.IsLocked() || this.FileName == "" || !Os.FileExists(this.FileName))
             {
-                using XmlReader xr = XmlReader.Create(new StringReader(xml), xws);
-                XElement root = XElement.Load(xr);
-                foreach (XElement diagram in root.Elements())
-                {
-                    if (diagram.HasElements)
-                    {
-
-                        if (diagram.Name.ToString() == "option") // [options] [config]
-                        {
-                            this.LoadInnerXmlOptions(diagram, FontDefaultString);
-                        }
-
-                        if (diagram.Name.ToString() == "rectangles")
-                        {
-                            this.LoadInnerXmlRectangles(nodes, diagram, FontDefaultString);
-                        }
-
-                        if (diagram.Name.ToString() == "lines")
-                        {
-                            this.LoadInnerXmlLines(lines, nodes, diagram);
-                        }
-
-                    }
-                }
-
-                this.main.plugins.LoadAction(this, root);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(Translations.fileHasWrongFormat);
-                Program.log.Write("load xml error: " + ex.Message);
-                this.CloseFile();
                 return false;
             }
 
-            decimal newWidth = 0;
-            decimal newHeight = 0;
+            this.SaveXMLFile(this.FileName);
+            this.NewFile = false;
+            this.SavedFile = true;
+            this.undoOperations.RememberSave();
+            this.SetTitle();
+            return true;
+        }
 
-            Nodes nodesReordered = new Nodes(); // order nodes parent first (layer must exist when sub node is created)
-            this.NodesReorderNodes(0, null, nodes, nodesReordered);
-
-            foreach (Node rec in nodesReordered)
+        // save diagram as
+        public void Saveas(String FileName) //UID9358805584
+        {
+            if (this.IsLocked())
             {
-                if (!rec.isimage)
-                {
-                    SizeF s = rec.Measure();
-                    newWidth = (decimal)s.Width;
-                    newHeight = (decimal)s.Height;
-
-                    rec.Resize();
-
-                }
-
-                this.layers.AddNode(rec);
+                return;
             }
 
-            this.layers.SetLayersParentsReferences();
+            this.SaveXMLFile(FileName);
+            this.FileName = FileName;
+            this.SavedFile = true;
+            this.NewFile = false;
 
-            foreach (Line line in lines)
+            this.SetTitle();
+        }
+
+        // XML SAVE file or encrypted file
+        public void SaveXMLFile(string FileName) //UID6023051509
+        {
+            XElement root = new XElement("diagram");
+            root.Add(new XElement("version", "2"));
+
+            XElement diagram = this.SaveInnerXMLFile();
+            string diagraxml = this.XmlToString(diagram);
+
+            // encrypt data if password is set
+            try
             {
-                this.Connect(
-                    this.layers.GetNode(line.start),
-                    this.layers.GetNode(line.end),
-                    line.arrow,
-                    line.color,
-                    line.width
+
+                if (this.password != null)
+                {
+                    // encrypted file is saved allways as different string
+                    this.salt = Encrypt.CreateSalt(14);
+
+                    root.Add(new XElement("encrypted", Encrypt.EncryptStringAES(diagraxml, this.password, this.salt)));
+                    root.Add(new XElement("salt", Encrypt.GetSalt(this.salt)));
+                }
+                else
+                {
+                    root.Add(diagram);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Program.log.Write("save file error: " + ex.Message);
+            }
+
+            if (this.signed) {
+                string signatureIV = this.main.programOptions.signatureIV;
+
+                if (this.password != null) {
+                    signatureIV = Signature.generateIV();
+                    root.Add(new XElement("signatureIV", signatureIV));
+                }
+
+                string signature = Signature.SignText(this.main.programOptions.signatureSecret, diagraxml, signatureIV);
+                root.Add(new XElement("signature", signature));
+            }
+
+            // save data to file
+            try
+            {
+                if (diagraxml != "") { // prevent acidentaly loos data
+                    System.IO.StreamWriter file = new System.IO.StreamWriter(FileName);
+                    file.Write(this.XmlToString(root));
+                    file.Close();
+                }
+
+            }
+            catch (System.IO.IOException ex)
+            {
+                Program.log.Write("save file io error: " + ex.Message);
+                MessageBox.Show(Translations.fileIsLocked);
+            }
+            catch (Exception ex)
+            {
+                Program.log.Write("save file error: " + ex.Message);
+            }
+        }
+
+        // XML SAVE create xml from current diagram file state
+        public XElement SaveInnerXMLFile() //UID8716692347
+        {
+            XElement diagram = new XElement("diagram");
+            diagram.Add(new XElement("version", "1"));
+
+            try
+            {
+                XElement option = this.SaveInnerXmlOptions();
+                XElement rectangles = this.SaveInnerXmlRectangles(this.GetAllNodes());
+                XElement lines = this.SaveInnerXmlLines(this.GetAllLines());
+
+                diagram.Add(option);
+                diagram.Add(rectangles);
+                diagram.Add(lines);
+
+                this.main.plugins.SaveAction(this, diagram);
+            }
+            catch (Exception ex)
+            {
+                Program.log.Write("save xml error: " + ex.Message);
+            }
+
+            return diagram;
+        }
+
+        public XElement SaveInnerXmlOptions() //UID8029528026
+        {
+            // [options] [config]
+            XElement option = new XElement("option");
+            option.Add(new XElement("shiftx", this.options.homePosition.x));
+            option.Add(new XElement("shifty", this.options.homePosition.y));
+            option.Add(new XElement("scale", this.options.homeScale));
+            option.Add(new XElement("endPositionx", this.options.endPosition.x));
+            option.Add(new XElement("endPositiony", this.options.endPosition.y));
+            option.Add(new XElement("endScale", this.options.endScale));
+            option.Add(new XElement("firstLayereShift.x", this.options.firstLayereShift.x));
+            option.Add(new XElement("firstLayereShift.y", this.options.firstLayereShift.y));
+            if (this.options.openLayerInNewView) option.Add(new XElement("openLayerInNewView", this.options.openLayerInNewView));
+            option.Add(new XElement("homelayer", this.options.homeLayer));
+            option.Add(new XElement("endlayer", this.options.endLayer));
+            option.Add(new XElement("diagramreadonly", this.options.readOnly));
+            option.Add(new XElement("grid", this.options.grid));
+            option.Add(new XElement("borders", this.options.borders));
+            option.Add(Fonts.FontToXml(this.FontDefault, "defaultfont"));
+            option.Add(new XElement("coordinates", this.options.coordinates));
+            option.Add(new XElement("window.position.restore", this.options.restoreWindow));
+            option.Add(new XElement("window.position.x", this.options.Left));
+            option.Add(new XElement("window.position.y", this.options.Top));
+            option.Add(new XElement("window.position.width", this.options.Width));
+            option.Add(new XElement("window.position.height", this.options.Height));
+            option.Add(new XElement("window.state", this.options.WindowState));
+            
+            if (this.options.icon != "")
+            {
+                option.Add(new XElement("icon", this.options.icon));
+            }
+
+            if (this.options.backgroundImage != null)
+            {
+                option.Add(new XElement(
+                    "backgroundImage", 
+                    Media.ImageToString(this.options.backgroundImage)
+                    )
                 );
             }
             
-            return true;
+            return option;
+        }
+        
+        public XElement SaveInnerXmlRectangles(Nodes nodes) //UID0137352615
+        {
+            XElement rectangles = new XElement("rectangles");
+            foreach (Node rec in nodes)
+            {
+                XElement rectangle = new XElement("rectangle");
+                rectangle.Add(new XElement("id", rec.id));
+                if (!Fonts.Compare(this.FontDefault, rec.font))
+                {
+                    rectangle.Add(Fonts.FontToXml(rec.font));
+                }
+                rectangle.Add(new XElement("fontcolor", rec.fontcolor));
+                if (rec.name != "") rectangle.Add(new XElement("text", rec.name));
+                if (rec.note != "") rectangle.Add(new XElement("note", rec.note));
+                if (rec.link != "") rectangle.Add(new XElement("link", rec.link));
+                if (rec.scriptid != "") rectangle.Add(new XElement("scriptid", rec.scriptid));
+                if (rec.shortcut != 0) rectangle.Add(new XElement("shortcut", rec.shortcut));
+                if (rec.mark) rectangle.Add(new XElement("mark", rec.mark));
+                if (rec.attachment != "") rectangle.Add(new XElement("attachment", rec.attachment));
+
+                rectangle.Add(new XElement("layer", rec.layer));
+
+                if (rec.haslayer)
+                {
+                    rectangle.Add(new XElement("haslayer", rec.haslayer));
+                    rectangle.Add(new XElement("layershiftx", rec.layerShift.x));
+                    rectangle.Add(new XElement("layershifty", rec.layerShift.y));
+                }
+
+                rectangle.Add(new XElement("x", rec.position.x));
+                rectangle.Add(new XElement("y", rec.position.y));
+                rectangle.Add(new XElement("width", rec.width));
+                rectangle.Add(new XElement("height", rec.height));
+                rectangle.Add(new XElement("scale", rec.scale));
+                rectangle.Add(new XElement("color", rec.color));
+                if (rec.transparent) rectangle.Add(new XElement("transparent", rec.transparent));
+                if (rec.embeddedimage) rectangle.Add(new XElement("embeddedimage", rec.embeddedimage));
+
+                if (rec.embeddedimage && rec.image != null) // image is inserted directly to file
+                {
+                    rectangle.Add(new XElement("imagedata", Media.BitmapToString(rec.image)));
+                }
+                else if (rec.imagepath != "")
+                {
+                    rectangle.Add(new XElement("image", rec.imagepath));
+                }
+
+                if (rec.protect) rectangle.Add(new XElement("protect", rec.protect));
+
+                rectangle.Add(new XElement("timecreate", rec.timecreate));
+                rectangle.Add(new XElement("timemodify", rec.timemodify));
+
+                rectangles.Add(rectangle);
+            }
+            
+            return rectangles;
+        }
+        
+        public XElement SaveInnerXmlLines(Lines lines) //UID2182227651
+        {
+            XElement xlines = new XElement("lines");
+            foreach (Line lin in lines)
+            {
+                XElement line = new XElement("line");
+                line.Add(new XElement("start", lin.start));
+                line.Add(new XElement("end", lin.end));
+                line.Add(new XElement("scale", lin.scale));
+                line.Add(new XElement("arrow", (lin.arrow) ? "1" : "0"));
+                line.Add(new XElement("color", lin.color));
+                if (lin.width != 1) line.Add(new XElement("width", lin.width));
+                line.Add(new XElement("layer", lin.layer));
+                xlines.Add(line);
+            }
+
+            return xlines;
+        }
+
+        public string XmlToString(XElement root) //UID8716692347
+        {
+            try
+            {
+                StringBuilder sb = new StringBuilder();
+                XmlWriterSettings xws = new XmlWriterSettings
+                {
+                    OmitXmlDeclaration = true,
+                    CheckCharacters = false
+                };
+
+                using (XmlWriter xw = XmlWriter.Create(sb, xws))
+                {
+                    root.WriteTo(xw);
+                }
+
+                return sb.ToString();
+
+            }
+            catch (Exception ex)
+            {
+                Program.log.Write("write xml to file error: " + ex.Message);
+            }
+
+            return "";
+        }
+
+        public XElement StringToXml(string xml) //UID8716692347
+        {
+            try
+            {
+                XmlReaderSettings xws = new XmlReaderSettings
+                {
+                    CheckCharacters = false
+                };
+
+                using XmlReader xr = XmlReader.Create(new StringReader(xml), xws);
+                return XElement.Load(xr);
+            }
+            catch (Exception ex)
+            {
+                Program.log.Write("StringToXml error: " + ex.Message);
+            }
+
+            return null;
+        }
+
+
+        /*************************************************************************************************************************/
+        // CLOSE DIAGRAM
+
+        // set default options for file like new file 
+        public void CloseFile() //UID3849853197
+        {
+            // Prednadstavenie atributov
+            this.NewFile = true;
+            this.SavedFile = true;
+            this.FileName = "";
+
+            // clear nodes and lines lists
+            this.layers.Clear();
+
+            this.options.readOnly = false;
+            this.options.grid = true;
+            this.options.coordinates = false;
+
+            this.TextWindows.Clear();
         }
 
         /*************************************************************************************************************************/
@@ -2457,7 +2586,7 @@ namespace Diagram
                 {
                     this.encrypted = true;
                     this.password = Encrypt.ConvertToSecureString(newPassword);
-                    this.passwordHash = Encrypt.CalculateSHAHash(newPassword);
+                    this.passwordHash = Encrypt.CalculateSHA512Hash(newPassword);
                     return true;
                 }
 
@@ -2465,7 +2594,7 @@ namespace Diagram
                 {
                     this.encrypted = true;
                     this.password = Encrypt.ConvertToSecureString(newPassword);
-                    this.passwordHash = Encrypt.CalculateSHAHash(newPassword);
+                    this.passwordHash = Encrypt.CalculateSHA512Hash(newPassword);
                     return true;
                 }
             }
@@ -2521,7 +2650,7 @@ namespace Diagram
                 {
                     string password = this.main.GetPassword();
 
-                    if (password != null && this.passwordHash == Encrypt.CalculateSHAHash(password))
+                    if (password != null && this.passwordHash == Encrypt.CalculateSHA512Hash(password))
                     {
                         this.SetPassword(password);
                         this.locked = false;
@@ -2538,6 +2667,24 @@ namespace Diagram
             }
 
             return false;
+        }
+
+        public void TakeOwnership(bool showDialog = false)
+        {
+
+            if (showDialog) {
+                ConfirmTakeOwnership confirmTakeOwnership = new ConfirmTakeOwnership();
+                confirmTakeOwnership.ShowDialog();
+
+                if (confirmTakeOwnership.isConfirmed()) {
+                    this.signed = true;
+                }
+            } 
+        }
+
+        public bool isSigned()
+        {
+            return this.signed;
         }
     }
 }

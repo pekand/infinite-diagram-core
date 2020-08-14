@@ -74,6 +74,14 @@ namespace Diagram
         /// when application start as empty and this option is set then open default diagram if exist instead of empty file</summary>
         public string defaultDiagram = "";
 
+        /// <summary>
+        /// user signature (randomly generated token uniqe for user)</summary>
+        public string signatureSecret = "";
+
+        /// <summary>
+        /// user signature iv - random vector inicializer</summary>
+        public string signatureIV = null;
+
         /*************************************************************************************************************************/
         // Recent files
 

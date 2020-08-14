@@ -1,3 +1,4 @@
+Sign diagram.
 Save program configuration as xml.
 Csharp script plugin load assemblies.
 Log in chronologic order.

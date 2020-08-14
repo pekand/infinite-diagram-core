@@ -4137,10 +4137,15 @@ namespace Diagram
         // NODE Open Link
         public void OpenLink(Node rec) //UID9292140736
         {
+            bool isSigned = this.diagram.isSigned(); // prevent execution of scripts when curent user is not owner of document
+
             if (rec != null)
             {
+                bool stopNextAction = false;
 
-                bool stopNextAction = this.main.plugins.ClickOnNodeAction(this.diagram, this, rec); //UID0290845815
+                if (isSigned) {
+                    stopNextAction = this.main.plugins.ClickOnNodeAction(this.diagram, this, rec); //UID0290845815
+                }
 
                 if (stopNextAction) {
                     // stop execution from plugin
@@ -4160,7 +4165,7 @@ namespace Diagram
                         this.LayerIn(rec);
                     }
                 } 
-                else if (rec.attachment != "") 
+                else if (rec.attachment != "" && isSigned) 
                 {
                     this.SelectOnlyOneNode(rec); // deploy attachment
                     this.AttachmentDeploy();
@@ -4201,11 +4206,11 @@ namespace Diagram
                             }
                         }
                     }
-                    else if (Patterns.IsEmail(rec.link)) // OPEN URL
+                    else if (Patterns.IsEmail(rec.link) && isSigned) // OPEN URL
                     {
                         Os.OpenEmail(rec.link);
                     }
-                    else if (Patterns.IsURL(rec.link)) // OPEN URL
+                    else if (Patterns.IsURL(rec.link) && isSigned) // OPEN URL
                     {
                         try
                         {
@@ -4217,7 +4222,7 @@ namespace Diagram
                             Program.log.Write("open link as url error: " + ex.Message);
                         }
                     }
-                    else if (Os.DirectoryExists(rec.link))  // OPEN DIRECTORY
+                    else if (Os.DirectoryExists(rec.link) && isSigned)  // OPEN DIRECTORY
                     {
                         try
                         {
@@ -4229,7 +4234,7 @@ namespace Diagram
                             Program.log.Write("open link as directory error: " + ex.Message);
                         }
                     }
-                    else if (Os.FileExists(rec.link))       // OPEN FILE
+                    else if (Os.FileExists(rec.link) && isSigned)       // OPEN FILE
                     {
                         try
                         {
@@ -4250,7 +4255,7 @@ namespace Diagram
                         }
                     }
                     else if (Patterns.HasHastag(rec.link.Trim(), ref fileName, ref searchString)
-                        && Os.FileExists(Os.NormalizedFullPath(fileName)))       // OPEN FILE ON LINE POSITION
+                        && Os.FileExists(Os.NormalizedFullPath(fileName)) && isSigned)       // OPEN FILE ON LINE POSITION
                     {
                         try
                         {
@@ -4279,7 +4284,7 @@ namespace Diagram
                             Program.log.Write("open link as file error: " + ex.Message);
                         }
                     }                    
-                    else // run as command 
+                    else if(isSigned)// run as command 
                     {
 
                         // set current directory to current diagrm file destination

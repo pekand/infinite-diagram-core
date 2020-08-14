@@ -606,6 +606,13 @@ namespace Diagram
             items["changePasswordItem"].Text = "Change password";
             items["changePasswordItem"].Click += new System.EventHandler(this.ChangePasswordItem_Click);
             //
+            // takeOwnershipItem
+            //
+            items.Add("takeOwnershipItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["takeOwnershipItem"].Name = "takeOwnershipItem";
+            items["takeOwnershipItem"].Text = "Take ownership";
+            items["takeOwnershipItem"].Click += new System.EventHandler(this.takeOwnershipItem_Click);
+            //
             // readonlyItem
             //
             items.Add("readonlyItem", new System.Windows.Forms.ToolStripMenuItem());
@@ -713,6 +720,7 @@ namespace Diagram
             items["optionItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
                 items["encryptItem"],
                 items["changePasswordItem"],
+                items["takeOwnershipItem"],
                 items["readonlyItem"],
                 items["restoreWindowItem"],
                 items["gridItem"],
@@ -1477,6 +1485,12 @@ namespace Diagram
             {
                 this.diagramView.diagram.Unsave();
             }
+        }
+
+        // MENU take ownership
+        private void takeOwnershipItem_Click(object sender, EventArgs e)
+        {
+            this.diagramView.diagram.TakeOwnership(true);
         }
 
         // MENU Read only
