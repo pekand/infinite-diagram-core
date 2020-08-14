@@ -172,7 +172,7 @@ namespace Diagram
 
 #if !DEBUG
             // load plugins from global plugins directory
-            string pluginsGlobalDirectory = Os.Combine(optionsFile.GetGlobalConfigDirectory(), this.pluginsDirectoryName);
+            string pluginsGlobalDirectory = Os.Combine(this.programOptionsFile.GetGlobalConfigDirectory(), this.pluginsDirectoryName);
             if (Os.DirectoryExists(pluginsGlobalDirectory))
             {
                 plugins.LoadPlugins(pluginsGlobalDirectory);

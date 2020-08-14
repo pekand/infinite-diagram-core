@@ -887,7 +887,7 @@ namespace Diagram
                 string signatureIV = this.main.programOptions.signatureIV;
 
                 if (this.password != null) {
-                    signatureIV = Signature.generateIV();
+                    signatureIV = Signature.GenerateIV();
                     root.Add(new XElement("signatureIV", signatureIV));
                 }
 

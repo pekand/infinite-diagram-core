@@ -179,7 +179,7 @@ namespace Diagram
 
             if (this.programOptions.signatureIV == null || this.programOptions.signatureIV.Trim() == "")
             {
-                this.programOptions.signatureIV = Signature.generateIV();
+                this.programOptions.signatureIV = Signature.GenerateIV();
             }
 
             this.programOptions.RemoveOldRecentFiles();

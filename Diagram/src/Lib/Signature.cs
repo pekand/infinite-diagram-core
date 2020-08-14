@@ -41,7 +41,7 @@ namespace Diagram
             }
         }
 
-        public static string generateIV()
+        public static string GenerateIV()
         {
             using (SymmetricAlgorithm crypt = Aes.Create())
             {

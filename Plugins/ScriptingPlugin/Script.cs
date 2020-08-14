@@ -173,7 +173,7 @@ namespace Plugin
         // get node by script id
         public Node Get(string nodeScriptId)
         {
-            return this.script.diagram.GetNodeByScriptID(nodeScriptId);
+            return this.script.diagram.GetNodeByLink(nodeScriptId);
         }
 
         // get node by id
