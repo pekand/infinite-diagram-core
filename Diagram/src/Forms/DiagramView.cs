@@ -155,58 +155,56 @@ namespace Diagram
             this.DSelectDirectoryAttachment = new System.Windows.Forms.FolderBrowserDialog();
             this.DSelectFileAttachment = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
-            //
+            // 
             // DSave
-            //
+            // 
             this.DSave.DefaultExt = "*.diagram";
             this.DSave.Filter = "Diagram (*.diagram)|*.diagram";
-            //
+            // 
             // DOpen
-            //
+            // 
             this.DOpen.DefaultExt = "*.diagram";
             this.DOpen.Filter = "Diagram (*.diagram)|*.diagram";
-            //
+            // 
             // DFont
-            //
+            // 
             this.DFont.Color = System.Drawing.SystemColors.ControlText;
-            //
+            // 
             // DImage
-            //
-            this.DImage.Filter = "All|*.bmp;*.jpg;*.jpeg;*.png;*.ico|Bmp|*.bmp|Jpg|*.jpg;*.jpeg|Png|*.png|Ico|*.ico";
-            //
+            // 
+            this.DImage.Filter = "All|*.bmp;*.jpg;*.jpeg;*.png;*.ico|Bmp|*.bmp|Jpg|*.jpg;*.jpeg|Png|*.png|Ico|*.ico" +
+    "";
+            // 
             // MoveTimer
-            //
+            // 
             this.MoveTimer.Interval = 5;
             this.MoveTimer.Tick += new System.EventHandler(this.MoveTimer_Tick);
-            //
+            // 
             // exportFile
-            //
+            // 
             this.exportFile.DefaultExt = "*.png";
             this.exportFile.Filter = "Image (*.png) | *.png";
-            //
+            // 
             // saveTextFileDialog
-            //
+            // 
             this.saveTextFileDialog.DefaultExt = "*.txt";
             this.saveTextFileDialog.Filter = "Text file (*.txt)|*.txt";
-            //
+            // 
             // DSelectFileAttachment
-            //
+            // 
             this.DSelectFileAttachment.DefaultExt = "*.*";
             this.DSelectFileAttachment.Filter = "All files (*.*)|*.*";
-            //
+            // 
             // DiagramView
-            //
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            // 
+            this.AllowDrop = true;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(383, 341);
+            this.ClientSize = new System.Drawing.Size(447, 393);
             this.DoubleBuffered = true;
-#if DEBUG
-            this.Icon = global::Diagram.Properties.Resources.ico_diagram_debug;
-#else
-            this.Icon = global::Diagram.Properties.Resources.ico_diagram;
-#endif
             this.KeyPreview = true;
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "DiagramView";
             this.Text = "Diagram";
             this.Activated += new System.EventHandler(this.DiagramView_Activated);
@@ -214,6 +212,8 @@ namespace Diagram
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DiagramApp_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DiagramView_FormClosed);
             this.Load += new System.EventHandler(this.DiagramViewLoad);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.DiagramApp_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.DiagramApp_DragEnter);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.DiagramApp_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DiagramApp_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DiagramApp_KeyPress);
@@ -222,13 +222,9 @@ namespace Diagram
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DiagramApp_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DiagramApp_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DiagramApp_MouseUp);
-            this.Resize += new System.EventHandler(this.DiagramApp_Resize);
             this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.DiagramApp_MouseWheel);
-            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.DiagramApp_DragEnter);
-            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.DiagramApp_DragDrop);
-            this.AllowDrop = true;
+            this.Resize += new System.EventHandler(this.DiagramApp_Resize);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -4137,20 +4133,22 @@ namespace Diagram
         // NODE Open Link
         public void OpenLink(Node rec) //UID9292140736
         {
-            bool isSigned = this.diagram.isSigned(); // prevent execution of scripts when curent user is not owner of document
+            if (rec != null && !this.diagram.isSigned()) // prevent execution of scripts when curent user is not owner of document
+            {
+                this.diagram.EditNode(rec);
+                return;
+            }
 
             if (rec != null)
             {
-                bool stopNextAction = false;
-
-                if (isSigned) {
-                    stopNextAction = this.main.plugins.ClickOnNodeAction(this.diagram, this, rec); //UID0290845815
-                }
+                bool stopNextAction = this.main.plugins.ClickOnNodeAction(this.diagram, this, rec); //UID0290845815
 
                 if (stopNextAction) {
                     // stop execution from plugin
                     return;
-                } else if (rec.haslayer) {
+                } 
+                
+                if (rec.haslayer) {
                     if (this.diagram.options.openLayerInNewView) //UID1964118363
                     {
                         this.diagram.OpenDiagramView(
@@ -4165,7 +4163,7 @@ namespace Diagram
                         this.LayerIn(rec);
                     }
                 } 
-                else if (rec.attachment != "" && isSigned) 
+                else if (rec.attachment != "") 
                 {
                     this.SelectOnlyOneNode(rec); // deploy attachment
                     this.AttachmentDeploy();
@@ -4206,11 +4204,11 @@ namespace Diagram
                             }
                         }
                     }
-                    else if (Patterns.IsEmail(rec.link) && isSigned) // OPEN URL
+                    else if (Patterns.IsEmail(rec.link)) // OPEN URL
                     {
                         Os.OpenEmail(rec.link);
                     }
-                    else if (Patterns.IsURL(rec.link) && isSigned) // OPEN URL
+                    else if (Patterns.IsURL(rec.link)) // OPEN URL
                     {
                         try
                         {
@@ -4222,7 +4220,7 @@ namespace Diagram
                             Program.log.Write("open link as url error: " + ex.Message);
                         }
                     }
-                    else if (Os.DirectoryExists(rec.link) && isSigned)  // OPEN DIRECTORY
+                    else if (Os.DirectoryExists(rec.link))  // OPEN DIRECTORY
                     {
                         try
                         {
@@ -4234,7 +4232,7 @@ namespace Diagram
                             Program.log.Write("open link as directory error: " + ex.Message);
                         }
                     }
-                    else if (Os.FileExists(rec.link) && isSigned)       // OPEN FILE
+                    else if (Os.FileExists(rec.link))       // OPEN FILE
                     {
                         try
                         {
@@ -4255,7 +4253,7 @@ namespace Diagram
                         }
                     }
                     else if (Patterns.HasHastag(rec.link.Trim(), ref fileName, ref searchString)
-                        && Os.FileExists(Os.NormalizedFullPath(fileName)) && isSigned)       // OPEN FILE ON LINE POSITION
+                        && Os.FileExists(Os.NormalizedFullPath(fileName)))       // OPEN FILE ON LINE POSITION
                     {
                         try
                         {
@@ -4284,7 +4282,7 @@ namespace Diagram
                             Program.log.Write("open link as file error: " + ex.Message);
                         }
                     }                    
-                    else if(isSigned)// run as command 
+                    else // run as command 
                     {
 
                         // set current directory to current diagrm file destination

@@ -1,3 +1,4 @@
+Prevent open link when diagman is not signed.
 Sign diagram.
 Save program configuration as xml.
 Csharp script plugin load assemblies.
