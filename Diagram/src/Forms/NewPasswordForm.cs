@@ -25,90 +25,95 @@ namespace Diagram
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewPasswordForm));
             this.labelNewPassword1 = new System.Windows.Forms.Label();
             this.labelNewPassword2 = new System.Windows.Forms.Label();
             this.editNewPassword1 = new System.Windows.Forms.TextBox();
             this.editNewPassword2 = new System.Windows.Forms.TextBox();
             this.buttonOk = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
-            //
+            this.SuspendLayout();
+            // 
             // labelNewPassword1
-            //
+            // 
             this.labelNewPassword1.AutoSize = true;
-            this.labelNewPassword1.Location = new System.Drawing.Point(16, 31);
+            this.labelNewPassword1.Location = new System.Drawing.Point(14, 29);
             this.labelNewPassword1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelNewPassword1.Name = "labelNewPassword1";
-            this.labelNewPassword1.Size = new System.Drawing.Size(103, 17);
+            this.labelNewPassword1.Size = new System.Drawing.Size(87, 15);
             this.labelNewPassword1.TabIndex = 2;
             this.labelNewPassword1.Text = "New password:";
-            //
+            // 
             // labelNewPassword2
-            //
+            // 
             this.labelNewPassword2.AutoSize = true;
-            this.labelNewPassword2.Location = new System.Drawing.Point(16, 63);
+            this.labelNewPassword2.Location = new System.Drawing.Point(14, 59);
             this.labelNewPassword2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelNewPassword2.Name = "labelNewPassword2";
-            this.labelNewPassword2.Size = new System.Drawing.Size(103, 17);
+            this.labelNewPassword2.Size = new System.Drawing.Size(87, 15);
             this.labelNewPassword2.TabIndex = 3;
             this.labelNewPassword2.Text = "New password:";
-            //
+            // 
             // editNewPassword1
-            //
-            this.editNewPassword1.Location = new System.Drawing.Point(144, 27);
-            this.editNewPassword1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            // 
+            this.editNewPassword1.Location = new System.Drawing.Point(126, 25);
+            this.editNewPassword1.Margin = new System.Windows.Forms.Padding(4);
             this.editNewPassword1.Name = "editNewPassword1";
-            this.editNewPassword1.Size = new System.Drawing.Size(347, 22);
+            this.editNewPassword1.Size = new System.Drawing.Size(304, 23);
             this.editNewPassword1.TabIndex = 5;
             this.editNewPassword1.UseSystemPasswordChar = true;
-            //
+            // 
             // editNewPassword2
-            //
-            this.editNewPassword2.Location = new System.Drawing.Point(144, 59);
-            this.editNewPassword2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            // 
+            this.editNewPassword2.Location = new System.Drawing.Point(126, 55);
+            this.editNewPassword2.Margin = new System.Windows.Forms.Padding(4);
             this.editNewPassword2.Name = "editNewPassword2";
-            this.editNewPassword2.Size = new System.Drawing.Size(347, 22);
+            this.editNewPassword2.Size = new System.Drawing.Size(304, 23);
             this.editNewPassword2.TabIndex = 6;
             this.editNewPassword2.UseSystemPasswordChar = true;
-            //
+            // 
             // buttonOk
-            //
-            this.buttonOk.Location = new System.Drawing.Point(144, 91);
-            this.buttonOk.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            // 
+            this.buttonOk.Location = new System.Drawing.Point(126, 85);
+            this.buttonOk.Margin = new System.Windows.Forms.Padding(4);
             this.buttonOk.Name = "buttonOk";
-            this.buttonOk.Size = new System.Drawing.Size(85, 34);
+            this.buttonOk.Size = new System.Drawing.Size(74, 32);
             this.buttonOk.TabIndex = 7;
             this.buttonOk.Text = "Ok";
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.ButtonOk_Click);
-            //
+            // 
             // buttonCancel
-            //
-            this.buttonCancel.Location = new System.Drawing.Point(237, 91);
-            this.buttonCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            // 
+            this.buttonCancel.Location = new System.Drawing.Point(207, 85);
+            this.buttonCancel.Margin = new System.Windows.Forms.Padding(4);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(96, 34);
+            this.buttonCancel.Size = new System.Drawing.Size(84, 32);
             this.buttonCancel.TabIndex = 8;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.ButtonCancel_Click);
-            //
+            // 
             // NewPasswordForm
-            //
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(508, 135);
+            this.ClientSize = new System.Drawing.Size(444, 127);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.editNewPassword2);
             this.Controls.Add(this.editNewPassword1);
             this.Controls.Add(this.labelNewPassword2);
             this.Controls.Add(this.labelNewPassword1);
-            this.Icon = Properties.Resources.ico_diagramico_forms;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "NewPasswordForm";
             this.Text = "NewPasswordForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.NewPasswordForm_FormClosed);
             this.Load += new System.EventHandler(this.NewPasswordForm_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         public void Clear()

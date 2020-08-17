@@ -18,6 +18,7 @@
   <PropertyGroup>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <ApplicationIcon>diagram.ico</ApplicationIcon>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

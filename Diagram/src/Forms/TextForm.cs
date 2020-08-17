@@ -31,10 +31,11 @@ namespace Diagram
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TextForm));
             this.SplitContainer1 = new System.Windows.Forms.SplitContainer();
             this.TextFormTextBox = new System.Windows.Forms.RichTextBox();
-            this.TextFormNoteTextBox = new System.Windows.Forms.RichTextBox();
             this.TextFormLinkTextBox = new System.Windows.Forms.TextBox();
+            this.TextFormNoteTextBox = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).BeginInit();
             this.SplitContainer1.Panel1.SuspendLayout();
             this.SplitContainer1.Panel2.SuspendLayout();
@@ -45,6 +46,7 @@ namespace Diagram
             // 
             this.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SplitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.SplitContainer1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.SplitContainer1.Name = "SplitContainer1";
             this.SplitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -56,54 +58,55 @@ namespace Diagram
             // 
             this.SplitContainer1.Panel2.Controls.Add(this.TextFormLinkTextBox);
             this.SplitContainer1.Panel2.Controls.Add(this.TextFormNoteTextBox);
-            this.SplitContainer1.Size = new System.Drawing.Size(393, 517);
-            this.SplitContainer1.SplitterDistance = 72;
+            this.SplitContainer1.Size = new System.Drawing.Size(458, 597);
+            this.SplitContainer1.SplitterDistance = 83;
+            this.SplitContainer1.SplitterWidth = 5;
             this.SplitContainer1.TabIndex = 0;
             // 
             // TextFormTextBox
             // 
             this.TextFormTextBox.DetectUrls = false;
             this.TextFormTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TextFormTextBox.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.TextFormTextBox.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.TextFormTextBox.Location = new System.Drawing.Point(0, 0);
+            this.TextFormTextBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.TextFormTextBox.Name = "TextFormTextBox";
-            this.TextFormTextBox.Size = new System.Drawing.Size(393, 72);
+            this.TextFormTextBox.Size = new System.Drawing.Size(458, 83);
             this.TextFormTextBox.TabIndex = 0;
             this.TextFormTextBox.Text = "";
-            this.TextFormTextBox.AutoWordSelection = false;
             this.TextFormTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextFormTextBox_KeyDown);
-
+            // 
+            // TextFormLinkTextBox
+            // 
+            this.TextFormLinkTextBox.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.TextFormLinkTextBox.Location = new System.Drawing.Point(0, 486);
+            this.TextFormLinkTextBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.TextFormLinkTextBox.Name = "TextFormLinkTextBox";
+            this.TextFormLinkTextBox.Size = new System.Drawing.Size(458, 23);
+            this.TextFormLinkTextBox.TabIndex = 1;
             // 
             // TextFormNoteTextBox
             // 
             this.TextFormNoteTextBox.DetectUrls = false;
             this.TextFormNoteTextBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.TextFormNoteTextBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.TextFormNoteTextBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.TextFormNoteTextBox.Location = new System.Drawing.Point(0, 0);
+            this.TextFormNoteTextBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.TextFormNoteTextBox.Name = "TextFormNoteTextBox";
-            this.TextFormNoteTextBox.Size = new System.Drawing.Size(393, 404);
+            this.TextFormNoteTextBox.Size = new System.Drawing.Size(458, 466);
             this.TextFormNoteTextBox.TabIndex = 0;
             this.TextFormNoteTextBox.Text = "";
-            this.TextFormNoteTextBox.AutoWordSelection = false;
             this.TextFormNoteTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextFormNoteTextBox_KeyDown);
-
-            // 
-            // TextFormLinkTextBox
-            // 
-            this.TextFormLinkTextBox.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.TextFormLinkTextBox.Location = new System.Drawing.Point(0, 421);
-            this.TextFormLinkTextBox.Name = "TextFormLinkTextBox";
-            this.TextFormLinkTextBox.Size = new System.Drawing.Size(393, 20);
-            this.TextFormLinkTextBox.TabIndex = 1;
             // 
             // TextForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(393, 517);
+            this.ClientSize = new System.Drawing.Size(458, 597);
             this.Controls.Add(this.SplitContainer1);
-            this.Icon = global::Diagram.Properties.Resources.ico_diagramico_forms;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "TextForm";
             this.Text = "Edit";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TextForm_FormClosed);

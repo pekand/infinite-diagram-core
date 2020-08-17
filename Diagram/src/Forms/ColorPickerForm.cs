@@ -28,6 +28,7 @@ namespace Diagram
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ColorPickerForm));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -35,8 +36,9 @@ namespace Diagram
             // pictureBox1
             // 
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(391, 427);
+            this.pictureBox1.Size = new System.Drawing.Size(456, 493);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ColorPickerForm_MouseDown);
@@ -46,20 +48,21 @@ namespace Diagram
             // 
             // ColorPickerForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(842, 248);
+            this.ClientSize = new System.Drawing.Size(982, 286);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = global::Diagram.Properties.Resources.ico_diagramico_forms;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MaximizeBox = false;
             this.Name = "ColorPickerForm";
             this.Text = "Color";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ColorPickerForm_FormClosed);
             this.Load += new System.EventHandler(this.ColorPickerForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ColorPickerForm_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ColorPickerForm_KeyUp);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ColorPickerForm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 

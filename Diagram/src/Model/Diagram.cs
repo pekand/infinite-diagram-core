@@ -200,6 +200,8 @@ namespace Diagram
 
             if (version == null || version == "1")
             {
+                this.signed = false;
+
                 if (salt != null && encrypted != null)
                 {
                     bool error = false;
@@ -217,7 +219,7 @@ namespace Diagram
                                 diagram = this.StringToXml(decryptedXml);
                                 this.encrypted = true;
                                 this.SetPassword(password);
-
+                                this.LoadInnerXML(diagram);
                             }
                             catch (Exception e)
                             {
@@ -250,9 +252,6 @@ namespace Diagram
                     }
 
                     this.LoadInnerXML(diagram);
-
-                    string diagraxml = this.XmlToString(diagram);
-                    this.signed = false;
                 }
 
                 return true;

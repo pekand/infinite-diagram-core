@@ -24,6 +24,7 @@ namespace Diagram
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfirmTakeOwnership));
             this.labelMessage = new System.Windows.Forms.Label();
             this.buttonOk = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
@@ -70,6 +71,7 @@ namespace Diagram
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.labelMessage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "ConfirmTakeOwnership";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

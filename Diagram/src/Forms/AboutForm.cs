@@ -30,6 +30,7 @@ namespace Diagram
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             this.labelProgramName = new System.Windows.Forms.Label();
             this.buttonOk = new System.Windows.Forms.Button();
             this.labelLicence = new System.Windows.Forms.Label();
@@ -44,8 +45,8 @@ namespace Diagram
             // labelProgramName
             // 
             this.labelProgramName.AutoSize = true;
-            this.labelProgramName.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelProgramName.Location = new System.Drawing.Point(16, 16);
+            this.labelProgramName.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelProgramName.Location = new System.Drawing.Point(19, 18);
             this.labelProgramName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelProgramName.Name = "labelProgramName";
             this.labelProgramName.Size = new System.Drawing.Size(241, 37);
@@ -54,10 +55,10 @@ namespace Diagram
             // 
             // buttonOk
             // 
-            this.buttonOk.Location = new System.Drawing.Point(182, 107);
+            this.buttonOk.Location = new System.Drawing.Point(212, 123);
             this.buttonOk.Margin = new System.Windows.Forms.Padding(2);
             this.buttonOk.Name = "buttonOk";
-            this.buttonOk.Size = new System.Drawing.Size(56, 26);
+            this.buttonOk.Size = new System.Drawing.Size(65, 30);
             this.buttonOk.TabIndex = 1;
             this.buttonOk.Text = "OK";
             this.buttonOk.UseVisualStyleBackColor = true;
@@ -66,40 +67,39 @@ namespace Diagram
             // labelLicence
             // 
             this.labelLicence.AutoSize = true;
-            this.labelLicence.Location = new System.Drawing.Point(28, 70);
+            this.labelLicence.Location = new System.Drawing.Point(33, 81);
             this.labelLicence.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelLicence.Name = "labelLicence";
-            this.labelLicence.Size = new System.Drawing.Size(44, 13);
+            this.labelLicence.Size = new System.Drawing.Size(19, 15);
             this.labelLicence.TabIndex = 3;
-            this.labelLicence.Text = "licence:";
+            this.labelLicence.Text = "lic";
             // 
             // labelLicenceType
             // 
             this.labelLicenceType.AutoSize = true;
-            this.labelLicenceType.Location = new System.Drawing.Point(114, 70);
+            this.labelLicenceType.Location = new System.Drawing.Point(133, 81);
             this.labelLicenceType.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelLicenceType.Name = "labelLicenceType";
-            this.labelLicenceType.Size = new System.Drawing.Size(0, 13);
+            this.labelLicenceType.Size = new System.Drawing.Size(0, 15);
             this.labelLicenceType.TabIndex = 6;
-            this.labelLicence.Text = "lic";
             // 
             // labelAuthor
             // 
             this.labelAuthor.AutoSize = true;
-            this.labelAuthor.Location = new System.Drawing.Point(28, 53);
+            this.labelAuthor.Location = new System.Drawing.Point(33, 61);
             this.labelAuthor.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelAuthor.Name = "labelAuthor";
-            this.labelAuthor.Size = new System.Drawing.Size(40, 13);
+            this.labelAuthor.Size = new System.Drawing.Size(45, 15);
             this.labelAuthor.TabIndex = 4;
             this.labelAuthor.Text = "author:";
             // 
             // linkLabelMe
             // 
             this.linkLabelMe.AutoSize = true;
-            this.linkLabelMe.Location = new System.Drawing.Point(114, 53);
+            this.linkLabelMe.Location = new System.Drawing.Point(133, 61);
             this.linkLabelMe.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.linkLabelMe.Name = "linkLabelMe";
-            this.linkLabelMe.Size = new System.Drawing.Size(38, 13);
+            this.linkLabelMe.Size = new System.Drawing.Size(44, 15);
             this.linkLabelMe.TabIndex = 5;
             this.linkLabelMe.TabStop = true;
             this.linkLabelMe.Text = "Author";
@@ -108,49 +108,49 @@ namespace Diagram
             // labelVersion
             // 
             this.labelVersion.AutoSize = true;
-            this.labelVersion.Location = new System.Drawing.Point(28, 87);
+            this.labelVersion.Location = new System.Drawing.Point(33, 100);
             this.labelVersion.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(44, 13);
+            this.labelVersion.Size = new System.Drawing.Size(48, 15);
             this.labelVersion.TabIndex = 3;
             this.labelVersion.Text = "version:";
             // 
             // labelVersionNumber
             // 
             this.labelVersionNumber.AutoSize = true;
-            this.labelVersionNumber.Location = new System.Drawing.Point(114, 87);
+            this.labelVersionNumber.Location = new System.Drawing.Point(133, 100);
             this.labelVersionNumber.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelVersionNumber.Name = "labelVersionNumber";
-            this.labelVersionNumber.Size = new System.Drawing.Size(59, 13);
+            this.labelVersionNumber.Size = new System.Drawing.Size(22, 15);
             this.labelVersionNumber.TabIndex = 3;
             this.labelVersionNumber.Text = "0.0";
             // 
             // labelHomepage
             // 
             this.labelHomepage.AutoSize = true;
-            this.labelHomepage.Location = new System.Drawing.Point(28, 100);
+            this.labelHomepage.Location = new System.Drawing.Point(33, 115);
             this.labelHomepage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelHomepage.Name = "labelHomepage";
-            this.labelHomepage.Size = new System.Drawing.Size(0, 13);
+            this.labelHomepage.Size = new System.Drawing.Size(0, 15);
             this.labelHomepage.TabIndex = 3;
             this.labelHomepage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LabelHomepage_HomepageClicked);
             // 
             // AboutForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(260, 150);
+            this.ClientSize = new System.Drawing.Size(303, 173);
             this.Controls.Add(this.labelLicenceType);
             this.Controls.Add(this.linkLabelMe);
             this.Controls.Add(this.labelAuthor);
             this.Controls.Add(this.labelLicence);
-            this.Controls.Add(this.labelVersion); 
+            this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.labelVersionNumber);
             this.Controls.Add(this.labelHomepage);
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.labelProgramName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Icon = global::Diagram.Properties.Resources.ico_diagramico_forms;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -175,7 +175,16 @@ namespace Diagram
 
         private void LinkLabelMe_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("mailto:pekand@gmail.com");
+            try
+            {
+                System.Diagnostics.Process.Start("mailto:pekand@gmail.com");
+            }
+            catch (Exception ex)
+            {
+
+                Program.log.Write("Send email error:"+ex.Message);
+            }
+            
         }
 
         private void LabelHomepage_HomepageClicked(object sender, LinkLabelLinkClickedEventArgs e)

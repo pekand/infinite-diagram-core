@@ -23,6 +23,7 @@ namespace Diagram
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UpdateForm));
             this.labelInfo = new System.Windows.Forms.Label();
             this.buttonYes = new System.Windows.Forms.Button();
             this.buttonNo = new System.Windows.Forms.Button();
@@ -34,8 +35,9 @@ namespace Diagram
             // labelInfo
             // 
             this.labelInfo.AutoSize = true;
-            this.labelInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInfo.Location = new System.Drawing.Point(64, 31);
+            this.labelInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelInfo.Location = new System.Drawing.Point(75, 36);
+            this.labelInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelInfo.Name = "labelInfo";
             this.labelInfo.Size = new System.Drawing.Size(323, 24);
             this.labelInfo.TabIndex = 0;
@@ -43,9 +45,10 @@ namespace Diagram
             // 
             // buttonYes
             // 
-            this.buttonYes.Location = new System.Drawing.Point(276, 131);
+            this.buttonYes.Location = new System.Drawing.Point(322, 151);
+            this.buttonYes.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonYes.Name = "buttonYes";
-            this.buttonYes.Size = new System.Drawing.Size(75, 23);
+            this.buttonYes.Size = new System.Drawing.Size(88, 27);
             this.buttonYes.TabIndex = 1;
             this.buttonYes.Text = "Yes";
             this.buttonYes.UseVisualStyleBackColor = true;
@@ -53,9 +56,10 @@ namespace Diagram
             // 
             // buttonNo
             // 
-            this.buttonNo.Location = new System.Drawing.Point(357, 131);
+            this.buttonNo.Location = new System.Drawing.Point(416, 151);
+            this.buttonNo.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonNo.Name = "buttonNo";
-            this.buttonNo.Size = new System.Drawing.Size(87, 23);
+            this.buttonNo.Size = new System.Drawing.Size(102, 27);
             this.buttonNo.TabIndex = 2;
             this.buttonNo.Text = "No";
             this.buttonNo.UseVisualStyleBackColor = true;
@@ -64,8 +68,9 @@ namespace Diagram
             // checkBoxNewVersion
             // 
             this.checkBoxNewVersion.AutoSize = true;
-            this.checkBoxNewVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxNewVersion.Location = new System.Drawing.Point(16, 130);
+            this.checkBoxNewVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBoxNewVersion.Location = new System.Drawing.Point(19, 150);
+            this.checkBoxNewVersion.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.checkBoxNewVersion.Name = "checkBoxNewVersion";
             this.checkBoxNewVersion.Size = new System.Drawing.Size(160, 17);
             this.checkBoxNewVersion.TabIndex = 3;
@@ -76,9 +81,10 @@ namespace Diagram
             // linkLabelVisit
             // 
             this.linkLabelVisit.AutoSize = true;
-            this.linkLabelVisit.Location = new System.Drawing.Point(208, 68);
+            this.linkLabelVisit.Location = new System.Drawing.Point(243, 78);
+            this.linkLabelVisit.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkLabelVisit.Name = "linkLabelVisit";
-            this.linkLabelVisit.Size = new System.Drawing.Size(179, 13);
+            this.linkLabelVisit.Size = new System.Drawing.Size(209, 15);
             this.linkLabelVisit.TabIndex = 5;
             this.linkLabelVisit.TabStop = true;
             this.linkLabelVisit.Text = "Visit homepage for more informations";
@@ -91,14 +97,16 @@ namespace Diagram
             // 
             // UpdateForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(456, 166);
+            this.ClientSize = new System.Drawing.Size(532, 192);
             this.Controls.Add(this.linkLabelVisit);
             this.Controls.Add(this.checkBoxNewVersion);
             this.Controls.Add(this.buttonNo);
             this.Controls.Add(this.buttonYes);
             this.Controls.Add(this.labelInfo);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "UpdateForm";

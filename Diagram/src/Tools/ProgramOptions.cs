@@ -21,11 +21,11 @@ namespace Diagram
 
         /// <summary>
         /// contact email</summary>
-        public String email = "infinite.diagram@gmail.com";
+        public String email = "pekand@gmail.com";
 
         /// <summary>
         /// home page url</summary>
-        public String home_page = "https://www.infinite-diagram.com";
+        public String home_page = "https://www.infinite-diagram.pekand.com";
 
         /// <summary>
         /// local server ip address fo messaging beetwen runing instances</summary>
