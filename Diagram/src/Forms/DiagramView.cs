@@ -280,6 +280,8 @@ namespace Diagram
             {
                 this.Icon = Media.StringToIcon(this.diagram.options.icon);
             }
+
+            this.BackColor = this.diagram.options.backgroundColor.Get();
         }
 
         // FORM Load event - UID0112423443
@@ -613,6 +615,12 @@ namespace Diagram
             }
 
             openIconDialog.Dispose();
+        }
+
+        // FORM set icon
+        public void SetBackgroundColor(Color color) {
+            this.BackColor = color;
+            this.Invalidate();
         }
 
         // FORM set icon
@@ -3126,15 +3134,6 @@ namespace Diagram
             }
         }
 
-        // FILE Open diagram directory if diagram is already saved
-        public void OpenDiagramDirectory()
-        {
-            if (!this.diagram.NewFile && Os.FileExists(this.diagram.FileName))
-            {
-                Os.ShowDirectoryInExternalApplication(Os.GetDirectoryName(this.diagram.FileName));
-            }
-        }
-
         /*************************************************************************************************************************/
 
         // EXPORT Export diagram to png
@@ -4041,7 +4040,7 @@ namespace Diagram
             }
             else
             {
-                this.OpenDiagramDirectory(); // open main directory of diagram
+                this.diagram.OpenDiagramDirectory(); // open main directory of diagram
             }
         }
 

@@ -41,14 +41,7 @@ namespace Diagram
             return this.pluginItems;
         }
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent() //UID7904769190
-        {
-            this.SuspendLayout();
-          
+        private void BuildQuickItems() {
             //
             // editItem
             //
@@ -87,6 +80,43 @@ namespace Diagram
             });
             items["linkItem"].Name = "linkItem";
             items["linkItem"].Text = "Link";
+
+            //
+            // quickActionSeparator
+            //
+            separators.Add("quickActionSeparator", new System.Windows.Forms.ToolStripSeparator());
+            separators["quickActionSeparator"].Name = "quickActionSeparator";
+            //
+            // copyItem
+            //
+            items.Add("copyItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["copyItem"].Name = "copyItem";
+            items["copyItem"].Text = "Copy";
+            items["copyItem"].Click += new System.EventHandler(this.CopyItem_Click);
+            //
+            // cutItem
+            //
+            items.Add("cutItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["cutItem"].Name = "cutItem";
+            items["cutItem"].Text = "Cut";
+            items["cutItem"].Click += new System.EventHandler(this.CutItem_Click);
+            //
+            // pasteItem
+            //
+            items.Add("pasteItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["pasteItem"].Name = "pasteItem";
+            items["pasteItem"].Text = "Paste";
+            items["pasteItem"].Click += new System.EventHandler(this.PasteItem_Click);
+            //
+            // editSeparator
+            //
+            separators.Add("editSeparator", new System.Windows.Forms.ToolStripSeparator());
+            separators["editSeparator"].Name = "editSeparator";
+        }
+
+        private void BuildAlignItems()
+        {
+
             //
             // leftItem
             //
@@ -136,52 +166,11 @@ namespace Diagram
             items["sortItem"].Name = "sortItem";
             items["sortItem"].Text = "Sort";
             items["sortItem"].Click += new System.EventHandler(this.SortItem_Click);
-            //
-            // alignItem
-            //
-            items.Add("alignItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["alignItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                items["leftItem"],
-                items["rightItem"],
-                items["toLineItem"],
-                items["inColumnItem"],
-                items["groupVericalItem"],
-                items["groupHorizontalItem"],
-                items["sortItem"]
-            });
-            items["alignItem"].Name = "alignItem";
-            items["alignItem"].Text = "Align";
-            //
-            // quickActionSeparator
-            //
-            separators.Add("quickActionSeparator", new System.Windows.Forms.ToolStripSeparator());
-            separators["quickActionSeparator"].Name = "quickActionSeparator";
-            //
-            // copyItem
-            //
-            items.Add("copyItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["copyItem"].Name = "copyItem";
-            items["copyItem"].Text = "Copy";
-            items["copyItem"].Click += new System.EventHandler(this.CopyItem_Click);
-            //
-            // cutItem
-            //
-            items.Add("cutItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["cutItem"].Name = "cutItem";
-            items["cutItem"].Text = "Cut";
-            items["cutItem"].Click += new System.EventHandler(this.CutItem_Click);
-            //
-            // pasteItem
-            //
-            items.Add("pasteItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["pasteItem"].Name = "pasteItem";
-            items["pasteItem"].Text = "Paste";
-            items["pasteItem"].Click += new System.EventHandler(this.PasteItem_Click);
-            //
-            // editSeparator
-            //
-            separators.Add("editSeparator", new System.Windows.Forms.ToolStripSeparator());
-            separators["editSeparator"].Name = "editSeparator";
+        }
+
+        private void BuildFileItems()
+        {
+
             //
             // newItem
             //
@@ -247,22 +236,10 @@ namespace Diagram
             items["exitItem"].Name = "exitItem";
             items["exitItem"].Text = "Exit";
             items["exitItem"].Click += new System.EventHandler(this.ExitItem_Click);
-            //
-            // fileItem
-            //
-            items.Add("fileItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["fileItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                items["newItem"],
-                items["saveItem"],
-                items["saveAsItem"],
-                items["exportItem"],
-                items["openItem"],
-                items["recentItem"],
-                items["exitItem"]
-            });
-            items["fileItem"].Name = "fileItem";
-            items["fileItem"].Text = "File";
-            
+        }
+
+        private void BuildEditItems()
+        {
             //
             // undoItem
             //
@@ -274,51 +251,40 @@ namespace Diagram
             // redoItem
             //
             items.Add("redoItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["redoItem"].Name = "redoItem";
-            items["redoItem"].Text = "Redo";
-            items["redoItem"].Click += new System.EventHandler(this.RedoItem_Click);
+                items["redoItem"].Name = "redoItem";
+                items["redoItem"].Text = "Redo";
+                items["redoItem"].Click += new System.EventHandler(this.RedoItem_Click);
             //
             // copyLinkItem
             //
             items.Add("copyLinkItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["copyLinkItem"].Name = "copyLinkItem";
-            items["copyLinkItem"].Text = "Copy link";
-            items["copyLinkItem"].Click += new System.EventHandler(this.CopyLinkItem_Click);
+                items["copyLinkItem"].Name = "copyLinkItem";
+                items["copyLinkItem"].Text = "Copy link";
+                items["copyLinkItem"].Click += new System.EventHandler(this.CopyLinkItem_Click);
             //
             // copyNoteItem
             //
             items.Add("copyNoteItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["copyNoteItem"].Name = "copyNoteItem";
-            items["copyNoteItem"].Text = "Copy note";
-            items["copyNoteItem"].Click += new System.EventHandler(this.CopyNoteItem_Click);
+                items["copyNoteItem"].Name = "copyNoteItem";
+                items["copyNoteItem"].Text = "Copy note";
+                items["copyNoteItem"].Click += new System.EventHandler(this.CopyNoteItem_Click);
             //
             // pasteToLinkItem
             //
             items.Add("pasteToLinkItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["pasteToLinkItem"].Name = "pasteToLinkItem";
-            items["pasteToLinkItem"].Text = "Paste to link";
-            items["pasteToLinkItem"].Click += new System.EventHandler(this.PasteToLinkItem_Click);
+                items["pasteToLinkItem"].Name = "pasteToLinkItem";
+                items["pasteToLinkItem"].Text = "Paste to link";
+                items["pasteToLinkItem"].Click += new System.EventHandler(this.PasteToLinkItem_Click);
             //
             // pasteToNoteItem
             //
             items.Add("pasteToNoteItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["pasteToNoteItem"].Name = "pasteToNoteItem";
-            items["pasteToNoteItem"].Text = "Paste to note";
-            items["pasteToNoteItem"].Click += new System.EventHandler(this.PasteToNoteItem_Click);
-            //
-            // editMenuItem
-            //
-            items.Add("editMenuItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["editMenuItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                items["undoItem"],
-                items["redoItem"],
-                items["copyLinkItem"],
-                items["copyNoteItem"],
-                items["pasteToLinkItem"],
-                items["pasteToNoteItem"]
-            });
-            items["editMenuItem"].Name = "editMenuItem";
-            items["editMenuItem"].Text = "Edit";
+                items["pasteToNoteItem"].Name = "pasteToNoteItem";
+                items["pasteToNoteItem"].Text = "Paste to note";
+                items["pasteToNoteItem"].Click += new System.EventHandler(this.PasteToNoteItem_Click); 
+        }
+
+        private void BuildNodeItems() {
             //
             // transparentItem
             //
@@ -375,22 +341,9 @@ namespace Diagram
             items["protectItem"].Name = "protectItem";
             items["protectItem"].Text = "Protect";
             items["protectItem"].Click += new System.EventHandler(this.ProtectItem_Click);
-            //
-            // nodeItem
-            //
-            items.Add("nodeItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["nodeItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                items["transparentItem"],
-                items["fontItem"],
-                items["fontColorItem"],
-                items["editLinkItem"],
-                items["bringTopItem"],
-                items["bringBottomItem"],
-                items["removeShortcutItem"],
-                items["protectItem"]
-            });
-            items["nodeItem"].Name = "nodeItem";
-            items["nodeItem"].Text = "Node";
+        }
+
+        private void BuildImageItems() {
             //
             // lineColorItem
             //
@@ -436,17 +389,9 @@ namespace Diagram
             items["imageEmbeddedItem"].Name = "imageEmbeddedItem";
             items["imageEmbeddedItem"].Text = "Embed image";
             items["imageEmbeddedItem"].Click += new System.EventHandler(this.ImageEmbeddedItem_Click);
-            //
-            // imageItem
-            //
-            items.Add("imageItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["imageItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                items["imageAddItem"],
-                items["imageRemoveItem"],
-                items["imageEmbeddedItem"]
-            });
-            items["imageItem"].Name = "imageItem";
-            items["imageItem"].Text = "Image";
+        }
+
+        private void BuildAtachmentItems() {
             //
             // deploayAttachmentItem
             //
@@ -475,18 +420,9 @@ namespace Diagram
             items["removeAttachmentItem"].Name = "removeAttachmentItem";
             items["removeAttachmentItem"].Text = "Remove";
             items["removeAttachmentItem"].Click += new System.EventHandler(this.RemoveFileItem_Click);
-            //
-            // attachmentItem
-            //
-            items.Add("attachmentItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["attachmentItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                items["deploayAttachmentItem"],
-                items["includeFileItem"],
-                items["includeDirectoryItem"],
-                items["removeAttachmentItem"]
-            });
-            items["attachmentItem"].Name = "attachmentItem";
-            items["attachmentItem"].Text = "Attachment";
+        }
+
+        public void BuildViewItems() {
             //
             // newViewItem
             //
@@ -515,18 +451,9 @@ namespace Diagram
             items["refreshItem"].Name = "refreshItem";
             items["refreshItem"].Text = "Refresh";
             items["refreshItem"].Click += new System.EventHandler(this.RefreshItem_Click);
-            //
-            // viewItem
-            //
-            items.Add("viewItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["viewItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                items["newViewItem"],
-                items["centerItem"],
-                items["setStartPositionItem"],
-                items["refreshItem"]
-            });
-            items["viewItem"].Name = "viewItem";
-            items["viewItem"].Text = "View";
+        }
+
+        public void BuildLayerItems() {
             //
             // inItem
             //
@@ -541,21 +468,9 @@ namespace Diagram
             items["outItem"].Name = "outItem";
             items["outItem"].Text = "Out";
             items["outItem"].Click += new System.EventHandler(this.OutItem_Click);
-            //
-            // layerItem
-            //
-            items.Add("layerItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["layerItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                items["inItem"],
-                items["outItem"]
-            });
-            items["layerItem"].Name = "layerItem";
-            items["layerItem"].Text = "Layer";
-            //
-            // helpSeparator
-            //
-            separators.Add("helpSeparator", new System.Windows.Forms.ToolStripSeparator());
-            separators["helpSeparator"].Name = "helpSeparator";
+        }
+
+        public void BuildToolsItems() {
             //
             // openDiagramDirectoryItem
             //
@@ -570,93 +485,9 @@ namespace Diagram
             items["splitNodeItem"].Name = "openDiagramDirectoryItem";
             items["splitNodeItem"].Text = "Split node";
             items["splitNodeItem"].Click += new System.EventHandler(this.SplitNodeItem_Click);
+        }
 
-            //
-            // toolsItem
-            //
-            this.pluginItems = new System.Windows.Forms.ToolStripMenuItem();
-            items.Add("pluginsItem", this.pluginItems);
-            items["pluginsItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            });
-            items["pluginsItem"].Name = "pluginsItem";
-            items["pluginsItem"].Text = "Plugins";
-
-            //
-            // toolsItem
-            //
-            items.Add("toolsItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["toolsItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                items["openDiagramDirectoryItem"],
-                items["splitNodeItem"]
-            });
-            items["toolsItem"].Name = "toolsItem";
-            items["toolsItem"].Text = "Tools";
-            //
-            // encryptItem
-            //
-            items.Add("encryptItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["encryptItem"].Name = "encryptItem";
-            items["encryptItem"].Text = "Encrypt";
-            items["encryptItem"].Click += new System.EventHandler(this.EncryptItem_Click);
-            //
-            // changePasswordItem
-            //
-            items.Add("changePasswordItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["changePasswordItem"].Name = "changePasswordItem";
-            items["changePasswordItem"].Text = "Change password";
-            items["changePasswordItem"].Click += new System.EventHandler(this.ChangePasswordItem_Click);
-            //
-            // takeOwnershipItem
-            //
-            items.Add("takeOwnershipItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["takeOwnershipItem"].Name = "takeOwnershipItem";
-            items["takeOwnershipItem"].Text = "Take ownership";
-            items["takeOwnershipItem"].Click += new System.EventHandler(this.takeOwnershipItem_Click);
-            //
-            // readonlyItem
-            //
-            items.Add("readonlyItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["readonlyItem"].CheckOnClick = true;
-            items["readonlyItem"].Name = "readonlyItem";
-            items["readonlyItem"].Text = "Read only";
-            items["readonlyItem"].Click += new System.EventHandler(this.ReadonlyItem_Click);
-            //
-            // restoreWindowItem
-            //
-            items.Add("restoreWindowItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["restoreWindowItem"].Checked = true;
-            items["restoreWindowItem"].CheckOnClick = true;
-            items["restoreWindowItem"].CheckState = System.Windows.Forms.CheckState.Checked;
-            items["restoreWindowItem"].Name = "restoreWindowItem";
-            items["restoreWindowItem"].Text = "Restore window";
-            items["restoreWindowItem"].Click += new System.EventHandler(this.RestoreWindowItem_Click);
-            //
-            // gridItem
-            //
-            items.Add("gridItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["gridItem"].Checked = true;
-            items["gridItem"].CheckOnClick = true;
-            items["gridItem"].CheckState = System.Windows.Forms.CheckState.Checked;
-            items["gridItem"].Name = "gridItem";
-            items["gridItem"].Text = "Grid";
-            items["gridItem"].Click += new System.EventHandler(this.GridItem_Click);
-            //
-            // coordinatesItem
-            //
-            items.Add("coordinatesItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["coordinatesItem"].CheckOnClick = true;
-            items["coordinatesItem"].Name = "coordinatesItem";
-            items["coordinatesItem"].Text = "Coordinates";
-            items["coordinatesItem"].Visible = false;
-            items["coordinatesItem"].Click += new System.EventHandler(this.CoordinatesItem_Click);
-            //
-            // bordersItem
-            //
-            items.Add("bordersItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["bordersItem"].CheckOnClick = true;
-            items["bordersItem"].Name = "bordersItem";
-            items["bordersItem"].Text = "Borders";
-            items["bordersItem"].Click += new System.EventHandler(this.BordersItem_Click);
+        public void BuildThemeItems() {
             //
             // defaultFontItem
             //
@@ -686,6 +517,90 @@ namespace Diagram
             items["setBackgroundItem"].Text = "Set background image";
             items["setBackgroundItem"].Click += new System.EventHandler(this.SetBackgroundItem_Click);
             //
+            // setBackgroundColorItem
+            //
+            items.Add("setBackgroundColorItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["setBackgroundColorItem"].Name = "setBackgroundColorItem";
+            items["setBackgroundColorItem"].Text = "Background color";
+            items["setBackgroundColorItem"].Click += new System.EventHandler(this.SetBackgroundColorItem_Click);
+
+            //
+            // gridItem
+            //
+            items.Add("gridItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["gridItem"].Checked = true;
+            items["gridItem"].CheckOnClick = true;
+            items["gridItem"].CheckState = System.Windows.Forms.CheckState.Checked;
+            items["gridItem"].Name = "gridItem";
+            items["gridItem"].Text = "Grid";
+            items["gridItem"].Click += new System.EventHandler(this.GridItem_Click);
+
+            //
+            // coordinatesItem
+            //
+            items.Add("coordinatesItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["coordinatesItem"].CheckOnClick = true;
+            items["coordinatesItem"].Name = "coordinatesItem";
+            items["coordinatesItem"].Text = "Coordinates";
+            items["coordinatesItem"].Visible = false;
+            items["coordinatesItem"].Click += new System.EventHandler(this.CoordinatesItem_Click);
+
+            //
+            // bordersItem
+            //
+            items.Add("bordersItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["bordersItem"].CheckOnClick = true;
+            items["bordersItem"].Name = "bordersItem";
+            items["bordersItem"].Text = "Borders";
+            items["bordersItem"].Click += new System.EventHandler(this.BordersItem_Click);
+        }
+
+        public void BuildSecurityItems (){
+            //
+            // encryptItem
+            //
+            items.Add("encryptItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["encryptItem"].Name = "encryptItem";
+            items["encryptItem"].Text = "Encrypt";
+            items["encryptItem"].Click += new System.EventHandler(this.EncryptItem_Click);
+            //
+            // changePasswordItem
+            //
+            items.Add("changePasswordItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["changePasswordItem"].Name = "changePasswordItem";
+            items["changePasswordItem"].Text = "Change password";
+            items["changePasswordItem"].Click += new System.EventHandler(this.ChangePasswordItem_Click);
+            //
+            // takeOwnershipItem
+            //
+            items.Add("takeOwnershipItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["takeOwnershipItem"].Name = "takeOwnershipItem";
+            items["takeOwnershipItem"].Text = "Take ownership";
+            items["takeOwnershipItem"].Click += new System.EventHandler(this.takeOwnershipItem_Click);
+        }
+
+        public void BuildDiagramOptionItems() {
+            //
+            // readonlyItem
+            //
+            items.Add("readonlyItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["readonlyItem"].CheckOnClick = true;
+            items["readonlyItem"].Name = "readonlyItem";
+            items["readonlyItem"].Text = "Read only";
+            items["readonlyItem"].Click += new System.EventHandler(this.ReadonlyItem_Click);
+
+            //
+            // restoreWindowItem
+            //
+            items.Add("restoreWindowItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["restoreWindowItem"].Checked = true;
+            items["restoreWindowItem"].CheckOnClick = true;
+            items["restoreWindowItem"].CheckState = System.Windows.Forms.CheckState.Checked;
+            items["restoreWindowItem"].Name = "restoreWindowItem";
+            items["restoreWindowItem"].Text = "Remember window position";
+            items["restoreWindowItem"].Click += new System.EventHandler(this.RestoreWindowItem_Click);
+
+            //
             // openLayerInNewViewItem
             //
             items.Add("openLayerInNewViewItem", new System.Windows.Forms.ToolStripMenuItem());
@@ -713,30 +628,10 @@ namespace Diagram
             items["setAsDefaultDiagramItem"].Name = "setAsDefaultDiagramItem";
             items["setAsDefaultDiagramItem"].Text = "Set as default Diagram";
             items["setAsDefaultDiagramItem"].Click += new System.EventHandler(this.setAsDefaultDiagram_Click);
-            //
-            // optionItem
-            //
-            items.Add("optionItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["optionItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                items["encryptItem"],
-                items["changePasswordItem"],
-                items["takeOwnershipItem"],
-                items["readonlyItem"],
-                items["restoreWindowItem"],
-                items["gridItem"],
-                items["coordinatesItem"],
-                items["bordersItem"],
-                items["defaultFontItem"],
-                items["resetFontItem"],
-                items["setIconItem"],
-                items["setBackgroundItem"],
-                items["openLayerInNewViewItem"],
-                items["openConfigDirItem"],
-                items["openLastFileItem"],
-                items["setAsDefaultDiagramItem"]
-            });
-            items["optionItem"].Name = "optionItem";
-            items["optionItem"].Text = "Option";
+        }
+
+        public void BuildHelpItems()
+        {
             //
             // consoleItem
             //
@@ -745,6 +640,7 @@ namespace Diagram
             items["consoleItem"].Text = "Debug Console";
             items["consoleItem"].Visible = false;
             items["consoleItem"].Click += new System.EventHandler(this.ConsoleItem_Click);
+
             //
             // visitWebsiteItem
             //
@@ -759,6 +655,241 @@ namespace Diagram
             items["aboutItem"].Name = "aboutItem";
             items["aboutItem"].Text = "About";
             items["aboutItem"].Click += new System.EventHandler(this.AboutItem_Click);
+        }
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent() //UID7904769190
+        {
+            this.SuspendLayout();
+
+            this.BuildAlignItems();
+
+            //
+            // alignItem
+            //
+            items.Add("alignItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["alignItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                items["leftItem"],
+                items["rightItem"],
+                items["toLineItem"],
+                items["inColumnItem"],
+                items["groupVericalItem"],
+                items["groupHorizontalItem"],
+                items["sortItem"]
+            });
+            items["alignItem"].Name = "alignItem";
+            items["alignItem"].Text = "Align";
+
+            this.BuildFileItems();
+
+            //
+            // fileItem
+            //
+            items.Add("fileItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["fileItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                items["newItem"],
+                items["saveItem"],
+                items["saveAsItem"],
+                items["exportItem"],
+                items["openItem"],
+                items["recentItem"],
+                items["exitItem"]
+            });
+            items["fileItem"].Name = "fileItem";
+            items["fileItem"].Text = "File";
+
+
+            this.BuildEditItems();
+
+            //
+            // editMenuItem
+            //
+            items.Add("editMenuItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["editMenuItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                items["undoItem"],
+                items["redoItem"],
+                items["copyLinkItem"],
+                items["copyNoteItem"],
+                items["pasteToLinkItem"],
+                items["pasteToNoteItem"]
+            });
+            items["editMenuItem"].Name = "editMenuItem";
+            items["editMenuItem"].Text = "Edit";
+
+            this.BuildNodeItems();
+
+            //
+            // nodeItem
+            //
+            items.Add("nodeItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["nodeItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                items["transparentItem"],
+                items["fontItem"],
+                items["fontColorItem"],
+                items["editLinkItem"],
+                items["bringTopItem"],
+                items["bringBottomItem"],
+                items["removeShortcutItem"],
+                items["protectItem"]
+            });
+            items["nodeItem"].Name = "nodeItem";
+            items["nodeItem"].Text = "Node";
+
+            this.BuildImageItems();
+
+            //
+            // imageItem
+            //
+            items.Add("imageItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["imageItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                items["imageAddItem"],
+                items["imageRemoveItem"],
+                items["imageEmbeddedItem"]
+            });
+            items["imageItem"].Name = "imageItem";
+            items["imageItem"].Text = "Image";
+
+            this.BuildAtachmentItems();
+
+            //
+            // attachmentItem
+            //
+            items.Add("attachmentItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["attachmentItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                items["deploayAttachmentItem"],
+                items["includeFileItem"],
+                items["includeDirectoryItem"],
+                items["removeAttachmentItem"]
+            });
+            items["attachmentItem"].Name = "attachmentItem";
+            items["attachmentItem"].Text = "Attachment";
+
+            this.BuildViewItems();
+
+            //
+            // viewItem
+            //
+            items.Add("viewItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["viewItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                items["newViewItem"],
+                items["centerItem"],
+                items["setStartPositionItem"],
+                items["refreshItem"]
+            });
+            items["viewItem"].Name = "viewItem";
+            items["viewItem"].Text = "View";
+
+            this.BuildLayerItems();
+
+            //
+            // layerItem
+            //
+            items.Add("layerItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["layerItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                items["inItem"],
+                items["outItem"]
+            });
+            items["layerItem"].Name = "layerItem";
+            items["layerItem"].Text = "Layer";
+
+            //
+            // helpSeparator
+            //
+            separators.Add("helpSeparator", new System.Windows.Forms.ToolStripSeparator());
+            separators["helpSeparator"].Name = "helpSeparator";
+
+            //
+            // pluginsItem
+            //
+            this.pluginItems = new System.Windows.Forms.ToolStripMenuItem();
+            items.Add("pluginsItem", this.pluginItems);
+            items["pluginsItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            });
+            items["pluginsItem"].Name = "pluginsItem";
+            items["pluginsItem"].Text = "Plugins";
+
+
+            this.BuildToolsItems();
+
+            //
+            // toolsItem
+            //
+            items.Add("toolsItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["toolsItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                items["openDiagramDirectoryItem"],
+                items["splitNodeItem"]
+            });
+            items["toolsItem"].Name = "toolsItem";
+            items["toolsItem"].Text = "Tools";
+
+
+            this.BuildDiagramOptionItems();
+
+            //
+            // diagramOptionsItem
+            //
+            items.Add("diagramOptionsItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["diagramOptionsItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                items["readonlyItem"],
+                items["restoreWindowItem"],
+                items["openLayerInNewViewItem"],
+                items["openConfigDirItem"],
+                items["openLastFileItem"],
+                items["setAsDefaultDiagramItem"]
+            });
+            items["diagramOptionsItem"].Name = "diagramOptionsItem";
+            items["diagramOptionsItem"].Text = "Diagram";
+
+            this.BuildThemeItems();
+
+            //
+            // optionTheme
+            //
+            items.Add("optionTheme", new System.Windows.Forms.ToolStripMenuItem());
+            items["optionTheme"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                items["defaultFontItem"],
+                items["resetFontItem"],
+                items["setIconItem"],
+                items["setBackgroundItem"],
+                items["setBackgroundColorItem"],
+                items["gridItem"],
+                items["coordinatesItem"],
+                items["bordersItem"],
+            });
+            items["optionTheme"].Name = "optionTheme";
+            items["optionTheme"].Text = "Theme and Colors";
+
+            this.BuildSecurityItems();
+            //
+            // optionSecurity
+            //
+            items.Add("optionSecurity", new System.Windows.Forms.ToolStripMenuItem());
+            items["optionSecurity"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                items["encryptItem"],
+                items["changePasswordItem"],
+                items["takeOwnershipItem"],
+            });
+            items["optionSecurity"].Name = "optionSecurity";
+            items["optionSecurity"].Text = "Security";
+
+            //
+            // optionItem
+            //
+            items.Add("optionItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["optionItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                items["diagramOptionsItem"],
+                items["optionTheme"],
+                items["optionSecurity"]
+            });
+            items["optionItem"].Name = "optionItem";
+            items["optionItem"].Text = "Option";
+
+
+            this.BuildHelpItems();
+
             //
             // helpItem
             //
@@ -770,6 +901,10 @@ namespace Diagram
             });
             items["helpItem"].Name = "helpItem";
             items["helpItem"].Text = "Help";
+
+
+            this.BuildQuickItems();
+
             //
             // PopupMenu
             //
@@ -783,6 +918,7 @@ namespace Diagram
                 items["cutItem"],
                 items["pasteItem"],
                 separators["editSeparator"],
+
                 items["fileItem"],
                 items["editMenuItem"],
                 items["nodeItem"],
@@ -1458,7 +1594,7 @@ namespace Diagram
         // MENU Open Directory  - otvory adresar v ktorom sa nachadza prave otvreny subor
         public void OpenDiagramDirectoryItem_Click(object sender, EventArgs e) //UID8883607610
         {
-            this.diagramView.OpenDiagramDirectory();
+            this.diagramView.diagram.OpenDiagramDirectory();
         }
 
         // MENU split node by lines
@@ -1553,6 +1689,12 @@ namespace Diagram
         private void SetIconItem_Click(object sender, EventArgs e) //UID8410362372
         {
             this.diagramView.SetIcon();
+        }
+
+        // MENU set diagram background image
+        private void SetBackgroundColorItem_Click(object sender, EventArgs e) 
+        {
+            this.diagramView.diagram.SetBackgroundColor();
         }
 
         // MENU set diagram background image

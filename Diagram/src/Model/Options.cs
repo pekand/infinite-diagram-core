@@ -62,7 +62,8 @@ namespace Diagram
         /*************************************************************************************************************************/
         // ICON
 
-        public string icon = "";                           // diagram custom icon
+        public string icon = "";                             // diagram custom icon
+        public ColorType backgroundColor = new ColorType("#FFFFFF"); // color for view background
         public Bitmap backgroundImage = null;                // diagram custom icon
     }
 }

@@ -531,6 +531,11 @@ namespace Diagram
                         this.options.icon = el.Value;
                     }
 
+                    if (el.Name.ToString() == "backgroundColor")
+                    {
+                        this.options.backgroundColor.Set(el.Value.ToString());
+                    }
+
                     if (el.Name.ToString() == "backgroundImage")
                     {
                         this.options.backgroundImage = Media.StringToImage(el.Value);
@@ -967,7 +972,8 @@ namespace Diagram
             option.Add(new XElement("window.position.width", this.options.Width));
             option.Add(new XElement("window.position.height", this.options.Height));
             option.Add(new XElement("window.state", this.options.WindowState));
-            
+            option.Add(new XElement("backgroundColor", this.options.backgroundColor.ToString()));
+
             if (this.options.icon != "")
             {
                 option.Add(new XElement("icon", this.options.icon));
@@ -1824,6 +1830,41 @@ namespace Diagram
         public void RemoveMark(Node node)
         {
             if (node.mark) node.mark = false;
+        }
+
+        /*************************************************************************************************************************/
+        // OPTIONS
+        public void SetBackgroundColor()
+        {
+
+            if (this.IsReadOnly()) {
+                return;
+            }
+
+            ColorDialog backgroundColorDialog = new ColorDialog();
+
+            if (backgroundColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.options.backgroundColor.Set(backgroundColorDialog.Color);
+
+                foreach (DiagramView diagramView in this.DiagramViews) // Loop through List with foreach
+                {
+                    diagramView.BackColor = backgroundColorDialog.Color;
+                    diagramView.Invalidate();
+                }
+            }
+        }
+
+        /*************************************************************************************************************************/
+        // TOOLS
+
+        // FILE Open diagram directory if diagram is already saved
+        public void OpenDiagramDirectory()
+        {
+            if (!this.NewFile && Os.FileExists(this.FileName))
+            {
+                Os.ShowDirectoryInExternalApplication(Os.GetDirectoryName(this.FileName));
+            }
         }
 
         /*************************************************************************************************************************/

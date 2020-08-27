@@ -424,7 +424,7 @@ namespace Diagram
         {
             try
             {
-                Process.Start(path);
+                Process.Start("explorer.exe", path);
             }
             catch (Exception ex)
             {
