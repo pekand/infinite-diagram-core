@@ -55,15 +55,21 @@ namespace Diagram
 
         public string colorDirectory = "#AF92FF";          // color for node linked with directory
         public string colorFile = "#D9CCFF";               // color for node linked with file
-        public string colorLink = "#FFCCCC";               // color for node linked with url
         public string colorAttachment = "#C495DB";         // color for node linked with url
-        public string colorNode = "#FFFFB8";               // new node color
+
+        public ColorType lineColor = new ColorType("#000000");
+        public ColorType nodeColor = new ColorType("#FFFFB8");
+        public ColorType selectedNodeColor = new ColorType("#000000");
+        public ColorType backgroundColor = new ColorType("#F2F2F2");
+        public ColorType gridColor = new ColorType("#F2F2F2");
+        public ColorType scrollbarColor = new ColorType("#000000");
+
 
         /*************************************************************************************************************************/
         // ICON
 
         public string icon = "";                             // diagram custom icon
-        public ColorType backgroundColor = new ColorType("#FFFFFF"); // color for view background
+        
         public Bitmap backgroundImage = null;                // diagram custom icon
     }
 }

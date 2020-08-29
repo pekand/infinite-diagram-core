@@ -470,7 +470,8 @@ namespace Diagram
             items["outItem"].Click += new System.EventHandler(this.OutItem_Click);
         }
 
-        public void BuildToolsItems() {
+        public void BuildToolsItems() 
+        {
             //
             // openDiagramDirectoryItem
             //
@@ -516,6 +517,31 @@ namespace Diagram
             items["setBackgroundItem"].Name = "setBackgroundItem";
             items["setBackgroundItem"].Text = "Set background image";
             items["setBackgroundItem"].Click += new System.EventHandler(this.SetBackgroundItem_Click);
+
+            //
+            // setLineColorItem
+            //
+            items.Add("setLineColorItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["setLineColorItem"].Name = "setLineColorItem";
+            items["setLineColorItem"].Text = "Line color";
+            items["setLineColorItem"].Click += new System.EventHandler(this.SetLineColorItem_Click);
+
+            //
+            // setNodeColorItem
+            //
+            items.Add("setNodeColorItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["setNodeColorItem"].Name = "setNodeColorItem";
+            items["setNodeColorItem"].Text = "Node color";
+            items["setNodeColorItem"].Click += new System.EventHandler(this.SetNodeColorItem_Click);
+
+            //
+            // setNodeColorItem
+            //
+            items.Add("selectedNodeColorItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["selectedNodeColorItem"].Name = "selectedNodeColorItem";
+            items["selectedNodeColorItem"].Text = "Selected node color";
+            items["selectedNodeColorItem"].Click += new System.EventHandler(this.SetSelectedNodeColorItem_Click);
+
             //
             // setBackgroundColorItem
             //
@@ -523,6 +549,23 @@ namespace Diagram
             items["setBackgroundColorItem"].Name = "setBackgroundColorItem";
             items["setBackgroundColorItem"].Text = "Background color";
             items["setBackgroundColorItem"].Click += new System.EventHandler(this.SetBackgroundColorItem_Click);
+
+            //
+            // setGridColorItem
+            //
+            items.Add("setGridColorItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["setGridColorItem"].Name = "setGridColorItem";
+            items["setGridColorItem"].Text = "Grid color";
+            items["setGridColorItem"].Click += new System.EventHandler(this.SetGridColorItem_Click);
+
+
+            //
+            // setScrollbarColorItem
+            //
+            items.Add("setScrollbarColorItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["setScrollbarColorItem"].Name = "setScrollbarColorItem";
+            items["setScrollbarColorItem"].Text = "Scrollbar color";
+            items["setScrollbarColorItem"].Click += new System.EventHandler(this.setScrollbarColorItem_Click);
 
             //
             // gridItem
@@ -576,7 +619,7 @@ namespace Diagram
             items.Add("takeOwnershipItem", new System.Windows.Forms.ToolStripMenuItem());
             items["takeOwnershipItem"].Name = "takeOwnershipItem";
             items["takeOwnershipItem"].Text = "Take ownership";
-            items["takeOwnershipItem"].Click += new System.EventHandler(this.takeOwnershipItem_Click);
+            items["takeOwnershipItem"].Click += new System.EventHandler(this.TakeOwnershipItem_Click);
         }
 
         public void BuildDiagramOptionItems() {
@@ -854,7 +897,13 @@ namespace Diagram
                 items["resetFontItem"],
                 items["setIconItem"],
                 items["setBackgroundItem"],
+                items["setLineColorItem"],
+                items["setNodeColorItem"],
+                items["selectedNodeColorItem"],
                 items["setBackgroundColorItem"],
+                items["setGridColorItem"],
+                items["setScrollbarColorItem"],
+                items["setScrollbarColorItem"],
                 items["gridItem"],
                 items["coordinatesItem"],
                 items["bordersItem"],
@@ -1624,7 +1673,7 @@ namespace Diagram
         }
 
         // MENU take ownership
-        private void takeOwnershipItem_Click(object sender, EventArgs e)
+        private void TakeOwnershipItem_Click(object sender, EventArgs e)
         {
             this.diagramView.diagram.TakeOwnership(true);
         }
@@ -1691,10 +1740,38 @@ namespace Diagram
             this.diagramView.SetIcon();
         }
 
-        // MENU set diagram background image
+        // MENU set diagram line color
+        private void SetLineColorItem_Click(object sender, EventArgs e)
+        {
+            this.diagramView.diagram.SetLineColor();
+        }
+
+        // MENU set diagram node color
+        private void SetNodeColorItem_Click(object sender, EventArgs e)
+        {
+            this.diagramView.diagram.SetNodeColor();
+        }
+
+        private void SetSelectedNodeColorItem_Click(object sender, EventArgs e)
+        {
+            this.diagramView.diagram.SetSelectedNodeColor();
+        }
+
+        // MENU set diagram background color
         private void SetBackgroundColorItem_Click(object sender, EventArgs e) 
         {
             this.diagramView.diagram.SetBackgroundColor();
+        }
+
+        // MENU set diagram grid color
+        private void SetGridColorItem_Click(object sender, EventArgs e)
+        {
+            this.diagramView.diagram.SetGridColor();
+        }
+
+        private void setScrollbarColorItem_Click(object sender, EventArgs e)
+        {
+            this.diagramView.diagram.SetScrollbarColor();
         }
 
         // MENU set diagram background image

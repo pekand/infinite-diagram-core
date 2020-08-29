@@ -54,6 +54,12 @@ namespace Diagram
             return color;
         }
 
+        public Color Invert()
+        {
+            return Color.FromArgb(this.color.ToArgb() ^ 0xFFFFFF);
+        }
+
+
         /*************************************************************************************************************************/
         // CONVERSION
 

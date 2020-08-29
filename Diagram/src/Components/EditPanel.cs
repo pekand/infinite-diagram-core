@@ -87,8 +87,8 @@ namespace Diagram
 
                 this.SetPanelSize();
 
-                this.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFFB8");
-                this.edit.BackColor = System.Drawing.ColorTranslator.FromHtml("#FFFFB8");
+                this.BackColor = this.diagramView.diagram.options.nodeColor.Get();
+                this.edit.BackColor = this.BackColor;
 
                 this.editing = true;
                 this.Show();

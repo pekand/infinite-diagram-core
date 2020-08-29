@@ -334,6 +334,9 @@ namespace Diagram
             bottomScrollBar = new ScrollBar(this, this.ClientRectangle.Width, this.ClientRectangle.Height, true);
             rightScrollBar = new ScrollBar(this, this.ClientRectangle.Width, this.ClientRectangle.Height, false);
 
+            bottomScrollBar.SetColor(this.diagram.options.scrollbarColor.Get());
+            rightScrollBar.SetColor(this.diagram.options.scrollbarColor.Get());
+
             bottomScrollBar.OnChangePosition += new PositionChangeEventHandler(PositionChangeBottom);
             rightScrollBar.OnChangePosition += new PositionChangeEventHandler(PositionChangeRight);
 
@@ -3076,6 +3079,12 @@ namespace Diagram
             MoveScreenVertical(e.GetPosition());
         }
 
+        public void SetScrollbarColor(ColorType color)
+        {
+            this.rightScrollBar.SetColor(color.Get());
+            this.bottomScrollBar.SetColor(color.Get());
+        }
+
         /*************************************************************************************************************************/
 
         // FILE Save - Save diagram
@@ -3321,7 +3330,7 @@ namespace Diagram
             decimal six = this.shift.x / s % m; // calculate first line position
             decimal siy = this.shift.y / s % m;
 
-            Pen myPen = new Pen(Color.FromArgb(201, 201, 201), 1);
+            Pen myPen = new Pen(this.diagram.options.gridColor.Get(), 1);
             using (myPen)
             {
                 for (int i = 0; i <= lwc; i++) // dreaw vertical lines
@@ -3384,7 +3393,7 @@ namespace Diagram
             decimal s = Tools.GetScale(this.scale);
 
             Font drawFont = new Font("Arial", 10);
-            SolidBrush drawBrush = new SolidBrush(Color.Black);
+            SolidBrush drawBrush = new SolidBrush(this.diagram.options.backgroundColor.Invert());
             gfx.DrawString(
                 this.shift.x.ToString() + "sx," +
                         this.shift.y.ToString() +
@@ -3402,7 +3411,7 @@ namespace Diagram
         {
             string text = this.scale.ToString();
             Font drawFont = new Font("Arial", 25);
-            SolidBrush drawBrush = new SolidBrush(Color.Black);
+            SolidBrush drawBrush = new SolidBrush(this.diagram.options.backgroundColor.Invert());
             gfx.DrawString(
                 text,
                 drawFont,
@@ -3439,7 +3448,7 @@ namespace Diagram
         // DRAW add new node by drag UID3527460113
         private void DrawAddNode(Graphics gfx)
         {
-            Pen myPen = new Pen(Color.Black, 1);
+            Pen myPen = new Pen(this.diagram.options.lineColor.Get(), 1);
 
             if (this.sourceNode == null)
             {
@@ -3485,8 +3494,8 @@ namespace Diagram
             bool isvisible; // drawonly visible elements
             decimal s = Tools.GetScale(this.scale);
 
-            Pen nodeBorder = new Pen(Color.Black, 1);
-            Pen nodeSelectBorder = new Pen(Color.Black, 3);
+            Pen nodeBorder = new Pen(this.diagram.options.selectedNodeColor.Get(), 1);
+            Pen nodeSelectBorder = new Pen(this.diagram.options.selectedNodeColor.Get(), 3);
             Pen nodeLinkBorder = new Pen(Color.DarkRed, 3);
             Pen nodeMarkBorder = new Pen(Color.Navy, 3);
 
@@ -3573,7 +3582,7 @@ namespace Diagram
                             decimal size = 10 / (s / Tools.GetScale(rec.scale));
                             if (0 < size && size < 200) { 
                                 Font drawFont = new Font("Arial", (float)size);
-                                SolidBrush drawBrush = new SolidBrush(Color.Black);
+                                SolidBrush drawBrush = new SolidBrush(this.diagram.options.backgroundColor.Invert());
 
                                 PointF infoPosition = new PointF(
                                     (float)((this.shift.x + rec.position.x) / s),
@@ -3581,7 +3590,7 @@ namespace Diagram
                                 );
 
                                 gfx.DrawString(
-                                    rec.id.ToString() + "i:" + (rec.position.x).ToString() + "x," + (rec.position.y).ToString() + "y",
+                                    rec.id.ToString() + "i:" + rec.scale.ToString() + "s:" + (rec.position.x).ToString() + "x," + (rec.position.y).ToString() + "y",
                                     drawFont,
                                     drawBrush,
                                     infoPosition

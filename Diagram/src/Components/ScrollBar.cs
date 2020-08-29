@@ -59,6 +59,8 @@ namespace Diagram
         // event change position
         public event PositionChangeEventHandler OnChangePosition;
 
+        public Color color = Color.Black;
+
         public ScrollBar(object parent, long width, long height, bool horizontalOrientation = true, double per = 0.5F)
         {
             this.parent = parent;
@@ -150,8 +152,9 @@ namespace Diagram
                     tracker.Width = (int)barwidth;
                     tracker.Height = (int)trackwidth;
                 }
-                g.FillRectangle(new SolidBrush(Color.FromArgb((int)this.opacity, 0, 0, 0)), bar);
-                g.FillRectangle(new SolidBrush(Color.FromArgb((int)this.opacity * 2, 0, 0, 0)), tracker);
+
+                g.FillRectangle(new SolidBrush(Color.FromArgb((int)this.opacity, this.color)), bar);
+                g.FillRectangle(new SolidBrush(Color.FromArgb((int)this.opacity * 2, this.color)), tracker);
             }
         }
 
@@ -378,6 +381,10 @@ namespace Diagram
             {
                 trackpos = (int)(position * (barheight - trackwidth) + bary);
             }
+        }
+
+        public void SetColor(Color color) {
+            this.color = color;
         }
     }
 }

@@ -1,3 +1,4 @@
+Allow change colors in diagram by options.
 Set background color.
 Prevent open link when diagman is not signed.
 Sign diagram.

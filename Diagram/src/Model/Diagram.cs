@@ -531,9 +531,34 @@ namespace Diagram
                         this.options.icon = el.Value;
                     }
 
+                    if (el.Name.ToString() == "lineColor")
+                    {
+                        this.options.lineColor.Set(el.Value.ToString());
+                    }
+
+                    if (el.Name.ToString() == "nodeColor")
+                    {
+                        this.options.nodeColor.Set(el.Value.ToString());
+                    }
+
+                    if (el.Name.ToString() == "selectedNodeColor")
+                    {
+                        this.options.selectedNodeColor.Set(el.Value.ToString());
+                    }
+
                     if (el.Name.ToString() == "backgroundColor")
                     {
                         this.options.backgroundColor.Set(el.Value.ToString());
+                    }
+
+                    if (el.Name.ToString() == "gridColor")
+                    {
+                        this.options.gridColor.Set(el.Value.ToString());
+                    }
+
+                    if (el.Name.ToString() == "scrollbarColor")
+                    {
+                        this.options.scrollbarColor.Set(el.Value.ToString());
                     }
 
                     if (el.Name.ToString() == "backgroundImage")
@@ -972,8 +997,13 @@ namespace Diagram
             option.Add(new XElement("window.position.width", this.options.Width));
             option.Add(new XElement("window.position.height", this.options.Height));
             option.Add(new XElement("window.state", this.options.WindowState));
+            option.Add(new XElement("lineColor", this.options.lineColor.ToString()));
+            option.Add(new XElement("nodeColor", this.options.nodeColor.ToString()));
+            option.Add(new XElement("selectedNodeColor", this.options.selectedNodeColor.ToString()));
             option.Add(new XElement("backgroundColor", this.options.backgroundColor.ToString()));
-
+            option.Add(new XElement("gridColor", this.options.gridColor.ToString()));
+            option.Add(new XElement("scrollbarColor", this.options.scrollbarColor.ToString()));
+            
             if (this.options.icon != "")
             {
                 option.Add(new XElement("icon", this.options.icon));
@@ -1444,7 +1474,7 @@ namespace Diagram
             }
             else
             {
-                rec.color.Set(Media.GetColor(this.options.colorNode));
+                rec.color.Set(this.options.nodeColor.Get());
             }
             
             rec.scale = 1;
@@ -1520,7 +1550,8 @@ namespace Diagram
                         scale = a.scale,
                         startNode = this.GetNodeByID(a.id),
                         endNode = this.GetNodeByID(b.id),
-                        layer = layer
+                        layer = layer,
+                        color = new ColorType(this.options.lineColor)
                     };
 
                     this.layers.AddLine(line);
@@ -1834,10 +1865,58 @@ namespace Diagram
 
         /*************************************************************************************************************************/
         // OPTIONS
-        public void SetBackgroundColor()
+        public void SetLineColor()
         {
 
             if (this.IsReadOnly()) {
+                return;
+            }
+
+            ColorDialog lineColorDialog = new ColorDialog();
+
+            if (lineColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.options.lineColor.Set(lineColorDialog.Color);
+            }
+        }
+
+        public void SetNodeColor()
+        {
+
+            if (this.IsReadOnly())
+            {
+                return;
+            }
+
+            ColorDialog NodeColorDialog = new ColorDialog();
+
+            if (NodeColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.options.nodeColor.Set(NodeColorDialog.Color);
+            }
+        }
+
+        public void SetSelectedNodeColor()
+        {
+
+            if (this.IsReadOnly())
+            {
+                return;
+            }
+
+            ColorDialog SelectedNodeColorDialog = new ColorDialog();
+
+            if (SelectedNodeColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.options.selectedNodeColor.Set(SelectedNodeColorDialog.Color);
+            }
+        }
+
+        public void SetBackgroundColor()
+        {
+
+            if (this.IsReadOnly())
+            {
                 return;
             }
 
@@ -1847,9 +1926,52 @@ namespace Diagram
             {
                 this.options.backgroundColor.Set(backgroundColorDialog.Color);
 
-                foreach (DiagramView diagramView in this.DiagramViews) // Loop through List with foreach
+                foreach (DiagramView diagramView in this.DiagramViews)
                 {
                     diagramView.BackColor = backgroundColorDialog.Color;
+                    diagramView.Invalidate();
+                }
+            }
+        }
+
+        public void SetGridColor()
+        {
+
+            if (this.IsReadOnly())
+            {
+                return;
+            }
+
+            ColorDialog gridColorDialog = new ColorDialog();
+
+            if (gridColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.options.gridColor.Set(gridColorDialog.Color);
+
+                foreach (DiagramView diagramView in this.DiagramViews)
+                {
+                    diagramView.Invalidate();
+                }
+            }
+        }
+
+        public void SetScrollbarColor()
+        {
+
+            if (this.IsReadOnly())
+            {
+                return;
+            }
+
+            ColorDialog scrollbarColorDialog = new ColorDialog();
+
+            if (scrollbarColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.options.scrollbarColor.Set(scrollbarColorDialog.Color);
+
+                foreach (DiagramView diagramView in this.DiagramViews)
+                {
+                    diagramView.SetScrollbarColor(this.options.scrollbarColor);
                     diagramView.Invalidate();
                 }
             }
