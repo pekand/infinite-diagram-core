@@ -1338,7 +1338,8 @@ namespace Diagram
                 // KEY ALT+MLEFT
                 // KEY DBLCLICK create new node UID6734640900
                 if (!isreadonly
-                    && (dblclick || keyalt)
+                    && dblclick
+                    && !keyalt
                     && !keyshift
                     && !keyctrl
                     && TargetNode == null
@@ -1348,6 +1349,20 @@ namespace Diagram
                 {
                     Node newNode = this.CreateNode(this.actualMousePos.Clone().Subtract(10), false); 
                     this.diagram.Unsave("create", newNode, this.shift, this.scale, this.currentLayer.id);
+                }
+                else
+                // ALT+MLEFT Node click -> center node
+                if (!isreadonly
+                    && !dblclick
+                    && keyalt
+                    && !keyshift
+                    && !keyctrl
+                    && TargetNode != null
+                    && this.sourceNode == TargetNode
+                    && e.X == this.startMousePos.x
+                    && e.Y == this.startMousePos.y)
+                {
+                    this.GoToNode(TargetNode);
                 }
                 else
                 // KEY DRAG+ALT copy style from node to other node
