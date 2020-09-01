@@ -561,6 +561,11 @@ namespace Diagram
                         this.options.scrollbarColor.Set(el.Value.ToString());
                     }
 
+                    if (el.Name.ToString() == "selectionColor")
+                    {
+                        this.options.selectionColor.Set(el.Value.ToString());
+                    }
+
                     if (el.Name.ToString() == "backgroundImage")
                     {
                         this.options.backgroundImage = Media.StringToImage(el.Value);
@@ -1003,7 +1008,8 @@ namespace Diagram
             option.Add(new XElement("backgroundColor", this.options.backgroundColor.ToString()));
             option.Add(new XElement("gridColor", this.options.gridColor.ToString()));
             option.Add(new XElement("scrollbarColor", this.options.scrollbarColor.ToString()));
-            
+            option.Add(new XElement("selectionColor", this.options.selectionColor.ToString()));
+
             if (this.options.icon != "")
             {
                 option.Add(new XElement("icon", this.options.icon));
@@ -1974,6 +1980,22 @@ namespace Diagram
                     diagramView.SetScrollbarColor(this.options.scrollbarColor);
                     diagramView.Invalidate();
                 }
+            }
+        }
+
+        public void SetSelectionColor()
+        {
+
+            if (this.IsReadOnly())
+            {
+                return;
+            }
+
+            ColorDialog selectionColorDialog = new ColorDialog();
+
+            if (selectionColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.options.selectionColor.Set(selectionColorDialog.Color);
             }
         }
 

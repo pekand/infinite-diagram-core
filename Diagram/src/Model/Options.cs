@@ -63,6 +63,7 @@ namespace Diagram
         public ColorType backgroundColor = new ColorType("#F2F2F2");
         public ColorType gridColor = new ColorType("#F2F2F2");
         public ColorType scrollbarColor = new ColorType("#000000");
+        public ColorType selectionColor = new ColorType(Color.FromArgb(100, 10, 200, 200));
 
 
         /*************************************************************************************************************************/

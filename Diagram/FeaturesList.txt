@@ -1,3 +1,6 @@
+Open layer if document is not signed
+Zoom to node with alt.
+Select items change color in options.
 Allow change colors in diagram by options.
 Set background color.
 Prevent open link when diagman is not signed.

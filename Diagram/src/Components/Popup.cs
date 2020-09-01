@@ -559,6 +559,8 @@ namespace Diagram
             items["setGridColorItem"].Click += new System.EventHandler(this.SetGridColorItem_Click);
 
 
+            
+
             //
             // setScrollbarColorItem
             //
@@ -566,6 +568,16 @@ namespace Diagram
             items["setScrollbarColorItem"].Name = "setScrollbarColorItem";
             items["setScrollbarColorItem"].Text = "Scrollbar color";
             items["setScrollbarColorItem"].Click += new System.EventHandler(this.setScrollbarColorItem_Click);
+
+            //
+            // setSelectionColorItem
+            //
+            items.Add("setSelectionColorItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["setSelectionColorItem"].Name = "setSelectionColorItem";
+            items["setSelectionColorItem"].Text = "Selection color";
+            items["setSelectionColorItem"].Click += new System.EventHandler(this.setSelectionColorItem_Click);
+
+
 
             //
             // gridItem
@@ -904,6 +916,7 @@ namespace Diagram
                 items["setGridColorItem"],
                 items["setScrollbarColorItem"],
                 items["setScrollbarColorItem"],
+                items["setSelectionColorItem"],
                 items["gridItem"],
                 items["coordinatesItem"],
                 items["bordersItem"],
@@ -1772,6 +1785,12 @@ namespace Diagram
         private void setScrollbarColorItem_Click(object sender, EventArgs e)
         {
             this.diagramView.diagram.SetScrollbarColor();
+        }
+
+
+        private void setSelectionColorItem_Click(object sender, EventArgs e)
+        {
+            this.diagramView.diagram.SetSelectionColor();
         }
 
         // MENU set diagram background image

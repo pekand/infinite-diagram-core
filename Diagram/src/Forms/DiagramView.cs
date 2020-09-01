@@ -3439,7 +3439,7 @@ namespace Diagram
         // DRAW select node by mouse drag (blue rectangle) UID1806594258
         private void DrawNodesSelectArea(Graphics gfx)
         {
-            SolidBrush brush = new SolidBrush(Color.FromArgb(100, 10, 200, 200));
+            SolidBrush brush = new SolidBrush(Color.FromArgb(200,  this.diagram.options.selectionColor.Get()));
 
             decimal a = this.shift.x - this.startShift.x + this.startMousePos.x * Tools.GetScale(this.scale);
             decimal b = this.shift.y - this.startShift.y + this.startMousePos.y * Tools.GetScale(this.scale);
@@ -4158,13 +4158,69 @@ namespace Diagram
         // NODE Open Link
         public void OpenLink(Node rec) //UID9292140736
         {
-            if (rec != null && !this.diagram.isSigned()) // prevent execution of scripts when curent user is not owner of document
+            if (rec == null) // prevent execution of scripts when curent user is not owner of document
             {
-                this.diagram.EditNode(rec);
+                return;
+            }
+            
+            if (rec.haslayer)
+            {
+                if (this.diagram.options.openLayerInNewView) //UID1964118363
+                {
+                    this.diagram.OpenDiagramView(
+                        this,
+                        this.diagram.layers.GetLayer(
+                            rec.id
+                        )
+                    );
+
+                    return;
+                }
+                else
+                {
+                    this.LayerIn(rec);
+                    return;
+                }
+            }
+            else  if (rec.shortcut > 0) // GO TO LINK
+            {
+                Node target = this.diagram.GetNodeByID(rec.shortcut);
+                this.GoToNode(target);
+                this.diagram.InvalidateDiagram();
+                return;
+            }
+            else if (Patterns.IsGotoIdCommand(rec.link)) // GOTO position
+            {
+                Program.log.Write("go to position in diagram " + rec.link);
+                Node node = this.diagram.GetNodeByID(Patterns.GetGotoIdCommand(rec.link));
+                if (node != null)
+                {
+                    this.GoToNodeWithAnimation(node);
+                }
+                return;
+            }
+            else if (Patterns.IsGotoStringCommand(rec.link)) // GOTO position
+            {
+                Program.log.Write("go to position in diagram " + rec.link);
+                String searchFor = Patterns.GetGotoStringCommand(rec.link);
+                Nodes nodes = this.diagram.layers.SearchInAllNodes(searchFor);
+                if (nodes.Count() >= 2)
+                {
+                    if (rec != nodes[0])
+                    {
+                        this.GoToNodeWithAnimation(nodes[0]);
+                    }
+                    else
+                    {
+                        this.GoToNodeWithAnimation(nodes[1]);
+                    }
+                }
+
                 return;
             }
 
-            if (rec != null)
+
+            if (this.diagram.isSigned())
             {
                 bool stopNextAction = this.main.plugins.ClickOnNodeAction(this.diagram, this, rec); //UID0290845815
 
@@ -4172,66 +4228,24 @@ namespace Diagram
                     // stop execution from plugin
                     return;
                 } 
-                
-                if (rec.haslayer) {
-                    if (this.diagram.options.openLayerInNewView) //UID1964118363
-                    {
-                        this.diagram.OpenDiagramView(
-                            this,
-                            this.diagram.layers.GetLayer(
-                                rec.id
-                            )
-                        );
-                    }
-                    else
-                    {
-                        this.LayerIn(rec);
-                    }
-                } 
-                else if (rec.attachment != "") 
-                {
-                    this.SelectOnlyOneNode(rec); // deploy attachment
-                    this.AttachmentDeploy();
-                    return;
-                }
-                else if (rec.shortcut > 0) // GO TO LINK
-                {
-                    Node target = this.diagram.GetNodeByID(rec.shortcut);
-                    this.GoToNode(target);
-                    this.diagram.InvalidateDiagram();
-                }
-                else
+
                 if (rec.link.Length > 0)
                 {
 
                     string fileName = "";
                     string searchString = "";
 
-                    if (Patterns.IsGotoIdCommand(rec.link)) // GOTO position
+                    if (rec.attachment != "")
                     {
-                        Program.log.Write("go to position in diagram " + rec.link);
-                        Node node = this.diagram.GetNodeByID(Patterns.GetGotoIdCommand(rec.link));
-                        if (node != null) {
-                            this.GoToNodeWithAnimation(node);
-                        }
+                        this.SelectOnlyOneNode(rec); // deploy attachment
+                        this.AttachmentDeploy();
+                        return;
                     }
-                    else if (Patterns.IsGotoStringCommand(rec.link)) // GOTO position
-                    {
-                        Program.log.Write("go to position in diagram " + rec.link);
-                        String searchFor = Patterns.GetGotoStringCommand(rec.link);
-                        Nodes nodes = this.diagram.layers.SearchInAllNodes(searchFor);
-                        if (nodes.Count() >= 2)
-                        {
-                            if (rec != nodes[0]) {
-                                this.GoToNodeWithAnimation(nodes[0]);
-                            } else {
-                                this.GoToNodeWithAnimation(nodes[1]);
-                            }
-                        }
-                    }
-                    else if (Patterns.IsEmail(rec.link)) // OPEN URL
+                    else if(Patterns.IsEmail(rec.link)) // OPEN EMAIL
                     {
                         Os.OpenEmail(rec.link);
+
+                        return;
                     }
                     else if (Patterns.IsURL(rec.link)) // OPEN URL
                     {
@@ -4244,6 +4258,8 @@ namespace Diagram
                         {
                             Program.log.Write("open link as url error: " + ex.Message);
                         }
+
+                        return;
                     }
                     else if (Os.DirectoryExists(rec.link))  // OPEN DIRECTORY
                     {
@@ -4256,6 +4272,8 @@ namespace Diagram
                         {
                             Program.log.Write("open link as directory error: " + ex.Message);
                         }
+
+                        return;
                     }
                     else if (Os.FileExists(rec.link))       // OPEN FILE
                     {
@@ -4276,6 +4294,8 @@ namespace Diagram
                         {
                             Program.log.Write("open link as file error: " + ex.Message);
                         }
+
+                        return;
                     }
                     else if (Patterns.HasHastag(rec.link.Trim(), ref fileName, ref searchString)
                         && Os.FileExists(Os.NormalizedFullPath(fileName)))       // OPEN FILE ON LINE POSITION
@@ -4306,6 +4326,8 @@ namespace Diagram
                         {
                             Program.log.Write("open link as file error: " + ex.Message);
                         }
+
+                        return;
                     }                    
                     else // run as command 
                     {
@@ -4339,13 +4361,14 @@ namespace Diagram
 
                         Program.log.Write("diagram: openlink: run command: " + cmd);
                         Os.RunCommand(cmd, Os.GetFileDirectory(this.diagram.FileName)); // RUN COMMAND UID5087096741
+
+                        return;
                     }
                 }
-                else // EDIT NODE
-                {
-                    this.diagram.EditNode(rec);
-                }
             }
+
+            this.diagram.EditNode(rec);
+            return;
         }
 
         // NODE Remove shortcuts
