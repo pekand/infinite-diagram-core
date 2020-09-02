@@ -3777,6 +3777,14 @@ namespace Diagram
                 Node r1 = lin.startNode;
                 Node r2 = lin.endNode;
 
+
+                float r1x = (float)((this.shift.x + cx + r1.position.x + (r1.width * Tools.GetScale(r1.scale)) / 2) / s);
+                float r1y = (float)((this.shift.y + cy + r1.position.y + (r1.height * Tools.GetScale(r1.scale)) / 2) / s);
+
+                float r2x = (float)((this.shift.x + cx + r2.position.x + (r2.width * Tools.GetScale(r2.scale)) / 2) / s);
+                float r2y = (float)((this.shift.y + cy + r2.position.y + (r2.height * Tools.GetScale(r2.scale)) / 2) / s);
+
+
                 isvisible = false;
                 if (export)
                 {
@@ -3788,22 +3796,22 @@ namespace Diagram
                     isvisible = false;
                 }
                 else
-                    if (0 + this.ClientSize.Width <= (this.shift.x + r1.position.x) / s && 0 + this.ClientSize.Width <= (this.shift.x + r2.position.x) / s)
+                if (0 + this.ClientSize.Width <= r1x && 0 + this.ClientSize.Width <= r2x)
                 {
                     isvisible = false;
                 }
                 else
-                        if ((this.shift.x + r1.position.x) / s <= 0 && (this.shift.x + r2.position.x) / s <= 0)
+                if (r1x <= 0 && r2x <= 0)
                 {
                     isvisible = false;
                 }
                 else
-                            if (0 + this.ClientSize.Height <= (this.shift.y + r1.position.y) / s && 0 + this.ClientSize.Height <= (this.shift.y + r2.position.y) / s)
+                if (0 + this.ClientSize.Height <= r1y && 0 + this.ClientSize.Height <= r2y)
                 {
                     isvisible = false;
                 }
                 else
-                                if ((this.shift.y + r1.position.y) / s <= 0 && (this.shift.y + r2.position.y) / s <= 0)
+                if (r1y <= 0 && r2y <= 0)
                 {
                     isvisible = false;
                 }
@@ -3850,23 +3858,20 @@ namespace Diagram
                     }
                     else
                     {
+                        int linewidth = (int)lin.width;
+                        /*
                         int linewidth = lin.width * Tools.GetScale(lin.scale) / s > 1 ? (int)(lin.width * Tools.GetScale(lin.scale) / s) : 1;
 
                         if (linewidth>100) {
                             linewidth = 100;
                         }
+                        */
 
 
                         PointF[] points =
                          {
-                             new PointF(
-                                 (float)((this.shift.x + cx + r1.position.x + (r1.width * Tools.GetScale(r1.scale)) / 2) / s),
-                                 (float)((this.shift.y + cy + r1.position.y + (r1.height * Tools.GetScale(r1.scale)) / 2) / s)
-                             ),
-                             new PointF(
-                                 (float)((this.shift.x + cx + r2.position.x + (r2.width * Tools.GetScale(r2.scale)) / 2) / s),
-                                 (float)((this.shift.y + cy + r2.position.y + (r2.height * Tools.GetScale(r2.scale)) / 2) / s)
-                             )                             
+                             new PointF(r1x, r1y),
+                             new PointF(r2x, r2y)                             
                          };
 
                         // draw line
@@ -4233,21 +4238,22 @@ namespace Diagram
                 if (stopNextAction) {
                     // stop execution from plugin
                     return;
-                } 
+                }
 
+                if (rec.attachment != "")
+                {
+                    this.SelectOnlyOneNode(rec); // deploy attachment
+                    this.AttachmentDeploy();
+                    return;
+                }
+                else
                 if (rec.link.Length > 0)
                 {
 
                     string fileName = "";
                     string searchString = "";
 
-                    if (rec.attachment != "")
-                    {
-                        this.SelectOnlyOneNode(rec); // deploy attachment
-                        this.AttachmentDeploy();
-                        return;
-                    }
-                    else if(Patterns.IsEmail(rec.link)) // OPEN EMAIL
+                    if(Patterns.IsEmail(rec.link)) // OPEN EMAIL
                     {
                         Os.OpenEmail(rec.link);
 
