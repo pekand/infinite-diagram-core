@@ -92,6 +92,7 @@ namespace Diagram
         // ATTRIBUTES Layers
         public Layer currentLayer = null;
         public Position firstLayereShift = new Position();    // left corner position in zero top layer
+        public decimal firstLayereScale = 0;    
         public List<Layer> layersHistory = new List<Layer>(); // layer history - last layer is current selected layer
 
         // COMPONENTS
@@ -2615,17 +2616,19 @@ namespace Diagram
             if (this.currentLayer.parentNode == null)
             {
                 this.firstLayereShift.Set(shift);
+                this.firstLayereScale = this.scale;
             }
             else
             {
                 this.currentLayer.parentNode.layerShift.Set(this.shift);
+                this.currentLayer.parentNode.layerScale = this.scale;
             }
 
-            this.currentLayer = this.diagram.layers.CreateLayer(node);
+            this.currentLayer = this.diagram.layers.GetOrCreateLayer(node);
             this.currentLayer.parentNode.haslayer = true;
             this.layersHistory.Add(this.currentLayer);
             this.shift.Set(this.currentLayer.parentNode.layerShift);
-
+            this.scale = this.currentLayer.parentNode.layerScale;
             this.SetTitle();
             this.breadcrumbs.Update();
             this.diagram.InvalidateDiagram();
@@ -2637,6 +2640,7 @@ namespace Diagram
             if (this.currentLayer.parentLayer != null) { //this layer is not top layer
 
                 this.currentLayer.parentNode.layerShift.Set(this.shift);
+                this.currentLayer.parentNode.layerScale = this.scale;
 
                 if (this.currentLayer.nodes.Count() == 0) {
                     this.currentLayer.parentNode.haslayer = false;
@@ -2649,10 +2653,12 @@ namespace Diagram
                 if (this.currentLayer.parentNode == null)
                 {
                     this.shift.Set(this.firstLayereShift);
+                    this.scale = this.firstLayereScale;
                 }
                 else
                 {
                     this.shift.Set(this.currentLayer.parentNode.layerShift);
+                    this.scale = this.currentLayer.parentNode.layerScale;
                 }
 
                 this.SetTitle();

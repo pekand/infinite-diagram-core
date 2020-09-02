@@ -11,8 +11,8 @@ namespace Diagram
         // POSITION
 
         public Position shift = new Position();            // startup position in diagram
-        public double scale = 1;
         public Position firstLayereShift = new Position(); // position in layer
+        public decimal firstLayereScale = 0;
 
         /*************************************************************************************************************************/
         // HOME AND END POSITIONS
@@ -61,7 +61,7 @@ namespace Diagram
         public ColorType nodeColor = new ColorType("#FFFFB8");
         public ColorType selectedNodeColor = new ColorType("#000000");
         public ColorType backgroundColor = new ColorType("#F2F2F2");
-        public ColorType gridColor = new ColorType("#F2F2F2");
+        public ColorType gridColor = new ColorType("#AAAAAA");
         public ColorType scrollbarColor = new ColorType("#000000");
         public ColorType selectionColor = new ColorType(Color.FromArgb(100, 10, 200, 200));
 

@@ -19,10 +19,10 @@ namespace Diagram
 
         public Layers()
         {
-            this.CreateLayer();
+            this.GetOrCreateLayer();
         }
 
-        public Layer CreateLayer(Node parent = null)
+        public Layer GetOrCreateLayer(Node parent = null)
         {
             Layer layer = GetLayer((parent == null) ? 0 : parent.id);
 
@@ -384,7 +384,7 @@ namespace Diagram
             if (layer == null)
             {
                 Node parentNode = this.GetNode(node.layer);
-                layer = this.CreateLayer(parentNode);
+                layer = this.GetOrCreateLayer(parentNode);
                 parentNode.haslayer = true;
             }
 
@@ -400,7 +400,7 @@ namespace Diagram
 
             if (layer == null)
             {
-                layer = this.CreateLayer(this.GetNode(line.layer));
+                layer = this.GetOrCreateLayer(this.GetNode(line.layer));
             }
 
             layer.lines.Add(line);
@@ -506,7 +506,7 @@ namespace Diagram
 
             this.allNodes.Clear();
             this.layers.Clear();
-            this.CreateLayer();
+            this.GetOrCreateLayer();
         }
 
         /*************************************************************************************************************************/

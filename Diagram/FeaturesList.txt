@@ -1,3 +1,4 @@
+Scale layer after go to layer.
 Open layer if document is not signed
 Zoom to node with alt.
 Select items change color in options.

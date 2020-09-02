@@ -491,6 +491,11 @@ namespace Diagram
                         this.options.firstLayereShift.y = Tools.StringToDecimal(el.Value);
                     }
 
+                    if (el.Name.ToString() == "firstLayereScale")
+                    {
+                        this.options.firstLayereScale = Tools.StringToDecimal(el.Value);
+                    }
+
                     if (el.Name.ToString() == "openLayerInNewView")
                     {
                         this.options.openLayerInNewView = bool.Parse(el.Value);
@@ -675,6 +680,11 @@ namespace Diagram
                             if (el.Name.ToString() == "layershifty")
                             {
                                 R.layerShift.y = Tools.StringToDecimal(el.Value);
+                            }
+
+                            if (el.Name.ToString() == "layerscale")
+                            {
+                                R.layerScale = Tools.StringToDecimal(el.Value);
                             }
 
                             if (el.Name.ToString() == "x")
@@ -959,7 +969,7 @@ namespace Diagram
             try
             {
                 XElement option = this.SaveInnerXmlOptions();
-                XElement rectangles = this.SaveInnerXmlRectangles(this.GetAllNodes());
+                XElement rectangles = this.SaveInnerXmlNodes(this.GetAllNodes());
                 XElement lines = this.SaveInnerXmlLines(this.GetAllLines());
 
                 diagram.Add(option);
@@ -988,6 +998,7 @@ namespace Diagram
             option.Add(new XElement("endScale", this.options.endScale));
             option.Add(new XElement("firstLayereShift.x", this.options.firstLayereShift.x));
             option.Add(new XElement("firstLayereShift.y", this.options.firstLayereShift.y));
+            option.Add(new XElement("firstLayereScale", this.options.firstLayereScale));
             if (this.options.openLayerInNewView) option.Add(new XElement("openLayerInNewView", this.options.openLayerInNewView));
             option.Add(new XElement("homelayer", this.options.homeLayer));
             option.Add(new XElement("endlayer", this.options.endLayer));
@@ -1027,7 +1038,7 @@ namespace Diagram
             return option;
         }
         
-        public XElement SaveInnerXmlRectangles(Nodes nodes) //UID0137352615
+        public XElement SaveInnerXmlNodes(Nodes nodes) //UID0137352615
         {
             XElement rectangles = new XElement("rectangles");
             foreach (Node rec in nodes)
@@ -1054,6 +1065,7 @@ namespace Diagram
                     rectangle.Add(new XElement("haslayer", rec.haslayer));
                     rectangle.Add(new XElement("layershiftx", rec.layerShift.x));
                     rectangle.Add(new XElement("layershifty", rec.layerShift.y));
+                    rectangle.Add(new XElement("layerscale", rec.layerScale));
                 }
 
                 rectangle.Add(new XElement("x", rec.position.x));
@@ -2576,7 +2588,7 @@ namespace Diagram
                 li.layer = li.layer - minid + 1;
             }
             
-            XElement xrectangles = this.SaveInnerXmlRectangles(copy);
+            XElement xrectangles = this.SaveInnerXmlNodes(copy);
             XElement xlines = this.SaveInnerXmlLines(lines);
                 
             root.Add(xrectangles);
