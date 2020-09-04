@@ -3508,11 +3508,10 @@ namespace Diagram
                 );
             }
         }
-
+        
         // DRAW nodes UID4202302087
         private void DrawNodes(Graphics gfx, Nodes nodes, Position correction = null, bool export = false)
         {
-            bool isvisible; // drawonly visible elements
             decimal s = Tools.GetScale(this.scale);
 
             Pen nodeBorder = new Pen(this.diagram.options.selectedNodeColor.Get(), 1);
@@ -3532,38 +3531,8 @@ namespace Diagram
             // DRAW nodes
             foreach (Node rec in nodes) // Loop through List with foreach
             {
-                // exclude not visible nodes
-                isvisible = true;
-                if (export)
-                {
-                    isvisible = true;
-                }else
-                if (rec.scale < this.scale - 6 || this.scale + 6 < rec.scale) // remove to small or to big objects
-                {
-                    isvisible = false;
-                }
-                else
-                    if (0 + this.ClientSize.Width <= (this.shift.x + rec.position.x) / s)
-                {
-                    isvisible = false;
-                }
-                else
-                        if ((this.shift.x + rec.position.x + rec.width) / s <= 0)
-                {
-                    isvisible = false;
-                }
-                else
-                            if (0 + this.ClientSize.Height <= (this.shift.y + rec.position.y) / s)
-                {
-                    isvisible = false;
-                }
-                else
-                                if ((this.shift.y + rec.position.y + rec.height) / s <= 0)
-                {
-                    isvisible = false;
-                }
-                
-                if (isvisible && rec.visible)
+
+                if ((export || this.NodeIsVisible(rec)) && rec.visible)
                 {
                     if (rec.isimage)
                     {
@@ -4159,11 +4128,19 @@ namespace Diagram
         // NODE find node in mouse cursor position
         public Node FindNodeInMousePosition(Position mousePosition, Node skipNode = null)
         {
-            return this.diagram.FindNodeInPosition(
+            Nodes nodes = this.diagram.FindAllNodesInPosition(
                 this.MouseToDiagramPosition(mousePosition),
                 this.currentLayer.id,
                 skipNode
             );
+
+            foreach (Node node in nodes) {
+                if (this.NodeIsVisible(node)) { //mark1
+                    return node;
+                }
+            }
+
+            return null;
         }
 
         // NODE Open Link
@@ -5841,6 +5818,43 @@ namespace Diagram
                 )
             );
         }
+
+        // NODE VISIBILITY check visibility of node in current view
+        public bool NodeIsVisible(Node rec)
+        {
+
+            decimal s = Tools.GetScale(this.scale);
+
+            bool isvisible = true; ;
+
+            if (rec.scale < this.scale - 6 || this.scale + 6 < rec.scale) // remove to small or to big objects
+            {
+                isvisible = false;
+            }
+            else
+            if (0 + this.ClientSize.Width <= (this.shift.x + rec.position.x) / s)
+            {
+                isvisible = false;
+            }
+            else
+            if ((this.shift.x + rec.position.x + rec.width) / s <= 0)
+            {
+                isvisible = false;
+            }
+            else
+            if (0 + this.ClientSize.Height <= (this.shift.y + rec.position.y) / s)
+            {
+                isvisible = false;
+            }
+            else
+            if ((this.shift.y + rec.position.y + rec.height) / s <= 0)
+            {
+                isvisible = false;
+            }
+
+            return isvisible;
+        }
+
 
         // LINE change color of lines
         public void ChangeLineColor()

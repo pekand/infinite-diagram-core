@@ -1,3 +1,4 @@
+Select only visivle nodes.
 Calculate line position according to center of nodes instead of node corner.
 Scale layer after go to layer.
 Open layer if document is not signed
