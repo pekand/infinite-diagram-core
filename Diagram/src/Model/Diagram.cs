@@ -105,6 +105,7 @@ namespace Diagram
                 bool opened;
                 if (xml.Trim() == "")
                 {
+                    this.signed = true; // empty file is by default signed
                     opened = true; // count empty file as valid new diagram
                 }
                 else
@@ -135,8 +136,6 @@ namespace Diagram
             XElement option = null;
             XElement rectangles = null;
             XElement lines = null;
-
-
 
             try
             {
