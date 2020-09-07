@@ -4135,7 +4135,7 @@ namespace Diagram
             );
 
             foreach (Node node in nodes) {
-                if (this.NodeIsVisible(node)) { //mark1
+                if (this.NodeIsVisible(node)) {
                     return node;
                 }
             }

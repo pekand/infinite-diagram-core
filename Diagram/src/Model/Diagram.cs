@@ -1695,7 +1695,8 @@ namespace Diagram
                 foreach (Node rec in nodes) // change space between nodes
                 {
                     rec.position.y = posy;
-                    posy = posy + rec.height + 10;
+                    decimal s = Tools.GetScale(rec.scale);
+                    posy = posy + rec.height * s + 10 * s;
                 }
             }
         }
@@ -1711,14 +1712,16 @@ namespace Diagram
                 {
                     if (rec.position.y <= miny)
                     {
+                        decimal s = Tools.GetScale(rec.scale);
                         miny = rec.position.y;
-                        topx = rec.position.x + rec.width / 2; ;
+                        topx = rec.position.x + rec.width * s / 2; ;
                     }
                 }
 
                 foreach (Node rec in Nodes)
                 {
-                    rec.position.x = topx - rec.width / 2;
+                    decimal s = Tools.GetScale(rec.scale);
+                    rec.position.x = topx - rec.width * s / 2;
                 }
             }
         }
@@ -1750,8 +1753,9 @@ namespace Diagram
                 decimal posx = minx;
                 foreach (Node rec in nodes) // zmensit medzeru medzi objektami
                 {
+                    decimal s = Tools.GetScale(rec.scale);
                     rec.position.x = posx;
-                    posx = posx + rec.width + 10;
+                    posx = posx + rec.width * s + 10 * s;
                 }
             }
         }
@@ -1766,13 +1770,15 @@ namespace Diagram
                 {
                     if (rec.position.x + rec.width >= maxx)
                     {
-                        maxx = rec.position.x + rec.width;
+                        decimal s = Tools.GetScale(rec.scale);
+                        maxx = rec.position.x + rec.width * s;
                     }
                 }
 
                 foreach (Node rec in Nodes)
                 {
-                    rec.position.x = maxx - rec.width;
+                    decimal s = Tools.GetScale(rec.scale);
+                    rec.position.x = maxx - rec.width * s;
                 }
             }
         }
