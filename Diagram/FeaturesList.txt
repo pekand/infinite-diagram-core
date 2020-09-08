@@ -1,3 +1,4 @@
+Move scaled items wth keyboard.
 Align scaled items.
 Empty file is by default signed.
 Select only visivle nodes.

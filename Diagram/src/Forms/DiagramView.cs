@@ -5360,15 +5360,17 @@ namespace Diagram
                 long speed = (quick) ? this.diagram.options.keyArrowFastMoveNodeSpeed : this.diagram.options.keyArrowSlowMoveNodeSpeed;
                 foreach (Node rec in this.selectedNodes)
                 {
-                    rec.position.x -= speed;
+                    decimal s = Tools.GetScale(this.scale);
+                    rec.position.x -= speed * s;
                 }
                 this.diagram.Unsave();
                 this.diagram.InvalidateDiagram();
             }
             else // MOVE SCREEN
             {
+                decimal s = Tools.GetScale(this.scale);
                 long speed = (quick) ? this.ClientSize.Width : this.diagram.options.keyArrowSlowSpeed;
-                this.shift.x += speed;
+                this.shift.x += speed * s;
                 this.diagram.InvalidateDiagram();
             }
         }
@@ -5385,15 +5387,17 @@ namespace Diagram
                 long speed = (quick) ? this.diagram.options.keyArrowFastMoveNodeSpeed : this.diagram.options.keyArrowSlowMoveNodeSpeed;
                 foreach (Node rec in this.selectedNodes)
                 {
-                    rec.position.x += speed;
+                    decimal s = Tools.GetScale(this.scale);
+                    rec.position.x += speed * s;
                 }
                 this.diagram.Unsave();
                 this.diagram.InvalidateDiagram();
             }
             else // MOVE SCREEN
             {
+                decimal s = Tools.GetScale(this.scale);
                 long speed = (quick) ? this.ClientSize.Width : this.diagram.options.keyArrowSlowSpeed;
-                this.shift.x -= speed;
+                this.shift.x -= speed * s;
                 this.diagram.InvalidateDiagram();
             }
         }
@@ -5410,15 +5414,17 @@ namespace Diagram
                 long speed = (quick) ? this.diagram.options.keyArrowFastMoveNodeSpeed : this.diagram.options.keyArrowSlowMoveNodeSpeed;
                 foreach (Node rec in this.selectedNodes)
                 {
-                    rec.position.y -= speed;
+                    decimal s = Tools.GetScale(this.scale);
+                    rec.position.y -= speed * s;
                 }
                 this.diagram.Unsave();
                 this.diagram.InvalidateDiagram();
             }
             else // MOVE SCREEN
             {
+                decimal s = Tools.GetScale(this.scale);
                 long speed = (quick) ? this.ClientSize.Height : this.diagram.options.keyArrowSlowSpeed;
-                this.shift.y += speed;
+                this.shift.y += speed * s;
                 this.diagram.InvalidateDiagram();
             }
         }
@@ -5435,15 +5441,17 @@ namespace Diagram
                 long speed = (quick) ? this.diagram.options.keyArrowFastMoveNodeSpeed : this.diagram.options.keyArrowSlowMoveNodeSpeed;
                 foreach (Node rec in this.selectedNodes)
                 {
-                    rec.position.y += speed;
+                    decimal s = Tools.GetScale(this.scale);
+                    rec.position.y += speed * s;
                 }
                 this.diagram.Unsave();
                 this.diagram.InvalidateDiagram();
             }
             else // MOVE SCREEN
             {
+                decimal s = Tools.GetScale(this.scale);
                 long speed = (quick) ? this.ClientSize.Height : this.diagram.options.keyArrowSlowSpeed;
-                this.shift.y -= speed;
+                this.shift.y -= speed * s;
                 this.diagram.InvalidateDiagram();
             }
         }
