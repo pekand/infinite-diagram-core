@@ -5281,7 +5281,6 @@ namespace Diagram
 
             Node newrec = this.CreateNode(this.GetMousePosition());
             newrec.SetName(insertdatestring);
-            newrec.color.Set("#8AC5FF");
 
             this.diagram.Unsave("create", newrec, this.shift, this.scale, this.currentLayer.id);
             this.diagram.InvalidateDiagram();
@@ -5969,7 +5968,6 @@ namespace Diagram
                     delegate (object o, RunWorkerCompletedEventArgs args)
                     {
                         if (node.name == null) node.SetName("url");
-                        node.color.Set("#F2FFCC");
                         this.diagram.InvalidateDiagram();
                     }
                 )

@@ -1,3 +1,4 @@
+Remove default color from link.
 Remove blinking when add node to slelection.
 Move scaled items wth keyboard.
 Align scaled items.
