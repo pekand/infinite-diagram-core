@@ -768,6 +768,11 @@ namespace Diagram
             this.LogEvent("MouseDown");
 #endif
 
+            bool buttonleft = e.Button == MouseButtons.Left;
+            bool buttonright = e.Button == MouseButtons.Right;
+            bool buttonmiddle = e.Button == MouseButtons.Middle;
+            bool isreadonly = this.diagram.options.readOnly;
+
             this.actualMousePos.Set(e.X, e.Y);
 
             if (this.stateSearching)
@@ -798,55 +803,71 @@ namespace Diagram
             this.startMousePos.Set(this.actualMousePos);  // starting mouse position
             this.startShift.Set(this.shift);  // starting indent
 
-            if (e.Button == MouseButtons.Left)
+            this.sourceNode = this.FindNodeInMousePosition(this.actualMousePos);
+
+            this.stateSourceNodeAlreadySelected = this.sourceNode != null && this.sourceNode.selected;
+
+
+            if (buttonleft && bottomScrollBar != null && bottomScrollBar.MouseDown(e.X, e.Y))
             {
-                this.sourceNode = this.FindNodeInMousePosition(this.actualMousePos);
+                MoveScreenHorizontal(bottomScrollBar.position);
+                this.diagram.InvalidateDiagram();
+                return;
+            }
+                
+            if (buttonleft && rightScrollBar != null && rightScrollBar.MouseDown(e.X, e.Y))
+            {
+                MoveScreenVertical(rightScrollBar.position);
+                this.diagram.InvalidateDiagram();
+                return;
+            }
+                
+            if (buttonleft && this.sourceNode == null)
+            {
+                if (!isreadonly
+                    && ((!this.keyctrl && this.keyalt) || (this.keyctrl && this.keyalt))
+                    && !this.keyshift) // add node by drag
+                {
+                    this.stateAddingNode = true;
+                    MoveTimer.Enabled = true;
+                    this.ClearSelection();
+                }
+                else // multiselect
+                {
+                    this.stateSelectingNodes = true;
+                    MoveTimer.Enabled = true;
+                }
+            }
+                
+            if (buttonleft && this.sourceNode != null)
+            {
+                if (this.keyshift && !this.keyctrl && !this.keyalt
+                    && this.sourceNode.link.Trim() != ""
+                    && (Os.FileExists(this.sourceNode.link) || Os.DirectoryExists(this.sourceNode.link))) // drag file from diagram
+                {
+                    string[] array = { this.sourceNode.link };
+                    var data = new DataObject(DataFormats.FileDrop, array);
+                    this.DoDragDrop(data, DragDropEffects.Copy);
+                }
+                else if (!isreadonly && !this.stateDblclick)  //informations for draging
+                {
+                        
+                    if (!this.keyctrl && !this.keyshift && !this.keyalt && !this.sourceNode.selected)
+                    {
+                        this.SelectOnlyOneNode(this.sourceNode);
+                        this.diagram.InvalidateDiagram();
+                    }
 
-                this.stateSourceNodeAlreadySelected = this.sourceNode != null && this.sourceNode.selected;
+                    if (this.keyctrl && !this.keyshift && !this.keyalt 
+                        && !this.sourceNode.selected 
+                        && this.selectedNodes.Count == 0)
+                    {
+                        this.SelectOnlyOneNode(this.sourceNode);
+                        this.diagram.InvalidateDiagram();
+                    }
 
-                if (bottomScrollBar != null && bottomScrollBar.MouseDown(e.X, e.Y))
-                {
-                    MoveScreenHorizontal(bottomScrollBar.position);
-                    this.diagram.InvalidateDiagram();
-                    return;
-                }
-                else
-                if (rightScrollBar != null && rightScrollBar.MouseDown(e.X, e.Y))
-                {
-                    MoveScreenVertical(rightScrollBar.position);
-                    this.diagram.InvalidateDiagram();
-                    return;
-                }
-                else
-                if (this.sourceNode == null)
-                {
-                    if (!this.diagram.options.readOnly
-                        && ((!this.keyctrl && this.keyalt) || (this.keyctrl && this.keyalt))
-                        && !this.keyshift) // add node by drag
-                    {
-                        this.stateAddingNode = true;
-                        MoveTimer.Enabled = true;
-                        this.ClearSelection();
-                    }
-                    else // multiselect
-                    {
-                        this.stateSelectingNodes = true;
-                        MoveTimer.Enabled = true;
-                    }
-                }
-                else if (this.sourceNode != null)
-                {
-                    if (this.keyshift && !this.keyctrl && !this.keyalt
-                        && this.sourceNode.link.Trim() != ""
-                        && (Os.FileExists(this.sourceNode.link) || Os.DirectoryExists(this.sourceNode.link))) // drag file from diagram
-                    {
-                        string[] array = { this.sourceNode.link };
-                        var data = new DataObject(DataFormats.FileDrop, array);
-                        this.DoDragDrop(data, DragDropEffects.Copy);
-                    }
-                    else if (!this.diagram.options.readOnly && !this.stateDblclick)  //informations for draging
-                    {
-                        if (!this.keyshift && this.keyctrl && !this.keyalt)  // start copy item
+                    if (this.sourceNode.selected) {
+                        if (this.keyctrl && !this.keyshift && !this.keyalt)  // start copy item
                         {
                             this.stateCoping = true;
 
@@ -879,37 +900,28 @@ namespace Diagram
                         }
 
                         this.stateDragSelection = true;
-                        MoveTimer.Enabled = true;
-                        this.startNodePos.Set(this.sourceNode.position); // starting position of draging item
+                            MoveTimer.Enabled = true;
+                            this.startNodePos.Set(this.sourceNode.position); // starting position of draging item
 
                         this.vmouse
                             .Set(this.actualMousePos)
                             .Scale(Tools.GetScale(this.scale))
                             .Subtract(this.shift)
                             .Subtract(this.sourceNode.position); // mouse position in node
-
-                        if (!this.keyctrl && !this.keyshift && !this.sourceNode.selected)
-                        {
-                            this.SelectOnlyOneNode(this.sourceNode);
-                            this.diagram.InvalidateDiagram();
-                        }
                     }
                 }
             }
-            else
-            if (e.Button == MouseButtons.Right)
+
+            if (buttonright)
             {
                 this.stateMoveView = true; // popupmenu or view move
             }
-            else
-            if (e.Button == MouseButtons.Middle)
+            
+            if (buttonmiddle && !isreadonly)
             {
-                if (!this.diagram.options.readOnly)
-                {
-                    this.sourceNode = this.FindNodeInMousePosition(new Position(e.X, e.Y));
-                    this.stateAddingNode = true;// add node by drag
-                    MoveTimer.Enabled = true;
-                }
+                this.sourceNode = this.FindNodeInMousePosition(new Position(e.X, e.Y));
+                this.stateAddingNode = true;// add node by drag
+                MoveTimer.Enabled = true;
             }
 
             this.diagram.InvalidateDiagram();
@@ -961,7 +973,7 @@ namespace Diagram
             Position mouseTranslation = new Position(this.actualMousePos).Subtract(this.startMousePos);
 
             // States
-            bool mousemove = ((this.actualMousePos.x != this.startMousePos.x) || (this.actualMousePos.y != this.startMousePos.y)); // mouse change position
+            bool mousemove = ((Math.Abs(this.actualMousePos.x - this.startMousePos.x) > 2) || (Math.Abs(this.actualMousePos.y - this.startMousePos.y) > 2)); // mouse change position
             bool buttonleft = e.Button == MouseButtons.Left;
             bool buttonright = e.Button == MouseButtons.Right;
             bool buttonmiddle = e.Button == MouseButtons.Middle;
@@ -982,110 +994,92 @@ namespace Diagram
                 return;
             }
 
-            if(dblclick)
+            // KEY DRAG
+            if (finishdraging && !isreadonly) // drag node
+            {
+
+                if (this.sourceNode != null && !keyctrl) // return node to starting position after connection is created
+                {
+                    Position translation = new Position(this.startNodePos)
+                        .Subtract(sourceNode.position);
+
+                    if (this.selectedNodes.Count > 0)
+                    {
+                        foreach (Node node in this.selectedNodes)
+                        {
+                            node.position.Add(translation);
+                        }
+                    }
+
+                    this.diagram.InvalidateDiagram();
+                }
+            }
+
+            if (dblclick)
             {
                 this.stateSelectingNodes = false;
             }
-            else
-            // KEY DRAG
-            if (finishdraging) // drag node
-            {
-                if (!this.diagram.options.readOnly)
-                {
-                    if (this.sourceNode != null && !keyctrl) // return node to starting position after connection is created
-                    {
-                        Position translation = new Position(this.startNodePos)
-                            .Subtract(sourceNode.position);
 
-                        if (this.selectedNodes.Count > 0)
-                        {
-                            foreach (Node node in this.selectedNodes)
-                            {
-                                node.position.Add(translation);
-                            }
-                        }
-
-                        this.diagram.InvalidateDiagram();
-                    }
-                }
-            }
-            else
             // KEY DRAG-MMIDDLE
             if (finishadding)
             {
                 this.diagram.InvalidateDiagram();
             }
-            else
+
             // KEY DRAG+MLEFT select nodes with selection rectangle UID0351799057
-            if (finishselecting)
+            if (finishselecting && mousemove)
             {
-                if (mousemove)
+                Position a = new Position(this.startMousePos)
+                    .Scale(Tools.GetScale(this.scale))
+                    .Subtract(this.startShift);
+
+                Position b = new Position(this.actualMousePos)
+                    .Scale(Tools.GetScale(this.scale))
+                    .Subtract(this.shift);
+
+                decimal temp;
+                if (b.x < a.x) { temp = a.x; a.x = b.x; b.x = temp; }
+                if (b.y < a.y) { temp = b.y; b.y = a.y; a.y = temp; }
+
+                if (!this.keyshift) this.ClearSelection();
+                foreach (Node rec in this.currentLayer.nodes)
                 {
-                    Position a = new Position(this.startMousePos)
-                        .Scale(Tools.GetScale(this.scale))
-                        .Subtract(this.startShift);
-
-                    Position b = new Position(this.actualMousePos)
-                        .Scale(Tools.GetScale(this.scale))
-                        .Subtract(this.shift);
-
-                    decimal temp;
-                    if (b.x < a.x) { temp = a.x; a.x = b.x; b.x = temp; }
-                    if (b.y < a.y) { temp = b.y; b.y = a.y; a.y = temp; }
-
-                    if (!this.keyshift) this.ClearSelection();
-                    foreach (Node rec in this.currentLayer.nodes)
+                    if (
+                        (rec.layer == this.currentLayer.id || rec.id == this.currentLayer.id)
+                        && a.x <= rec.position.x
+                        && rec.position.x + rec.width * Tools.GetScale(rec.scale) <= b.x
+                        && a.y <= rec.position.y
+                        && rec.position.y + rec.height * Tools.GetScale(rec.scale) <= + b.y) // get all nodes in selection rectangle
                     {
-                        if (
-                            (rec.layer == this.currentLayer.id || rec.id == this.currentLayer.id)
-                            && a.x <= rec.position.x
-                            && rec.position.x + rec.width * Tools.GetScale(rec.scale) <= b.x
-                            && a.y <= rec.position.y
-                            && rec.position.y + rec.height * Tools.GetScale(rec.scale) <= + b.y) // get all nodes in selection rectangle
+                        if (keyshift && !keyctrl && !keyalt) // KEY SHIFT+MLEFT Invert selection
                         {
-                            if (keyshift && !keyctrl && !keyalt) // KEY SHIFT+MLEFT Invert selection
+                            if (rec.selected)
                             {
-                                if (rec.selected)
-                                {
-                                    this.RemoveNodeFromSelection(rec);
-                                }
-                                else
-                                {
-                                    this.SelectNode(rec);
-                                }
+                                this.RemoveNodeFromSelection(rec);
                             }
-
-                            if (!keyshift && !keyctrl && !keyalt) // KEY MLEFT select nodes
+                            else
                             {
                                 this.SelectNode(rec);
                             }
                         }
-                    }
 
-                    this.diagram.InvalidateDiagram();
+                        if (!keyshift && !keyctrl && !keyalt) // KEY MLEFT select nodes
+                        {
+                            this.SelectNode(rec);
+                        }
+                    }
                 }
+
+                this.diagram.InvalidateDiagram();
             }
 
             Node TargetNode = this.FindNodeInMousePosition(new Position(e.X, e.Y));
 
-            if (buttonleft) // MLEFT
+            if (buttonleft && this.stateCoping && !isreadonly) // CTRL+DRAG copy part of diagram
             {
+                this.stateCoping = false;
 
-                if (!keyalt && keyctrl && !keyshift && TargetNode != null && TargetNode.selected) // CTRL+CLICK add node to selection
-                {
-                    this.RemoveNodeFromSelection(TargetNode);
-                    this.diagram.InvalidateDiagram();
-                }
-                else
-                if (!keyalt && keyctrl && !keyshift && TargetNode != null && !TargetNode.selected) // CTRL+CLICK remove node from selection
-                {
-                    this.SelectNode(TargetNode);
-                    this.diagram.InvalidateDiagram();
-                }
-                else
-                if (this.stateCoping && mousemove) // CTRL+DRAG copy part of diagram
-                {
-                    this.stateCoping = false;
+                if (mousemove) {
 
                     DiagramBlock newBlock = this.diagram.DuplicatePartOfDiagram(this.selectedNodes, this.currentLayer.id);
 
@@ -1116,384 +1110,489 @@ namespace Diagram
                     this.SelectNodes(topNodes);
 
                     this.diagram.Unsave();
-                    this.diagram.InvalidateDiagram();
                 }
-                else
-                if (bottomScrollBar != null
-                    && rightScrollBar != null
-                    && (bottomScrollBar.MouseUp() || rightScrollBar.MouseUp()))
-                {
-                    this.diagram.InvalidateDiagram();
-                }
-                else
-                // KEY MLEFT clear selection
-                if (!mousemove
-                    && TargetNode == null
-                    && this.sourceNode == null
-                    && this.selectedNodes.Count() > 0
-                    && !keyalt
-                    && !keyctrl
-                    && !keyshift)
-                {
-                    this.ClearSelection();
-                    this.diagram.InvalidateDiagram();
-                }
-                else
-                // KEY CTRL+ALT+DRAG create node and conect with existing node
-                if (!isreadonly
-                    && !keyshift
-                    && keyctrl
-                    && keyalt
-                    && TargetNode == null
-                    && this.sourceNode != null)
-                {
-                    var s = this.sourceNode;
-                    var newNodePosition = new Position(e.X, e.Y);
-                    var node = this.CreateNode(newNodePosition);
-                    node.shortcut = s.id;
-                    this.diagram.Connect(s, node);
-                    this.diagram.Unsave("create", node, this.shift, this.scale, this.currentLayer.id);
-                    this.diagram.InvalidateDiagram();
-                }
-                else
-                // KEY CTRL+ALT+DRAG create shortcut beetwen objects
-                if (!isreadonly
-                    && !keyshift
-                    && keyctrl
-                    && keyalt
-                    && TargetNode != null
-                    && this.sourceNode != null
-                    && TargetNode != this.sourceNode)
-                {
-                    this.diagram.Unsave("edit", this.sourceNode, this.shift, this.scale, this.currentLayer.id);
-                    this.sourceNode.link = "#" + TargetNode.id.ToString();
-                    this.diagram.Unsave();
-                    this.diagram.InvalidateDiagram();
-                }
-                else
-                // KEY DRAG move node
-                if
-                (
-                    !isreadonly
-                    && (
-                        (TargetNode == null && this.sourceNode != null)
-                        || (
-                            TargetNode != null
-                            && this.sourceNode != TargetNode
-                            && TargetNode.selected
-                        )
-                        || (TargetNode != null && this.sourceNode == TargetNode)
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            if (buttonleft 
+                && !keyalt 
+                && keyctrl 
+                && !keyshift 
+                && TargetNode != null 
+                && !TargetNode.selected) // CTRL+CLICK add node to selection
+            {
+                this.SelectNode(TargetNode);
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            if (buttonleft 
+                && bottomScrollBar != null
+                && rightScrollBar != null
+                && (bottomScrollBar.MouseUp() || rightScrollBar.MouseUp()))
+            {
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY MLEFT clear selection
+            if (buttonleft 
+                && !mousemove
+                && TargetNode == null
+                && this.sourceNode == null
+                && this.selectedNodes.Count() > 0
+                && !keyalt
+                && !keyctrl
+                && !keyshift)
+            {
+                this.ClearSelection();
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY CTRL+ALT+DRAG create node and conect with existing node
+            if (buttonleft 
+                && !isreadonly
+                && !keyshift
+                && keyctrl
+                && keyalt
+                && TargetNode == null
+                && this.sourceNode != null)
+            {
+                var s = this.sourceNode;
+                var newNodePosition = new Position(e.X, e.Y);
+                var node = this.CreateNode(newNodePosition);
+                node.shortcut = s.id;
+                this.diagram.Connect(s, node);
+                this.diagram.Unsave("create", node, this.shift, this.scale, this.currentLayer.id);
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY CTRL+ALT+DRAG create shortcut beetwen objects
+            if (buttonleft 
+                && !isreadonly
+                && !keyshift
+                && keyctrl
+                && keyalt
+                && TargetNode != null
+                && this.sourceNode != null
+                && TargetNode != this.sourceNode)
+            {
+                this.diagram.Unsave("edit", this.sourceNode, this.shift, this.scale, this.currentLayer.id);
+                this.sourceNode.link = "#" + TargetNode.id.ToString();
+                this.diagram.Unsave();
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY DRAG move node
+            if
+            (   buttonleft
+                && !isreadonly
+                && finishdraging
+                && !keyshift
+                && !keyctrl
+                && !keyalt
+                && (
+                    (TargetNode == null && this.sourceNode != null)
+                    || (
+                        TargetNode != null
+                        && this.sourceNode != TargetNode
+                        && TargetNode.selected
                     )
-                    && Math.Sqrt((double)(mouseTranslation.x * mouseTranslation.x + mouseTranslation.y * mouseTranslation.y)) > 5
+                    || (TargetNode != null && this.sourceNode == TargetNode)
                 )
+                && Math.Sqrt((double)(mouseTranslation.x * mouseTranslation.x + mouseTranslation.y * mouseTranslation.y)) > 5
+            )
+            {
+                Position vector = new Position(this.actualMousePos)
+                    .Scale(Tools.GetScale(this.scale))
+                    .Subtract(this.vmouse)
+                    .Subtract(this.shift)
+                    .Subtract(this.sourceNode.position);
+
+                if (this.selectedNodes.Count > 0)
                 {
-                    Position vector = new Position(this.actualMousePos)
+                    this.diagram.undoOperations.Add("edit", this.selectedNodes, null, this.shift, this.scale, this.currentLayer.id);
+
+                    foreach (Node node in this.selectedNodes)
+                    {
+                        node.position.Add(vector);
+                    }
+
+                    this.diagram.Unsave();
+                }
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY DRAG+ALT create node and conect with existing node
+            if (buttonleft 
+                && !isreadonly
+                && !keyshift
+                && !keyctrl
+                && keyalt
+                && TargetNode != null
+                && this.sourceNode == null)
+            {
+                Node node = this.CreateNode(
+                        new Position(
+                            +this.shift.x - startShift.x + this.startMousePos.x,
+                            +this.shift.y - startShift.y + this.startMousePos.y
+                        )
+                    );
+
+                Line line = this.diagram.Connect(
+                    node,
+                    TargetNode
+                );
+
+                this.diagram.Unsave("create", node, line, this.shift, this.scale, this.currentLayer.id);
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY CTRL+ALT+DRAG create node and make shortcut to target node
+            if (buttonleft 
+                && !isreadonly
+                && keyalt
+                && keyctrl
+                && !keyshift
+                && TargetNode != null
+                && this.sourceNode == null)
+            {
+                Position newNodePosition = new Position(this.shift)
+                    .Subtract(startShift)
+                    .Add(this.startMousePos);
+
+                Node newrec = this.CreateNode(
+                    newNodePosition
+                );
+
+                newrec.link = "#" + TargetNode.id;
+                this.diagram.Unsave("create", newrec, this.shift, this.scale, this.currentLayer.id);
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY DBLCLICK open link or edit window after double click on node [dblclick] [open] [edit] //UID8515606919
+            if (buttonleft 
+                && dblclick
+                && this.sourceNode != null
+                && !keyctrl
+                && !keyalt
+                && !keyshift)
+            {
+                this.ResetStates();
+                this.OpenLink(this.sourceNode);
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY SHIFT+DBLCLICK open node edit form
+            if (buttonleft 
+                && dblclick
+                && this.sourceNode != null
+                && !keyctrl
+                && !keyalt
+                && keyshift)
+            {
+                this.diagram.EditNode(this.sourceNode);
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY CTRL+DBLCLICK open link in node
+            if (buttonleft 
+                && dblclick
+                && this.sourceNode != null
+                && keyctrl
+                && !keyalt
+                && !keyshift)
+            {
+                if (this.sourceNode.link != "")
+                {
+                    Os.OpenPathInSystem(this.sourceNode.link);
+                }
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY DBLCLICK+SPACE change position in zoom view mode
+            if (buttonleft 
+                && this.stateZooming
+                && dblclick
+                && !keyctrl
+                && !keyalt
+                && !keyshift)
+            {
+                this.shift
+                    .Subtract(
+                        this.actualMousePos
+                        .Clone()
                         .Scale(Tools.GetScale(this.scale))
-                        .Subtract(this.vmouse)
-                        .Subtract(this.shift)
-                        .Subtract(this.sourceNode.position);
-
-                    if (this.selectedNodes.Count > 0)
-                    {
-                        this.diagram.undoOperations.Add("edit", this.selectedNodes, null, this.shift, this.scale, this.currentLayer.id);
-
-                        foreach (Node node in this.selectedNodes)
-                        {
-                            node.position.Add(vector);
-                        }
-
-                        this.diagram.Unsave();
-                    }
-
-                    this.diagram.InvalidateDiagram();
-                }
-                else
-                // KEY DRAG+CTRL create node and conect with existing node
-                if (!isreadonly
-                    && !keyshift
-                    && !keyctrl
-                    && keyalt
-                    && TargetNode != null
-                    && this.sourceNode == null)
-                {
-                    Node node = this.CreateNode(
-                            new Position(
-                                +this.shift.x - startShift.x + this.startMousePos.x,
-                                +this.shift.y - startShift.y + this.startMousePos.y
-                            )
-                        );
-
-                    Line line = this.diagram.Connect(
-                        node,
-                        TargetNode
+                        )
+                    .Add(
+                        (this.ClientSize.Width * Tools.GetScale(this.scale)) / 2,
+                        (this.ClientSize.Height * Tools.GetScale(this.scale)) / 2
                     );
 
-                    this.diagram.Unsave("create", node, line, this.shift, this.scale, this.currentLayer.id);
-                    this.diagram.InvalidateDiagram();
-                }
-                else
-                // KEY CTRL+ALT+DRAG create node and make shortcut to target node
-                if (!isreadonly
-                    && keyalt
-                    && keyctrl
-                    && !keyshift
-                    && TargetNode != null
-                    && this.sourceNode == null)
-                {
-                    Position newNodePosition = new Position(this.shift)
-                        .Subtract(startShift)
-                        .Add(this.startMousePos);
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY CTRL+SHIFT+MLEFT conect with selected nodes new node or selected node
+            if (buttonleft 
+                && !isreadonly
+                && keyshift
+                && keyctrl
+                && this.selectedNodes.Count() > 0
+                && e.X == this.startMousePos.x
+                && e.Y == this.startMousePos.y)
+            {
+                // TODO Still working this?
+                Node newrec = TargetNode;
 
-                    Node newrec = this.CreateNode(
-                        newNodePosition
-                    );
+                Nodes newNodes = new Nodes();
+                if (newrec == null)
+                {
+                    newrec = this.CreateNode(this.actualMousePos.Clone().Subtract(10), false);
+                    newNodes.Add(newrec);
+                }
 
-                    newrec.link = "#" + TargetNode.id;
-                    this.diagram.Unsave("create", newrec, this.shift, this.scale, this.currentLayer.id);
-                    this.diagram.InvalidateDiagram();
-                }
-                else
-                // KEY DBLCLICK open link or edit window after double click on node [dblclick] [open] [edit] //UID8515606919
-                if (dblclick
-                    && this.sourceNode != null
-                    && !keyctrl
-                    && !keyalt
-                    && !keyshift)
+                Lines newLines = new Lines();
+                foreach (Node rec in this.selectedNodes)
                 {
-                    this.ResetStates();
-                    this.OpenLink(this.sourceNode);
+                    Line line = this.diagram.Connect(rec, newrec);
+                    newLines.Add(line);
                 }
-                else
-                // KEY SHIFT+DBLCLICK open node edit form
-                if (dblclick
-                    && this.sourceNode != null
-                    && !keyctrl
-                    && !keyalt
-                    && keyshift)
-                {
-                    this.diagram.EditNode(this.sourceNode);
-                }
-                else
-                // KEY CTRL+DBLCLICK open link in node
-                if (dblclick
-                    && this.sourceNode != null
-                    && keyctrl
-                    && !keyalt
-                    && !keyshift)
-                {
-                    if (this.sourceNode.link != "")
-                    {
-                        Os.OpenPathInSystem(this.sourceNode.link);
-                    }
-                }
-                else
-                // KEY DBLCLICK+SPACE change position in zoom view mode
-                if (this.stateZooming
-                    && dblclick
-                    && !keyctrl
-                    && !keyalt
-                    && !keyshift)
-                {
-                    this.shift
-                        .Subtract(
-                            this.actualMousePos
-                            .Clone()
-                            .Scale(Tools.GetScale(this.scale))
-                            )
-                        .Add(
-                            (this.ClientSize.Width * Tools.GetScale(this.scale)) / 2,
-                            (this.ClientSize.Height * Tools.GetScale(this.scale)) / 2
-                        );
-                    this.diagram.InvalidateDiagram();
-                }
-                else
-                // KEY CTRL+SHIFT+MLEFT conect with selected nodes new node or selected node
-                if (!isreadonly
-                    && keyshift
-                    && keyctrl
-                    && this.selectedNodes.Count() > 0
-                    && e.X == this.startMousePos.x
-                    && e.Y == this.startMousePos.y)
-                {
-                    // TODO Still working this?
-                    Node newrec = TargetNode;
 
-                    Nodes newNodes = new Nodes();
-                    if (newrec == null)
-                    {
-                        newrec = this.CreateNode(this.actualMousePos.Clone().Subtract(10), false);
-                        newNodes.Add(newrec);
-                    }
+                this.SelectOnlyOneNode(newrec);
+                this.diagram.Unsave("create", newNodes, newLines, this.shift, this.scale, this.currentLayer.id);
 
-                    Lines newLines = new Lines();
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY DBLCLICK create new node UID6734640900
+            if (buttonleft 
+                && !isreadonly
+                && dblclick
+                && !keyalt
+                && !keyshift
+                && !keyctrl
+                && TargetNode == null
+                && this.sourceNode == null
+                && e.X == this.startMousePos.x
+                && e.Y == this.startMousePos.y)
+            {
+                Node newNode = this.CreateNode(this.actualMousePos.Clone().Subtract(10), false); 
+                this.diagram.Unsave("create", newNode, this.shift, this.scale, this.currentLayer.id);
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // ALT+MLEFT Node click -> center node
+            if (buttonleft 
+                && !isreadonly
+                && !dblclick
+                && keyalt
+                && !keyshift
+                && !keyctrl
+                && TargetNode != null
+                && this.sourceNode == TargetNode
+                && e.X == this.startMousePos.x
+                && e.Y == this.startMousePos.y)
+            {
+                this.GoToNode(TargetNode);
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY DRAG+ALT copy style from node to other node
+            if (buttonleft 
+                && !isreadonly
+                && !keyshift
+                && !keyctrl
+                && keyalt
+                && TargetNode != null
+                && this.sourceNode != null
+                && this.sourceNode != TargetNode)
+            {
+                if (this.selectedNodes.Count() > 1)
+                {
+                    this.diagram.undoOperations.Add("edit", this.selectedNodes, null, this.shift, this.scale, this.currentLayer.id);
                     foreach (Node rec in this.selectedNodes)
                     {
-                        Line line = this.diagram.Connect(rec, newrec);
-                        newLines.Add(line);
+                        rec.CopyNodeStyle(TargetNode);
                     }
+                    this.diagram.Unsave();
+                }
 
-                    this.SelectOnlyOneNode(newrec);
-                    this.diagram.Unsave("create", newNodes, newLines, this.shift, this.scale, this.currentLayer.id);
-                }
-                else
-                // KEY ALT+MLEFT
-                // KEY DBLCLICK create new node UID6734640900
-                if (!isreadonly
-                    && dblclick
-                    && !keyalt
-                    && !keyshift
-                    && !keyctrl
-                    && TargetNode == null
-                    && this.sourceNode == null
-                    && e.X == this.startMousePos.x
-                    && e.Y == this.startMousePos.y)
+                if (this.selectedNodes.Count() == 1
+                    || (this.selectedNodes.Count() == 0 && this.sourceNode != null))
                 {
-                    Node newNode = this.CreateNode(this.actualMousePos.Clone().Subtract(10), false); 
-                    this.diagram.Unsave("create", newNode, this.shift, this.scale, this.currentLayer.id);
-                }
-                else
-                // ALT+MLEFT Node click -> center node
-                if (!isreadonly
-                    && !dblclick
-                    && keyalt
-                    && !keyshift
-                    && !keyctrl
-                    && TargetNode != null
-                    && this.sourceNode == TargetNode
-                    && e.X == this.startMousePos.x
-                    && e.Y == this.startMousePos.y)
-                {
-                    this.GoToNode(TargetNode);
-                }
-                else
-                // KEY DRAG+ALT copy style from node to other node
-                if (!isreadonly
-                    && !keyshift
-                    && !keyctrl
-                    && keyalt
-                    && TargetNode != null
-                    && this.sourceNode != null
-                    && this.sourceNode != TargetNode)
-                {
-                    if (this.selectedNodes.Count() > 1)
+                    this.diagram.undoOperations.Add("edit", TargetNode, this.shift, this.scale, this.currentLayer.id);
+
+                    TargetNode.CopyNodeStyle(this.sourceNode);
+
+                    if (this.selectedNodes.Count() == 1 && this.selectedNodes[0] != this.sourceNode)
                     {
-                        this.diagram.undoOperations.Add("edit", this.selectedNodes, null, this.shift, this.scale, this.currentLayer.id);
-                        foreach (Node rec in this.selectedNodes)
+                        this.ClearSelection();
+                        this.SelectNode(this.sourceNode);
+                    }
+                    this.diagram.Unsave();
+                }
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY DRAG make link between two nodes
+            if (buttonleft 
+                && !isreadonly
+                && !keyctrl
+                && !keyshift
+                && !keyalt
+                && TargetNode != null
+                && this.sourceNode != null
+                && this.sourceNode != TargetNode)
+            {
+                bool arrow = false;
+                if (keyshift)
+                {
+                    arrow = true;
+                }
+
+                Lines newLines = new Lines();
+                Lines removeLines = new Lines();
+                if (this.selectedNodes.Count() > 0)
+                {
+                    foreach (Node rec in this.selectedNodes)
+                    {
+                        if (rec != TargetNode)
                         {
-                            rec.CopyNodeStyle(TargetNode);
-                        }
-                        this.diagram.Unsave();
-                    }
-
-                    if (this.selectedNodes.Count() == 1
-                        || (this.selectedNodes.Count() == 0 && this.sourceNode != null))
-                    {
-                        this.diagram.undoOperations.Add("edit", TargetNode, this.shift, this.scale, this.currentLayer.id);
-
-                        TargetNode.CopyNodeStyle(this.sourceNode);
-
-                        if (this.selectedNodes.Count() == 1 && this.selectedNodes[0] != this.sourceNode)
-                        {
-                            this.ClearSelection();
-                            this.SelectNode(this.sourceNode);
-                        }
-                        this.diagram.Unsave();
-                    }
-                }
-                else
-                // KEY DRAG make link between two nodes
-                if (!isreadonly
-                    && !keyctrl
-                    && !keyalt
-                    && TargetNode != null
-                    && this.sourceNode != null
-                    && this.sourceNode != TargetNode)
-                {
-                    bool arrow = false;
-                    if (keyshift)
-                    {
-                        arrow = true;
-                    }
-
-                    Lines newLines = new Lines();
-                    Lines removeLines = new Lines();
-                    if (this.selectedNodes.Count() > 0)
-                    {
-                        foreach (Node rec in this.selectedNodes)
-                        {
-                            if (rec != TargetNode)
+                            if (this.diagram.HasConnection(rec, TargetNode))
                             {
-                                if (this.diagram.HasConnection(rec, TargetNode))
-                                {
-                                    Line removeLine = this.diagram.GetLine(rec, TargetNode);
-                                    removeLines.Add(removeLine);
-                                    this.diagram.Disconnect(rec, TargetNode);
+                                Line removeLine = this.diagram.GetLine(rec, TargetNode);
+                                removeLines.Add(removeLine);
+                                this.diagram.Disconnect(rec, TargetNode);
 
-                                }
-                                else
-                                {
-                                    Line newLine = this.diagram.Connect(rec, TargetNode, arrow, null);
-                                    newLines.Add(newLine);
-                                }
+                            }
+                            else
+                            {
+                                Line newLine = this.diagram.Connect(rec, TargetNode, arrow, null);
+                                newLines.Add(newLine);
                             }
                         }
                     }
-
-                    if (newLines.Count() > 0 && removeLines.Count() > 0)
-                    {
-                        this.diagram.undoOperations.StartGroup();
-                        this.diagram.undoOperations.Add("create", null, newLines, this.shift, this.scale, this.currentLayer.id);
-                        this.diagram.undoOperations.Add("delete", null, removeLines, this.shift, this.scale, this.currentLayer.id);
-                        this.diagram.undoOperations.EndGroup();
-                        this.diagram.Unsave();
-                    }
-                    else if (newLines.Count() > 0)
-                    {
-                        this.diagram.undoOperations.Add("create", null, newLines, this.shift, this.scale, this.currentLayer.id);
-                    }
-                    else if (removeLines.Count() > 0)
-                    {
-                        this.diagram.undoOperations.Add("delete", null, removeLines, this.shift, this.scale, this.currentLayer.id);
-                    }
-
-
-                    this.diagram.InvalidateDiagram();
                 }
-                // KEY SHIFT+MLEFT add node to selected nodes
-                else
-                if (!keyctrl
-                    && keyshift
-                    && !keyalt
-                    && this.sourceNode == TargetNode
-                    && TargetNode != null
-                    && !TargetNode.selected)
+
+                if (newLines.Count() > 0 && removeLines.Count() > 0)
                 {
-                    this.SelectNode(TargetNode);
-                    this.diagram.InvalidateDiagram();
+                    this.diagram.undoOperations.StartGroup();
+                    this.diagram.undoOperations.Add("create", null, newLines, this.shift, this.scale, this.currentLayer.id);
+                    this.diagram.undoOperations.Add("delete", null, removeLines, this.shift, this.scale, this.currentLayer.id);
+                    this.diagram.undoOperations.EndGroup();
+                    this.diagram.Unsave();
                 }
-                // KEY SHIFT+MLEFT remove node from selected nodes
-                else
-                if (!keyctrl
-                    && keyshift
-                    && !keyalt
-                    && TargetNode != null
-                    && (this.sourceNode == TargetNode || TargetNode.selected))
+                else if (newLines.Count() > 0)
                 {
-                    this.RemoveNodeFromSelection(TargetNode);
-                    this.diagram.InvalidateDiagram();
+                    this.diagram.undoOperations.Add("create", null, newLines, this.shift, this.scale, this.currentLayer.id);
                 }
-                else
-                if (this.sourceNode == TargetNode
-                    && this.stateSourceNodeAlreadySelected)
+                else if (removeLines.Count() > 0)
                 {
-                    this.Rename(); //UID3101342400
+                    this.diagram.undoOperations.Add("delete", null, removeLines, this.shift, this.scale, this.currentLayer.id);
                 }
 
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
             }
-            else
+
+            // KEY SHIFT+MLEFT add node to selected nodes
+            if (buttonleft 
+                && !keyctrl
+                && keyshift
+                && !keyalt
+                && this.sourceNode == TargetNode
+                && TargetNode != null
+                && !TargetNode.selected)
+            {
+                this.SelectNode(TargetNode);
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+
+            // KEY SHIFT+MLEFT remove node from selected nodes
+            if (buttonleft 
+                && !keyctrl
+                && keyshift
+                && !keyalt
+                && TargetNode != null
+                && (this.sourceNode == TargetNode || TargetNode.selected))
+            {
+                this.RemoveNodeFromSelection(TargetNode);
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            if (buttonleft
+                && !isreadonly
+                && !keyctrl
+                && !keyshift
+                && !keyalt
+                && this.sourceNode == TargetNode
+                && this.stateSourceNodeAlreadySelected)
+            {
+                this.Rename(); //UID3101342400
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+
             if (buttonright) // KEY MRIGHT
             {
                 this.stateMoveView = false; // show popup menu
+
                 if (e.X == this.startMousePos.x
                     && e.Y == this.startMousePos.y
                     && this.startShift.x == this.shift.x
@@ -1507,128 +1606,140 @@ namespace Diagram
                         this.SelectOnlyOneNode(temp);
                     }
 
-                    this.diagram.InvalidateDiagram();
                     PopupMenu.Show(this.Left + e.X, this.Top + e.Y); // [POPUP] show popup
                 }
                 else { // KEY DRAG+MRIGHT move view
                     this.shift.x = this.startShift.x + (e.X - this.startMousePos.x) * Tools.GetScale(this.scale);
                     this.shift.y = this.startShift.y + (e.Y - this.startMousePos.y) * Tools.GetScale(this.scale);
-                    this.diagram.InvalidateDiagram();
                 }
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
             }
-            else
-            if (buttonmiddle) // MMIDDLE
+            
+
+            // KEY DRAG+MMIDDLE conect two existing nodes
+            if (buttonmiddle
+                && !isreadonly
+                && this.sourceNode != null 
+                && TargetNode != null
+            ) {
+
+                Line newLine = this.diagram.Connect(
+                    sourceNode,
+                    TargetNode
+                );
+
+                if (sourceNode.name == "")
+                {
+                    sourceNode.transparent = true;
+                }
+                if (TargetNode.name == "")
+                {
+                    TargetNode.transparent = true;
+                }
+
+                if (newLine != null) {
+                    this.diagram.Unsave("create", newLine, this.shift, this.scale, this.currentLayer.id);
+                    this.diagram.InvalidateDiagram();
+                }
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY DRAG+MMIDDLE connect exixting node with new node
+            if (buttonmiddle
+                && !isreadonly
+                && this.sourceNode != null 
+                && TargetNode == null
+                )
             {
-                // KEY DRAG+MMIDDLE conect two existing nodes
-                if (this.sourceNode != null && TargetNode != null) {
 
-                    Line newLine = this.diagram.Connect(
-                        sourceNode,
-                        TargetNode
-                    );
+                Node newNode = this.CreateNode(this.actualMousePos.Clone().Subtract(10));
 
-                    if (sourceNode.name == "")
-                    {
-                        sourceNode.transparent = true;
-                    }
-                    if (TargetNode.name == "")
-                    {
-                        TargetNode.transparent = true;
-                    }
+                Line newLine = this.diagram.Connect(
+                    sourceNode,
+                    newNode
+                );
 
-                    if (newLine != null) {
-                        this.diagram.Unsave("create", newLine, this.shift, this.scale, this.currentLayer.id);
-                        this.diagram.InvalidateDiagram();
-                    }
-                }
-                else
-                // KEY DRAG+MMIDDLE connect exixting node with new node
-                if (this.sourceNode != null && TargetNode == null)
+                if (sourceNode.name == "")
                 {
-
-                    Node newNode = this.CreateNode(this.actualMousePos.Clone().Subtract(10));
-
-                    Line newLine = this.diagram.Connect(
-                        sourceNode,
-                        newNode
-                    );
-
-                    if (sourceNode.name == "")
-                    {
-                        sourceNode.transparent = true;
-                    }
-                    newNode.transparent = true;
-
-                    this.diagram.Unsave("create", newNode, newLine, this.shift, this.scale, this.currentLayer.id);
-                    this.diagram.InvalidateDiagram();
+                    sourceNode.transparent = true;
                 }
-                else
-                // KEY DRAG+MMIDDLE create new node and conect id with existing node
-                if (!isreadonly && TargetNode != null)
-                {
-                    Node newNode = this.CreateNode(
-                        (new Position(this.shift)).Subtract(this.startShift).Add(this.startMousePos)
+                newNode.transparent = true;
+
+                this.diagram.Unsave("create", newNode, newLine, this.shift, this.scale, this.currentLayer.id);
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY DRAG+MMIDDLE create new node and conect id with existing node
+            if (buttonmiddle 
+                && !isreadonly
+                && this.sourceNode == null
+                && TargetNode != null)
+            {
+                Node newNode = this.CreateNode(
+                    (new Position(this.shift)).Subtract(this.startShift).Add(this.startMousePos)
+                );
+
+                Line newLine = this.diagram.Connect(
+                    newNode,
+                    TargetNode
+                );
+
+                newNode.transparent = true;
+
+                this.diagram.Unsave("create", newNode, newLine, this.shift, this.scale, this.currentLayer.id);
+
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
+            }
+                
+            // KEY DRAG+MMIDDLE create new node and conect with new node (create line)
+            if (buttonmiddle 
+                && !isreadonly
+                && this.sourceNode == null
+                && TargetNode == null)
+            {
+                Nodes nodes = new Nodes();
+                Lines lines = new Lines();
+
+                Node node1 = this.CreateNode(
+                        (new Position(this.shift)).Subtract(this.startShift).Add(this.startMousePos),
+                        false
                     );
 
-                    Line newLine = this.diagram.Connect(
-                        newNode,
-                        TargetNode
-                    );
+                nodes.Add(node1);
 
-                    newNode.transparent = true;
+                Node node2 = this.CreateNode(
+                    this.actualMousePos.Clone().Subtract(10)
+                );
 
-                    this.diagram.Unsave("create", newNode, newLine, this.shift, this.scale, this.currentLayer.id);
-                    this.diagram.InvalidateDiagram();
-                }
-                else
-                // KEY DRAG+MMIDDLE create new node and conect with new node (create line)
-                if (!isreadonly && TargetNode == null)
-                {
-                    Nodes nodes = new Nodes();
-                    Lines lines = new Lines();
+                nodes.Add(node2);
 
-                    Node node1 = this.CreateNode(
-                            (new Position(this.shift)).Subtract(this.startShift).Add(this.startMousePos),
-                            false
-                        );
+                lines.Add(this.diagram.Connect(
+                    node1,
+                    node2
+                ));
 
-                    nodes.Add(node1);
+                node1.transparent = true;
+                node2.transparent = true;
 
-                    Node node2 = this.CreateNode(
-                        this.actualMousePos.Clone().Subtract(10)
-                    );
+                this.diagram.Unsave("create", nodes, lines, this.shift, this.scale, this.currentLayer.id);
 
-                    nodes.Add(node2);
-
-                    lines.Add(this.diagram.Connect(
-                        node1,
-                        node2
-                    ));
-
-                    node1.transparent = true;
-                    node2.transparent = true;
-
-                    this.diagram.Unsave("create", nodes, lines, this.shift, this.scale, this.currentLayer.id);
-                    this.diagram.InvalidateDiagram();
-                }
+                this.diagram.InvalidateDiagram();
+                this.ResetStates();
+                return;
             }
 
             this.ResetStates();
-        }
-
-        // EVENT revert states to default UID5045070650
-        private void ResetStates()
-        {
-            this.MoveTimer.Enabled = false;
-            this.stateDragSelection = false;
-            this.stateMoveView = false;
-            this.stateSelectingNodes = false;
-            this.stateAddingNode = false;
-            this.stateDblclick = false;
-            //this.stateZooming = false;
-            this.stateSearching = false;
-            this.stateSourceNodeAlreadySelected = false;
-            this.stateCoping = false;
         }
 
         // EVENT Mouse Whell UID1111344210
@@ -1724,6 +1835,21 @@ namespace Diagram
             }
         }
 
+        // EVENT revert states to default UID5045070650
+        private void ResetStates()
+        {
+            this.MoveTimer.Enabled = false;
+            this.stateDragSelection = false;
+            this.stateMoveView = false;
+            this.stateSelectingNodes = false;
+            this.stateAddingNode = false;
+            this.stateDblclick = false;
+            //this.stateZooming = false;
+            this.stateSearching = false;
+            this.stateSourceNodeAlreadySelected = false;
+            this.stateCoping = false;
+        }
+
         // EVENT Shortcuts UID1444131132
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)                           // [KEYBOARD] [EVENT]
         {
@@ -1737,7 +1863,7 @@ namespace Diagram
                 return false;
             }
 
-
+            bool isreadonly = this.diagram.options.readOnly;
             bool stopNextAction = this.main.plugins.KeyPressAction(this.diagram, this, keyData); //UID0290845814
 
             /*
@@ -1750,20 +1876,20 @@ namespace Diagram
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.alignToLine, keyData)) // [KEY] [CTRL+L] align to line
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.alignToLine, keyData)) // [KEY] [CTRL+L] align to line
             {
                 this.AlignToLine();
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.alignToColumn, keyData)) // [KEY] [CTRL+H] align to column
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.alignToColumn, keyData)) // [KEY] [CTRL+H] align to column
             {
                 this.AlignToColumn();
                 return true;
             }
 
 
-            if (KeyMap.ParseKey(KeyMap.alignToGroup, keyData)) // [KEY] [CTRL+K] align to group
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.alignToGroup, keyData)) // [KEY] [CTRL+K] align to group
             {
                 this.AlignToGroup();
 
@@ -1788,7 +1914,7 @@ namespace Diagram
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.alignToLineGroup, keyData)) // [KEY] [CTRL+SHIFT+K] align to group
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.alignToLineGroup, keyData)) // [KEY] [CTRL+SHIFT+K] align to group
             {
                 this.AlignToLineGroup();
                 return true;
@@ -1812,13 +1938,13 @@ namespace Diagram
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.cut, keyData))  // [KEY] [CTRL+X] Cut diagram
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.cut, keyData))  // [KEY] [CTRL+X] Cut diagram
             {
                 this.Cut();
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.paste, keyData))  // [KEY] [CTRL+V] [PASTE] Paste text from clipboard
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.paste, keyData))  // [KEY] [CTRL+V] [PASTE] Paste text from clipboard
             {
                 Point ptCursor = Cursor.Position;
                 ptCursor = PointToClient(ptCursor);
@@ -1826,25 +1952,25 @@ namespace Diagram
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.pasteToNote, keyData))  // [KEY] [CTRL+SHIFT+V] paste to note
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.pasteToNote, keyData))  // [KEY] [CTRL+SHIFT+V] paste to note
             {
                 this.PasteToNote();
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.pasteToLink, keyData))  // [KEY] [CTRL+SHIFT+INS] paste to node link
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.pasteToLink, keyData))  // [KEY] [CTRL+SHIFT+INS] paste to node link
             {
                 this.PasteToLink();
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.undo, keyData))  // [KEY] [CTRL+Z]
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.undo, keyData))  // [KEY] [CTRL+Z]
             {
                 this.diagram.DoUndo(this);
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.redo, keyData))  // [KEY] [CTRL+SHIFT+Z]
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.redo, keyData))  // [KEY] [CTRL+SHIFT+Z]
             {
                 this.diagram.DoRedo(this);
                 return true;
@@ -1868,7 +1994,7 @@ namespace Diagram
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.save, keyData))  // [KEY] [CTRL+S] save diagram UID4672553712
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.save, keyData))  // [KEY] [CTRL+S] save diagram UID4672553712
             {
                 this.Save();
                 return true;
@@ -1886,13 +2012,13 @@ namespace Diagram
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.date, keyData))  // [KEY] [CTRL+D] date
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.date, keyData))  // [KEY] [CTRL+D] date
             {
                 this.EvaluateDate();
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.promote, keyData)) // [KEY] [CTRL+SHIFT+P] Promote node
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.promote, keyData)) // [KEY] [CTRL+SHIFT+P] Promote node
             {
                 this.Promote();
                 return true;
@@ -1912,7 +2038,7 @@ namespace Diagram
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.hideBackground, keyData)) // [KEY] [F6] Hide background
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.hideBackground, keyData)) // [KEY] [F6] Hide background
             {
                 this.HideBackground();
                 return true;
@@ -1944,7 +2070,7 @@ namespace Diagram
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.setHome, keyData))  // [KEY] [SHIFT+HOME] Move start point
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.setHome, keyData))  // [KEY] [SHIFT+HOME] Move start point
             {
                 this.SetCurentPositionAsHomePosition();
                 return true;
@@ -1956,7 +2082,7 @@ namespace Diagram
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.setEnd, keyData))  // [KEY] [SHIFT+END] Move end point
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.setEnd, keyData))  // [KEY] [SHIFT+END] Move end point
             {
                 this.SetCurentPositionAsEndPosition();
                 return true;
@@ -2011,19 +2137,19 @@ namespace Diagram
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.editNodeName, keyData)) // [KEY] [F2] edit node name
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.editNodeName, keyData)) // [KEY] [F2] edit node name
             {
                 this.Rename();
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.editNodeLink, keyData)) // [KEY] [F4] edit node name
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.editNodeLink, keyData)) // [KEY] [F4] edit node link
             {
                 this.EditLink();
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.fullScreean, keyData)) // [KEY] [F11] evaluate python script for selected nodes by stamp in link
+            if (KeyMap.ParseKey(KeyMap.fullScreean, keyData)) // [KEY] [F11] show full screen
             {
                 this.FullScreenSwitch();
                 return true;
@@ -2079,38 +2205,38 @@ namespace Diagram
                 }
             }
 
-            if (KeyMap.ParseKey(KeyMap.delete, keyData)) // [KEY] [DEL] [DELETE] delete
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.delete, keyData)) // [KEY] [DEL] [DELETE] delete
             {
                 this.DeleteSelectedNodes(this);
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.moveLeft, keyData) || KeyMap.ParseKey(KeyMap.moveLeftFast, keyData))  // [KEY] [left] [SHIFT+LEFT] [ARROW] Move node
+            if (!isreadonly && (KeyMap.ParseKey(KeyMap.moveLeft, keyData) || KeyMap.ParseKey(KeyMap.moveLeftFast, keyData)))  // [KEY] [left] [SHIFT+LEFT] [ARROW] Move node
             {
 
                 this.MoveNodesToLeft(KeyMap.ParseKey(KeyMap.moveLeftFast, keyData));
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.moveRight, keyData) || KeyMap.ParseKey(KeyMap.moveRightFast, keyData))  // [KEY] [right] [SHIFT+RIGHT] [ARROW] Move node
+            if (!isreadonly && (KeyMap.ParseKey(KeyMap.moveRight, keyData) || KeyMap.ParseKey(KeyMap.moveRightFast, keyData)))  // [KEY] [right] [SHIFT+RIGHT] [ARROW] Move node
             {
                 this.MoveNodesToRight(KeyMap.ParseKey(KeyMap.moveRightFast, keyData));
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.moveUp, keyData) || KeyMap.ParseKey(KeyMap.moveUpFast, keyData))  // [KEY] [up] [SHIFT+UP] [ARROW] Move node
+            if (!isreadonly && (KeyMap.ParseKey(KeyMap.moveUp, keyData) || KeyMap.ParseKey(KeyMap.moveUpFast, keyData)))  // [KEY] [up] [SHIFT+UP] [ARROW] Move node
             {
                 this.MoveNodesUp(KeyMap.ParseKey(KeyMap.moveUpFast, keyData));
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.moveDown, keyData) || KeyMap.ParseKey(KeyMap.moveDownFast, keyData))  // [KEY] [down] [SHIFT+DOWN] [ARROW] Move node
+            if (!isreadonly && (KeyMap.ParseKey(KeyMap.moveDown, keyData) || KeyMap.ParseKey(KeyMap.moveDownFast, keyData)))  // [KEY] [down] [SHIFT+DOWN] [ARROW] Move node
             {
                 this.MoveNodesDown(KeyMap.ParseKey(KeyMap.moveDownFast, keyData));
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.alignLeft, keyData)) // [KEY] [TAB] align selected nodes to left
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.alignLeft, keyData)) // [KEY] [TAB] align selected nodes to left
             {
                 
                 if (this.selectedNodes.Count() > 1)
@@ -2125,7 +2251,7 @@ namespace Diagram
                 return true;
             }
 
-            if (KeyMap.ParseKey(KeyMap.alignRight, keyData))  // [KEY] [SHIFT+TAB] align selected nodes to right
+            if (!isreadonly && KeyMap.ParseKey(KeyMap.alignRight, keyData))  // [KEY] [SHIFT+TAB] align selected nodes to right
             {
                 this.AlignRight();
                 return true;
@@ -2255,12 +2381,14 @@ namespace Diagram
         }                                 // [KEYBOARD] [UP] [EVENT]
 
         // EVENT Keypress UID1343430442
-        public void DiagramApp_KeyPress(object sender, KeyPressEventArgs e)
+        public void DiagramApp_KeyPress(object sender, KeyPressEventArgs e) // [KEYBOARD] [PRESS] [EVENT]
         {
 
 #if DEBUG
             this.LogEvent("KeyPress");
 #endif
+
+            bool isreadonly = this.diagram.options.readOnly;
 
             if (this.IsEditing() || this.stateSearching)
             {
@@ -2269,33 +2397,42 @@ namespace Diagram
 
             this.key = e.KeyChar;
 
-            if (!this.keyctrl && !this.keyalt)
+            // KEY PLUS In to layer
+            if (!this.keyctrl 
+                && !this.keyalt 
+                && this.key == '+' 
+                && this.selectedNodes.Count() == 1 
+                && this.selectedNodes[0].haslayer)
             {
-
-                if (this.key == '+') // KEY PLUS In to layer
-                {
-                    if (this.selectedNodes.Count() == 1 && this.selectedNodes[0].haslayer)
-                    {
-                        this.LayerIn(this.selectedNodes[0]);
-                    }
-                }
-                else
-                if (this.key == '-') // KEY MINUS Out to layer
-                {
-                    this.LayerOut();
-                }
-                else
-                if (this.key != ' '
-                    && this.key != '\t'
-                    && this.key != '\r'
-                    && this.key != '\n'
-                    && this.key != '`'
-                    && this.key != (char)27) // KEY OTHER create new node
-                {
-                    this.editPanel.ShowEditPanel(this.CursorPosition(), this.key);
-                }
+                this.LayerIn(this.selectedNodes[0]);
+                return;
             }
-        }                         // [KEYBOARD] [PRESS] [EVENT]
+
+            // KEY MINUS Out to layer
+            if (!this.keyctrl 
+                && !this.keyalt 
+                && this.currentLayer != null
+                && this.key == '-') 
+            {
+                this.LayerOut();
+                return;
+            }
+
+            // KEY OTHER create new node
+            if (!isreadonly
+                && !this.keyctrl
+                && !this.keyalt
+                && this.key != ' '
+                && this.key != '\t'
+                && this.key != '\r'
+                && this.key != '\n'
+                && this.key != '`'
+                && this.key != (char)27
+            ) {
+                this.editPanel.ShowEditPanel(this.CursorPosition(), this.key);
+            }
+
+        }
 
         // EVENT DROP file UID3440232213
         public void DiagramApp_DragDrop(object sender, DragEventArgs e)                                // [DROP] [DROP-FILE] [EVENT]
@@ -2667,7 +2804,19 @@ namespace Diagram
             }
         }
 
-	        // LAYER HISTORY Buld laier history from UID3310785252
+        // LAYER Is not in first layer
+        public bool isNotInFisrtLayer()
+        {
+            if (this.currentLayer.parentLayer != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
+        // LAYER HISTORY Buld laier history from UID3310785252
         public void BuildLayerHistory(long id)
         {    
         	Layer layer = this.diagram.layers.GetLayer(id);
@@ -5792,8 +5941,8 @@ namespace Diagram
             }
 
             // go to last node
-            lastMarkNode = markedNodes[markedNodes.Count - 1].id;
-            this.GoToNode(markedNodes[markedNodes.Count - 1]);
+            lastMarkNode = markedNodes[^1].id;
+            this.GoToNode(markedNodes[^1]);
             this.diagram.InvalidateDiagram();
         }
 
@@ -5862,7 +6011,6 @@ namespace Diagram
 
             return isvisible;
         }
-
 
         // LINE change color of lines
         public void ChangeLineColor()

@@ -6,6 +6,8 @@ namespace Plugin
 {
     public class CreateDirectoryPlugin : IPopupPlugin
     {
+        ToolStripMenuItem createDirectoryItem = null;
+
         public string Name
         {
             get
@@ -52,9 +54,9 @@ namespace Plugin
 
             string NewDirectoryPath = Os.Combine(Os.GetFileDirectory(DiagramPath), "test");
 
-            Os.CreateDirectory(DiagramPath);
+            Os.CreateDirectory(NewDirectoryPath);
 
-            Node newrec = diagramview.CreateNode(diagramview.shift.Add(diagramview.Width, diagramview.Height));
+            Node newrec = diagramview.CreateNode(diagramview.actualMousePos.Clone());
 
             newrec.SetName("test");
             newrec.link = NewDirectoryPath;
@@ -64,17 +66,17 @@ namespace Plugin
 
         public void PopupAddItemsAction(Diagram.DiagramView diagramview, ToolStripMenuItem pluginsItem)
         {
-            ToolStripMenuItem createDirectoryItem = new ToolStripMenuItem();
-            createDirectoryItem.Name = "editItem";
-            createDirectoryItem.Text = "CreateDirectory";
-            createDirectoryItem.Click += new System.EventHandler((sender, e) => this.CreateDirectoryItem_Click(sender, e, diagramview));
+            this.createDirectoryItem = new ToolStripMenuItem();
+            this.createDirectoryItem.Name = "editItem";
+            this.createDirectoryItem.Text = "CreateDirectory";
+            this.createDirectoryItem.Click += new System.EventHandler((sender, e) => this.CreateDirectoryItem_Click(sender, e, diagramview));
 
-            pluginsItem.DropDownItems.Add(createDirectoryItem);
+            pluginsItem.DropDownItems.Add(this.createDirectoryItem);
         }
 
         public void PopupOpenAction(Diagram.DiagramView diagramview,ToolStripMenuItem pluginsItem)
         {
-
+            this.createDirectoryItem.Enabled = !diagramview.diagram.IsReadOnly();
         }
     }
 }

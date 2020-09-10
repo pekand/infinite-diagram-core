@@ -251,37 +251,37 @@ namespace Diagram
             // redoItem
             //
             items.Add("redoItem", new System.Windows.Forms.ToolStripMenuItem());
-                items["redoItem"].Name = "redoItem";
-                items["redoItem"].Text = "Redo";
-                items["redoItem"].Click += new System.EventHandler(this.RedoItem_Click);
+            items["redoItem"].Name = "redoItem";
+            items["redoItem"].Text = "Redo";
+            items["redoItem"].Click += new System.EventHandler(this.RedoItem_Click);
             //
             // copyLinkItem
             //
             items.Add("copyLinkItem", new System.Windows.Forms.ToolStripMenuItem());
-                items["copyLinkItem"].Name = "copyLinkItem";
-                items["copyLinkItem"].Text = "Copy link";
-                items["copyLinkItem"].Click += new System.EventHandler(this.CopyLinkItem_Click);
+            items["copyLinkItem"].Name = "copyLinkItem";
+            items["copyLinkItem"].Text = "Copy link";
+            items["copyLinkItem"].Click += new System.EventHandler(this.CopyLinkItem_Click);
             //
             // copyNoteItem
             //
             items.Add("copyNoteItem", new System.Windows.Forms.ToolStripMenuItem());
-                items["copyNoteItem"].Name = "copyNoteItem";
-                items["copyNoteItem"].Text = "Copy note";
-                items["copyNoteItem"].Click += new System.EventHandler(this.CopyNoteItem_Click);
+            items["copyNoteItem"].Name = "copyNoteItem";
+            items["copyNoteItem"].Text = "Copy note";
+            items["copyNoteItem"].Click += new System.EventHandler(this.CopyNoteItem_Click);
             //
             // pasteToLinkItem
             //
             items.Add("pasteToLinkItem", new System.Windows.Forms.ToolStripMenuItem());
-                items["pasteToLinkItem"].Name = "pasteToLinkItem";
-                items["pasteToLinkItem"].Text = "Paste to link";
-                items["pasteToLinkItem"].Click += new System.EventHandler(this.PasteToLinkItem_Click);
+            items["pasteToLinkItem"].Name = "pasteToLinkItem";
+            items["pasteToLinkItem"].Text = "Paste to link";
+            items["pasteToLinkItem"].Click += new System.EventHandler(this.PasteToLinkItem_Click);
             //
             // pasteToNoteItem
             //
             items.Add("pasteToNoteItem", new System.Windows.Forms.ToolStripMenuItem());
-                items["pasteToNoteItem"].Name = "pasteToNoteItem";
-                items["pasteToNoteItem"].Text = "Paste to note";
-                items["pasteToNoteItem"].Click += new System.EventHandler(this.PasteToNoteItem_Click); 
+            items["pasteToNoteItem"].Name = "pasteToNoteItem";
+            items["pasteToNoteItem"].Text = "Paste to note";
+            items["pasteToNoteItem"].Click += new System.EventHandler(this.PasteToNoteItem_Click); 
         }
 
         private void BuildNodeItems() {
@@ -343,7 +343,8 @@ namespace Diagram
             items["protectItem"].Click += new System.EventHandler(this.ProtectItem_Click);
         }
 
-        private void BuildImageItems() {
+        private void BuildLineItems()
+        {
             //
             // lineColorItem
             //
@@ -358,16 +359,9 @@ namespace Diagram
             items["lineWidthItem"].Name = "lineWidthItem";
             items["lineWidthItem"].Text = "Width";
             items["lineWidthItem"].Click += new System.EventHandler(this.LineWidthItem_Click);
-            //
-            // lineItem
-            //
-            items.Add("lineItem", new System.Windows.Forms.ToolStripMenuItem());
-            items["lineItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                items["lineColorItem"],
-                items["lineWidthItem"]
-            });
-            items["lineItem"].Name = "lineItem";
-            items["lineItem"].Text = "Line";
+        }
+
+        private void BuildImageItems() {
             //
             // imageAddItem
             //
@@ -558,9 +552,6 @@ namespace Diagram
             items["setGridColorItem"].Text = "Grid color";
             items["setGridColorItem"].Click += new System.EventHandler(this.SetGridColorItem_Click);
 
-
-            
-
             //
             // setScrollbarColorItem
             //
@@ -576,8 +567,6 @@ namespace Diagram
             items["setSelectionColorItem"].Name = "setSelectionColorItem";
             items["setSelectionColorItem"].Text = "Selection color";
             items["setSelectionColorItem"].Click += new System.EventHandler(this.setSelectionColorItem_Click);
-
-
 
             //
             // gridItem
@@ -792,6 +781,20 @@ namespace Diagram
             });
             items["nodeItem"].Name = "nodeItem";
             items["nodeItem"].Text = "Node";
+
+            this.BuildLineItems();
+
+            //
+            // lineItem
+            //
+            items.Add("lineItem", new System.Windows.Forms.ToolStripMenuItem());
+            items["lineItem"].DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                items["lineColorItem"],
+                items["lineWidthItem"]
+            });
+            items["lineItem"].Name = "lineItem";
+            items["lineItem"].Text = "Line";
+
 
             this.BuildImageItems();
 
@@ -1014,154 +1017,141 @@ namespace Diagram
         public void PopupMenu_Opening(object sender, CancelEventArgs e) //UID0017225057
         {
             bool readOnly = this.diagramView.diagram.IsReadOnly();
+            bool isNotReadOnly = !readOnly;
+            bool isSelectedNoNode = this.diagramView.selectedNodes.Count() == 0;
+            bool isSelectedOneNode = this.diagramView.selectedNodes.Count() == 1;
+            bool isSelectedAtLeastOneNode = this.diagramView.selectedNodes.Count() > 0;
+            bool isSelectedMoreThenOneNode = this.diagramView.selectedNodes.Count() > 1;
 
-            items["editItem"].Visible = !readOnly;
-            items["colorItem"].Visible = !readOnly;
-            items["linkItem"].Visible = !readOnly;
-            items["openlinkItem"].Enabled = !readOnly;
-            separators["quickActionSeparator"].Visible = !readOnly;
-            items["alignItem"].Visible = !readOnly;
-            items["removeShortcutItem"].Visible = !readOnly;
-            items["openLinkDirectoryItem"].Visible = !readOnly;
-            items["copyItem"].Enabled = !readOnly;
-            items["cutItem"].Enabled = !readOnly;
-            items["pasteItem"].Enabled = !readOnly;
-            items["pasteToLinkItem"].Enabled = !readOnly;
-            items["pasteToNoteItem"].Enabled = !readOnly;
-            items["setStartPositionItem"].Enabled = !readOnly;
-            items["copyLinkItem"].Enabled = !readOnly;
-            items["undoItem"].Enabled = !readOnly;
-            items["redoItem"].Enabled = !readOnly;
-            items["copyNoteItem"].Enabled = !readOnly;
-            items["splitNodeItem"].Enabled = !readOnly;
-            items["encryptItem"].Enabled = !readOnly;
-            items["changePasswordItem"].Enabled = !readOnly;
-            items["defaultFontItem"].Enabled = !readOnly;
-            items["resetFontItem"].Enabled = !readOnly;
-            items["restoreWindowItem"].Enabled = !readOnly;
-            items["gridItem"].Enabled = !readOnly;
-            items["coordinatesItem"].Enabled = !readOnly;
-            items["bordersItem"].Enabled = !readOnly;
-            items["transparentItem"].Checked = !readOnly;
-            items["transparentItem"].Enabled = !readOnly;
-            items["imageAddItem"].Enabled = !readOnly;
-            items["imageRemoveItem"].Enabled = !readOnly;
-            items["imageEmbeddedItem"].Enabled = !readOnly;
-            items["fontItem"].Enabled = !readOnly;
-            items["fontColorItem"].Enabled = !readOnly;
-            items["editLinkItem"].Enabled = !readOnly;
-            items["bringTopItem"].Enabled = !readOnly;
-            items["bringBottomItem"].Enabled = !readOnly;
-            items["lineColorItem"].Enabled = !readOnly;
-            items["includeFileItem"].Enabled = !readOnly;
-            items["includeDirectoryItem"].Enabled = !readOnly;
-            items["removeAttachmentItem"].Enabled = !readOnly;
-            items["protectItem"].Enabled = !readOnly;
+            items["editItem"].Visible = isNotReadOnly && isSelectedAtLeastOneNode;
+            items["colorItem"].Visible = isNotReadOnly && isSelectedAtLeastOneNode;
+            items["linkItem"].Visible = isNotReadOnly && isSelectedOneNode && this.diagramView.selectedNodes[0].link.Trim() != "";
+            items["openlinkItem"].Enabled = isNotReadOnly && isSelectedOneNode && this.diagramView.selectedNodes[0].link.Trim() != "";
+            items["openLinkDirectoryItem"].Visible = isSelectedOneNode 
+                && this.diagramView.selectedNodes[0].link.Trim().Length > 0 
+                && Os.FileExists(this.diagramView.selectedNodes[0].link);
+
+            items["alignItem"].Visible = isNotReadOnly && isSelectedMoreThenOneNode;
+            items["leftItem"].Enabled = isNotReadOnly && isSelectedMoreThenOneNode;
+            items["rightItem"].Enabled = isNotReadOnly && isSelectedMoreThenOneNode;
+            items["toLineItem"].Enabled = isNotReadOnly && isSelectedMoreThenOneNode;
+            items["inColumnItem"].Enabled = isNotReadOnly && isSelectedMoreThenOneNode;
+            items["groupVericalItem"].Enabled = isNotReadOnly && isSelectedMoreThenOneNode;
+            items["groupHorizontalItem"].Enabled = isNotReadOnly && isSelectedMoreThenOneNode;
+            items["sortItem"].Enabled = isNotReadOnly && isSelectedMoreThenOneNode;
+
+            separators["quickActionSeparator"].Visible = isSelectedAtLeastOneNode;
+
+            items["copyItem"].Enabled = isSelectedAtLeastOneNode;
+            items["cutItem"].Enabled = isNotReadOnly && isSelectedAtLeastOneNode;
+            items["pasteItem"].Enabled = isNotReadOnly;
+
+            separators["editSeparator"].Enabled = true;
+
+            items["fileItem"].Enabled = true;
+            items["newItem"].Enabled = true;
+            items["saveItem"].Enabled = isNotReadOnly;
+            items["saveAsItem"].Enabled = true;
+            items["exportItem"].Enabled = true;
+            items["textItem"].Enabled = true;
+            items["exportToPngItem"].Enabled = true;
+            items["openItem"].Enabled = true;
+            items["recentItem"].Enabled = true;
+            items["exitItem"].Enabled = true;
+
+            items["editMenuItem"].Enabled = true;
+            items["undoItem"].Enabled = isNotReadOnly && this.diagramView.diagram.undoOperations.CanUndo();
+            items["redoItem"].Enabled = isNotReadOnly && this.diagramView.diagram.undoOperations.CanRedo();
+
+            items["copyLinkItem"].Enabled = (isSelectedOneNode && this.diagramView.selectedNodes[0].link.Trim() != "") || isSelectedMoreThenOneNode;
+            items["copyNoteItem"].Enabled = isNotReadOnly && isSelectedAtLeastOneNode;
+            items["pasteToLinkItem"].Enabled = isNotReadOnly;
+            items["pasteToNoteItem"].Enabled = isNotReadOnly;
+
+
+            items["nodeItem"].Enabled = true;
+            items["transparentItem"].Checked = isSelectedAtLeastOneNode && this.diagramView.IsSelectionTransparent();
+            items["transparentItem"].Enabled = isNotReadOnly && isSelectedAtLeastOneNode;
+            items["fontItem"].Enabled = isNotReadOnly && isSelectedAtLeastOneNode;
+            items["fontColorItem"].Enabled = isNotReadOnly && isSelectedAtLeastOneNode;
+            items["editLinkItem"].Enabled = isNotReadOnly && isSelectedOneNode;
+            items["bringTopItem"].Enabled = isNotReadOnly && isSelectedAtLeastOneNode;
+            items["bringBottomItem"].Enabled = isNotReadOnly && isSelectedAtLeastOneNode;
+            items["removeShortcutItem"].Visible = isNotReadOnly && isSelectedAtLeastOneNode;
+            items["protectItem"].Enabled = isNotReadOnly && isSelectedAtLeastOneNode;
+
+            items["lineItem"].Enabled = true;
+            items["lineColorItem"].Enabled = isNotReadOnly && isSelectedMoreThenOneNode;
+            items["lineWidthItem"].Enabled = isNotReadOnly && isSelectedMoreThenOneNode;
+
+            items["imageItem"].Enabled = true;
+            items["imageAddItem"].Enabled = isNotReadOnly && isSelectedAtLeastOneNode;
+            items["imageRemoveItem"].Enabled = isNotReadOnly && isSelectedAtLeastOneNode && this.diagramView.HasSelectionImage();
+            items["imageEmbeddedItem"].Enabled = isNotReadOnly && isSelectedAtLeastOneNode && this.diagramView.HasSelectionNotEmbeddedImage();
+
+            items["attachmentItem"].Enabled = true;
+            items["deploayAttachmentItem"].Enabled = this.diagramView.HasSelectionAttachment();
+            items["includeFileItem"].Enabled = isNotReadOnly;
+            items["includeDirectoryItem"].Enabled = isNotReadOnly;
+            items["removeAttachmentItem"].Enabled = isNotReadOnly && this.diagramView.HasSelectionAttachment();
+
+            items["viewItem"].Enabled = true;
+            items["newViewItem"].Enabled = true;
+            items["centerItem"].Enabled = true;
+            items["setStartPositionItem"].Enabled = isNotReadOnly;
+            items["refreshItem"].Enabled = true;
+
+
+            items["layerItem"].Enabled = true;
+            items["inItem"].Enabled = isSelectedOneNode;
+            items["outItem"].Enabled = this.diagramView.isNotInFisrtLayer();
+
+            separators["helpSeparator"].Enabled = true;
+
+            items["pluginsItem"].Enabled = true;
+
+            items["toolsItem"].Enabled = true;
+            items["openDiagramDirectoryItem"].Enabled = !this.diagramView.diagram.IsNew();
+            items["splitNodeItem"].Enabled = isNotReadOnly && isSelectedAtLeastOneNode;
+
+            items["optionItem"].Enabled = true;
+            items["diagramOptionsItem"].Enabled = true;
+            items["readonlyItem"].Enabled = true;
+            items["restoreWindowItem"].Enabled = isNotReadOnly;
             items["openLayerInNewViewItem"].Checked = this.diagramView.diagram.options.openLayerInNewView;
+            items["openConfigDirItem"].Enabled = true;
             items["openLastFileItem"].Checked = this.diagramView.main.programOptions.openLastFile;
             items["setAsDefaultDiagramItem"].Checked = this.diagramView.main.programOptions.defaultDiagram != "";
 
-            // NEW FILE
-            if (this.diagramView.diagram.IsNew())
-            {
-                items["openDiagramDirectoryItem"].Enabled = false;
-            }
-            else
-            {
-                items["openDiagramDirectoryItem"].Enabled = true;
-            }
+            items["optionTheme"].Enabled = true;
+            items["defaultFontItem"].Enabled = isNotReadOnly;
+            items["resetFontItem"].Enabled = isNotReadOnly;
+            items["setIconItem"].Enabled = isNotReadOnly;
+            items["setBackgroundItem"].Enabled = isNotReadOnly;
+            items["setLineColorItem"].Enabled = isNotReadOnly;
+            items["setNodeColorItem"].Enabled = isNotReadOnly;
+            items["selectedNodeColorItem"].Enabled = isNotReadOnly;
+            items["setBackgroundColorItem"].Enabled = isNotReadOnly;
+            items["setGridColorItem"].Enabled = isNotReadOnly;
+            items["setScrollbarColorItem"].Enabled = isNotReadOnly;
+            items["setSelectionColorItem"].Enabled = isNotReadOnly;
+            items["gridItem"].Enabled = isNotReadOnly;
+            items["coordinatesItem"].Enabled = isNotReadOnly;
+            items["bordersItem"].Enabled = isNotReadOnly;
 
-            if (readOnly)
-            {
-                return;
-            }
+            items["optionSecurity"].Enabled = true;
+            items["encryptItem"].Enabled = isNotReadOnly && !this.diagramView.diagram.IsEncrypted();
+            items["changePasswordItem"].Enabled = isNotReadOnly && this.diagramView.diagram.IsEncrypted();
+            items["takeOwnershipItem"].Enabled = isNotReadOnly;
 
-            items["imageAddItem"].Enabled = true;
+            items["helpItem"].Enabled = true;
+            items["consoleItem"].Enabled = true;
+            items["visitWebsiteItem"].Enabled = true;
+            items["aboutItem"].Enabled = true;
 
-            // SELECTION EMPTY
-            if (this.diagramView.selectedNodes.Count() == 0)
-            {
-                items["editItem"].Visible = false;
-                items["colorItem"].Visible = false;
-                items["linkItem"].Visible = false;
-                items["openlinkItem"].Enabled = false;
-                separators["quickActionSeparator"].Visible = false;//separator
-                items["alignItem"].Visible = false;
-                items["removeShortcutItem"].Visible = false;
-                items["openLinkDirectoryItem"].Visible = false;
-                items["copyItem"].Enabled = false;
-                items["cutItem"].Enabled = false;
-                items["copyLinkItem"].Enabled = false;
-                items["copyNoteItem"].Enabled = false;
-                items["transparentItem"].Checked = false;
-                items["transparentItem"].Enabled = false;
-                items["imageRemoveItem"].Enabled = false;
-                items["imageEmbeddedItem"].Enabled = false;
-                items["fontItem"].Enabled = false;
-                items["fontColorItem"].Enabled = false;
-                items["editLinkItem"].Enabled = false;
-                items["bringTopItem"].Enabled = false;
-                items["bringBottomItem"].Enabled = false;
-                items["lineColorItem"].Enabled = false;
-                items["protectItem"].Enabled = false;
-                items["splitNodeItem"].Enabled = false;
-            }
-
-            // SELECTION NOT EMPTY
-            if (this.diagramView.selectedNodes.Count() > 0)
-            {
-                items["editItem"].Visible = true;
-                items["colorItem"].Visible = true;
-                separators["quickActionSeparator"].Visible = true;//separator
-                items["copyItem"].Enabled = true;
-                items["cutItem"].Enabled = true;
-                items["copyLinkItem"].Enabled = true;
-                items["copyNoteItem"].Enabled = true;
-                items["transparentItem"].Checked = this.diagramView.IsSelectionTransparent();
-                items["transparentItem"].Enabled = true;
-                items["imageAddItem"].Enabled = true;
-                items["imageRemoveItem"].Enabled = this.diagramView.HasSelectionImage();
-                items["imageEmbeddedItem"].Enabled = this.diagramView.HasSelectionNotEmbeddedImage();
-                items["fontItem"].Enabled = true;
-                items["fontColorItem"].Enabled = true;
-                items["editLinkItem"].Enabled = false;
-                items["bringTopItem"].Enabled = true;
-                items["bringBottomItem"].Enabled = true;
-                items["protectItem"].Enabled = true;
-                items["splitNodeItem"].Enabled = true;
-            }
-
-            // SELECTION ONE
-            if (this.diagramView.selectedNodes.Count() == 1)
-            {
-                items["linkItem"].Visible = this.diagramView.selectedNodes[0].link.Trim() != "";
-                items["copyLinkItem"].Enabled = this.diagramView.selectedNodes[0].link.Trim() != "";
-                items["openlinkItem"].Enabled = this.diagramView.selectedNodes[0].link.Trim() != "";
-                items["alignItem"].Visible = false;
-                items["openLinkDirectoryItem"].Visible = false;
-                if (this.diagramView.selectedNodes[0].link.Trim().Length > 0 && Os.FileExists(this.diagramView.selectedNodes[0].link))
-                    items["openLinkDirectoryItem"].Visible = true;
-                items["editLinkItem"].Enabled = true;
-                items["lineColorItem"].Enabled = false;
-            }
-
-            // SELECTION MORE THEN ONE
-            if (this.diagramView.selectedNodes.Count() > 1)
-            {
-                items["linkItem"].Visible = false;
-                items["openlinkItem"].Enabled = false;
-                items["alignItem"].Visible = true;
-                items["removeShortcutItem"].Visible = false;
-                items["openLinkDirectoryItem"].Visible = false;
-                items["lineColorItem"].Enabled = true;
-            }
-
-            // UNDO REDO
-            items["undoItem"].Enabled = this.diagramView.diagram.undoOperations.CanUndo();
-            items["redoItem"].Enabled = this.diagramView.diagram.undoOperations.CanRedo();
 
             // REMOVE SHORTCUT
-            if (this.diagramView.selectedNodes.Count() > 0)
+            if (isNotReadOnly && isSelectedAtLeastOneNode)
             {
                 bool hasShortcut = false;
                 foreach (Node node in this.diagramView.selectedNodes)
@@ -1180,36 +1170,14 @@ namespace Diagram
                 }
             }
 
-            // PASSWORD IS SET
-            if (this.diagramView.diagram.IsEncrypted())
-            {
-                items["changePasswordItem"].Visible = true;
-                items["encryptItem"].Visible = false;
-            }
-            else
-            {
-                items["changePasswordItem"].Visible = false;
-                items["encryptItem"].Visible = true;
-            }
-
-            // ATTACHMENT
-            if (this.diagramView.HasSelectionAttachment())
-            {
-                items["deploayAttachmentItem"].Enabled = true;
-                items["removeAttachmentItem"].Enabled = true;
-            }
-            else
-            {
-                items["deploayAttachmentItem"].Enabled = false;
-                items["removeAttachmentItem"].Enabled = false;
-            }
-
-            // CLIPBOARD
+            // CLIPBOARD name by clipboard content
             DataObject retrievedData = (DataObject)Clipboard.GetDataObject();
-            if (retrievedData.GetDataPresent("DiagramXml")
-            || retrievedData.GetDataPresent(DataFormats.Text)
-            || Clipboard.ContainsFileDropList()
-            || Clipboard.GetDataObject() != null)
+
+            if (isNotReadOnly 
+                && retrievedData.GetDataPresent("DiagramXml")
+                || retrievedData.GetDataPresent(DataFormats.Text)
+                || Clipboard.ContainsFileDropList()
+                || Clipboard.GetDataObject() != null)
             {
                 items["pasteItem"].Text = "Paste";
                 items["pasteItem"].Enabled = true;
@@ -1240,10 +1208,11 @@ namespace Diagram
             }
             else
             {
+                items["pasteItem"].Text = "Paste";
                 items["pasteItem"].Enabled = false;
             }
 
-            // add recent files
+            // create recent files items
             if (recentItems != null && recentItems.Count() > 0) {
                 items["recentItem"].DropDownItems.Clear();
             }
@@ -1263,6 +1232,10 @@ namespace Diagram
             }
 
             items["recentItem"].DropDownItems.AddRange(recentItems);
+
+            if (recentItems.Count() == 0) {
+                items["recentItem"].Enabled = false;
+            }
             
             this.diagramView.main.plugins.PopupOpenAction(diagramView, this);
         }

@@ -18,7 +18,9 @@ namespace DropPlugin
 
     public class DropPlugin : Plugin, IDropPlugin, ISavePlugin, ILoadPlugin, IPopupPlugin
     {
-        
+        System.Windows.Forms.ToolStripMenuItem selectDataDirectoryItem = null;
+        System.Windows.Forms.ToolStripMenuItem removeDataDirectoryItem = null;
+
         public string Name
         {
             get
@@ -221,24 +223,25 @@ namespace DropPlugin
 
         public void PopupAddItemsAction(DiagramView diagramView, ToolStripMenuItem pluginsItem)
         {
+            this.selectDataDirectoryItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectDataDirectoryItem.Name = "selectDataDirectoryItem";
+            this.selectDataDirectoryItem.Text = "Select data directory";
+            this.selectDataDirectoryItem.Click += new System.EventHandler((sender, e) => this.SelectDataDirectoryItem_Click(sender, e, diagramView));
 
+            pluginsItem.DropDownItems.Add(this.selectDataDirectoryItem);
+
+            this.removeDataDirectoryItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeDataDirectoryItem.Name = "removeDataDirectoryItem";
+            this.removeDataDirectoryItem.Text = "Remove data directory";
+            this.removeDataDirectoryItem.Click += new System.EventHandler((sender, e) => this.RemoveDataDirectoryItem_Click(sender, e, diagramView));
+
+            pluginsItem.DropDownItems.Add(this.removeDataDirectoryItem);
         }
 
         public void PopupOpenAction(DiagramView diagramView, ToolStripMenuItem pluginsItem)
         {
-            System.Windows.Forms.ToolStripMenuItem selectDataDirectoryItem = new System.Windows.Forms.ToolStripMenuItem();
-            selectDataDirectoryItem.Name = "selectDataDirectoryItem";
-            selectDataDirectoryItem.Text = "Select data directory";
-            selectDataDirectoryItem.Click += new System.EventHandler((sender, e) => this.SelectDataDirectoryItem_Click(sender, e, diagramView));
-
-            pluginsItem.DropDownItems.Add(selectDataDirectoryItem);
-
-            System.Windows.Forms.ToolStripMenuItem removeDataDirectoryItem = new System.Windows.Forms.ToolStripMenuItem();
-            removeDataDirectoryItem.Name = "removeDataDirectoryItem";
-            removeDataDirectoryItem.Text = "Remove data directory";
-            removeDataDirectoryItem.Click += new System.EventHandler((sender, e) => this.RemoveDataDirectoryItem_Click(sender, e, diagramView));
-
-            pluginsItem.DropDownItems.Add(removeDataDirectoryItem);
+            this.selectDataDirectoryItem.Enabled = !diagramView.diagram.IsReadOnly();
+            this.removeDataDirectoryItem.Enabled = !diagramView.diagram.IsReadOnly();
         }
 
 

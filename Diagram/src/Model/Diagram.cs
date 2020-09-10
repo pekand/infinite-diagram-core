@@ -865,6 +865,11 @@ namespace Diagram
         // save diagram
         public bool Save() //UID8354947577
         {
+            if (this.options.readOnly)
+            {
+                return false;
+            }
+
             if (this.IsLocked() || this.FileName == "" || !Os.FileExists(this.FileName))
             {
                 return false;
@@ -881,6 +886,11 @@ namespace Diagram
         // save diagram as
         public void Saveas(String FileName) //UID9358805584
         {
+            if (this.options.readOnly)
+            {
+                return;
+            }
+
             if (this.IsLocked())
             {
                 return;
@@ -1490,11 +1500,6 @@ namespace Diagram
             ColorType color = null,
             Font font = null
         ) {
-            if (this.options.readOnly)
-            {
-                return null;
-            }
-
             var rec = new Node();
             if (font == null)
             {
@@ -1530,12 +1535,7 @@ namespace Diagram
         // NODE add node to diagram (create new id and layer if not exist) 
         public Node CreateNode(Node node)
         {
-            if (!this.options.readOnly)
-            {
-                return this.layers.CreateNode(node);
-            }
-
-            return null;
+            return this.layers.CreateNode(node);
         }
 
         /*************************************************************************************************************************/
@@ -1561,7 +1561,7 @@ namespace Diagram
         // LINE CONNECT connect two nodes
         public Line Connect(Node a, Node b)
         {
-            if (!this.options.readOnly && a != null && b != null)
+            if (a != null && b != null)
             {
                 Line line = this.layers.GetLine(a, b);
 
@@ -1611,7 +1611,7 @@ namespace Diagram
         // LINE DISCONNECT remove connection between two nodes
         public void Disconnect(Node a, Node b)
         {
-            if (!this.options.readOnly && a != null && b != null)
+            if (a != null && b != null)
             {
                 Line line = this.layers.GetLine(a, b);
 
