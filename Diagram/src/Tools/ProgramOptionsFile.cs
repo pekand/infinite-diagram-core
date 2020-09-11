@@ -12,7 +12,7 @@ namespace Diagram
     public class ProgramOptionsFile //UID8285897740
     {
         /*************************************************************************************************************************/
-        public String configFileDirectory = "Diagram"; // name of directory for save global configuration file
+        public String configFileDirectory = "InfiniteDiagram"; // name of directory for save global configuration file
 
 #if DEBUG
         // global configuration file name in debug mode

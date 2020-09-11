@@ -27,7 +27,7 @@
   
   <ItemGroup>
     <Reference Include="Diagram">
-      <HintPath>..\..\Diagram\bin\x64\Release\netcoreapp3.1\Diagram.dll</HintPath>
+      <HintPath>..\..\Diagram\bin\x64\Release\netcoreapp3.1\InfiniteDiagram.dll</HintPath>
     </Reference>
   </ItemGroup>
 

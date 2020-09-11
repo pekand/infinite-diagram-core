@@ -3,10 +3,10 @@ rmdir /S /Q .\plugins
 mkdir .\files
 mkdir .\plugins
 
-copy ..\Diagram\diagram.ico .\files\
-copy ..\Diagram\bin\x64\Release\netcoreapp3.1\Diagram.exe .\files\
-copy ..\Diagram\bin\x64\Release\netcoreapp3.1\Diagram.dll .\files\
-copy ..\Diagram\bin\x64\Release\netcoreapp3.1\Diagram.runtimeconfig.json .\files\
+copy ..\Diagram\InfiniteDiagram.ico .\files\
+copy ..\Diagram\bin\x64\Release\netcoreapp3.1\InfiniteDiagram.exe .\files\
+copy ..\Diagram\bin\x64\Release\netcoreapp3.1\InfiniteDiagram.dll .\files\
+copy ..\Diagram\bin\x64\Release\netcoreapp3.1\InfiniteDiagram.runtimeconfig.json .\files\
 copy ..\Diagram\bin\x64\Release\netcoreapp3.1\Interop.Shell32.dll .\files\
 
 copy ..\Diagram\bin\x64\Release\netcoreapp3.1\Fizzler.dll .\files\
@@ -54,8 +54,8 @@ copy ..\Diagram\bin\x64\Release\netcoreapp3.1\plugins\CScriptingPlugin\netcoreap
 copy ..\Diagram\bin\x64\Release\netcoreapp3.1\plugins\CScriptingPlugin\netcoreapp3.1\Microsoft.CodeAnalysis.CSharp.Scripting.dll .\plugins\CScriptingPlugin\
 copy ..\Diagram\bin\x64\Release\netcoreapp3.1\plugins\CScriptingPlugin\netcoreapp3.1\Microsoft.CodeAnalysis.Scripting.dll .\plugins\CScriptingPlugin\
 
-call subscribe "files\Diagram.exe"
-call subscribe "files\Diagram.dll"
+call subscribe "files\InfiniteDiagram.exe"
+call subscribe "files\InfiniteDiagram.dll"
 call subscribe "plugins\CreateDirectoryPlugin\CreateDirectoryPlugin.dll"
 call subscribe "plugins\DropPlugin\DropPlugin.dll"
 call subscribe "plugins\FindUidPlugin\FindUidPlugin.dll"
