@@ -772,6 +772,9 @@ namespace Diagram
             bool buttonright = e.Button == MouseButtons.Right;
             bool buttonmiddle = e.Button == MouseButtons.Middle;
             bool isreadonly = this.diagram.options.readOnly;
+            bool keyalt = this.keyalt;
+            bool keyctrl = this.keyctrl;
+            bool keyshift = this.keyshift;
 
             this.actualMousePos.Set(e.X, e.Y);
 
@@ -1589,7 +1592,10 @@ namespace Diagram
                 return;
             }
 
-            if (buttonright) // KEY MRIGHT
+            if (buttonright
+                && !keyctrl
+                && !keyshift
+                && !keyalt) // KEY MRIGHT
             {
                 this.stateMoveView = false; // show popup menu
 
@@ -1600,7 +1606,13 @@ namespace Diagram
                 {
                     Node temp = this.FindNodeInMousePosition(new Position(e.X, e.Y));
 
-                    if (temp == null || (this.sourceNode != temp && !temp.selected))
+
+                    if (temp == null)
+                    {
+                        this.ClearSelection();
+                    }
+
+                    if (temp != null && !temp.selected)
                     {
                         this.ClearSelection();
                         this.SelectOnlyOneNode(temp);
