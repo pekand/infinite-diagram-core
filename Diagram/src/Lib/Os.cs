@@ -175,6 +175,17 @@ namespace Diagram
             return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         }
 
+        /// <summary>
+        ///remove directory and content
+        /// Example: C:\Users\user_name\AppData\Roaming\
+        /// </summary> 
+        public static void RemoveDirectory(string path)
+        {
+            if (Directory.Exists(path)) {
+                Directory.Delete(path, true);
+            }
+        }
+
         /*************************************************************************************************************************/
         // PATH OPERATIONS
 

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Infinite Diagram"
-#define MyAppVersion "1.0.0.0"
+#define MyAppVersion "1.0.3.0"
 #define MyAppPublisher "pekand@gmail.com"
 #define MyAppURL "http://www.infinite-diagram.com"
 #define MyAppExeName "InfiniteDiagram.exe"
@@ -93,7 +93,7 @@ Root: HKCR; Subkey: ".diagram"; ValueType: string; ValueName: ""; ValueData: "di
 Root: HKCR; Subkey: ".diagram"; ValueType: string; ValueName: "Content Type"; ValueData: "text/plain" 
 Root: HKCR; Subkey: ".diagram\ShellNew"; ValueType: binary; ValueName: "Data"; ValueData: "3c 64 69 61 67 72 61 6d 3e 3c 2f 64 69 61 67 72 61 6d 3e" 
 Root: HKCR; Subkey: "diagramfile"; ValueType: string; ValueName: ""; ValueData: "Diagram File" 
-Root: HKCR; Subkey: "diagramfile\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\diagram.ico" 
+Root: HKCR; Subkey: "diagramfile\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\InfiniteDiagram.ico" 
 Root: HKCR; Subkey: "diagramfile\shell\open\command"; ValueType: string; ValueName: ""; ValueData: "{app}\InfiniteDiagram.exe ""%1""" 
 
 [Code]

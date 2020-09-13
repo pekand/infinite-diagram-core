@@ -197,7 +197,11 @@ namespace Diagram
 
             } catch (Exception ex)
             {
-                Program.log.Write("download file error: " + ex.Message);
+                while (ex != null)
+                {
+                    Program.log.Write("download file error: " + ex.Message);
+                    ex = ex.InnerException;
+                }
             }
 
             return false;

@@ -17,6 +17,8 @@
 
   <PropertyGroup>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Authors>pekand@gmail.com</Authors>
+    <Company>Success Company, s.r.o.</Company>
   </PropertyGroup>
 
   <ItemGroup>

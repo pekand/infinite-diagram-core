@@ -1,3 +1,4 @@
+Check version and show update form.
 Rename assembly to InfiniteDiagram.
 Select node with right click when popup is shown.
 Remove default color from link.

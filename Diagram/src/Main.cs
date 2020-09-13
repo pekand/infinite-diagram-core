@@ -117,6 +117,9 @@ namespace Diagram
         {
             Program.log.Write("Program: Main");
 
+            Update update = new Update();
+            update.CheckUpdates();
+
             this.LoadProgramOptionFiles();
 
             this.LoadPugins();

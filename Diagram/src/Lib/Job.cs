@@ -12,7 +12,7 @@ namespace Diagram
         /// <example> 
         /// This of use doJob method
         /// <code>
-        /// Job.doJob(
+        /// Job.DoJob(
         ///    new DoWorkEventHandler(
         ///        delegate (object o, DoWorkEventArgs args)
         ///        {
