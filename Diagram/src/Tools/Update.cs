@@ -11,7 +11,7 @@ namespace Diagram
 
         private string updateFolderName = "InfiniteDiagramUpdate";
         private string updateExecutableName = "infinite-diagram-install.exe";
-        private string homepage = "https://infinite-diagram.pekand.loc/";
+        private string homepage = "https://infinite-diagram.pekand.com/";
         private string lastversionFile = "lastversion.txt";
         private string signatureFile = "signature.txt";
         private string installationUrl = "https://github.com/pekand/infinite-diagram-core/releases/download/v{VERSION}/infinite-diagram-install.exe";

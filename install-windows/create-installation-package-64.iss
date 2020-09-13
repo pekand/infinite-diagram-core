@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Infinite Diagram"
-#define MyAppVersion "1.0.3.0"
+#define MyAppVersion "1.0.5.0"
 #define MyAppPublisher "pekand@gmail.com"
 #define MyAppURL "http://www.infinite-diagram.com"
 #define MyAppExeName "InfiniteDiagram.exe"
