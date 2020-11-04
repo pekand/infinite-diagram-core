@@ -151,7 +151,7 @@ namespace Plugin
 
         public void OpenDiagramAction(Diagram.Diagram diagram)
         {
-            this.log.Write("Diagram is changed");
+
         }
     }
 }

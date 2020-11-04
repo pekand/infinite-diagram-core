@@ -93,21 +93,21 @@ namespace Diagram
 
         public Line GetLine(long startId, long endId)
         {
-            Node start = GetNode(startId);
+            Node startNode = GetNode(startId);
 
-            if (start == null)
+            if (startNode == null)
             {
                 return null;
             }
 
-            Node end = GetNode(endId);
+            Node endNode = GetNode(endId);
 
-            if (end == null)
+            if (endNode == null)
             {
                 return null;
             }
 
-            return GetLine(start, end);
+            return GetLine(startNode, endNode);
         }
 
         public bool HasLayer(long id = 0)

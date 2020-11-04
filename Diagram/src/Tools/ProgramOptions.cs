@@ -25,7 +25,7 @@ namespace Diagram
 
         /// <summary>
         /// home page url</summary>
-        public String home_page = "https://www.infinite-diagram.pekand.com";
+        public String home_page = "https://infinite-diagram.pekand.com";
 
         /// <summary>
         /// local server ip address fo messaging beetwen runing instances</summary>
@@ -81,6 +81,10 @@ namespace Diagram
         /// <summary>
         /// user signature iv - random vector inicializer</summary>
         public string signatureIV = null;
+
+        /// <summary>
+        /// skip version for update. Show update dialog when newer version is released.</summary>
+        public string skipVersion = null;
 
         /*************************************************************************************************************************/
         // Recent files

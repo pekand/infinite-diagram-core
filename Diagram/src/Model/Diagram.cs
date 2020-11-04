@@ -103,7 +103,7 @@ namespace Diagram
                 }
 
                 bool opened;
-                if (xml.Trim() == "")
+                if (xml.Trim() == "" || xml.Trim() == "<diagram></diagram>")
                 {
                     this.signed = true; // empty file is by default signed
                     opened = true; // count empty file as valid new diagram
@@ -2550,11 +2550,13 @@ namespace Diagram
         public void GetLayerNodes(Node node, Nodes nodes)
         {
             if (node.haslayer) {
-                foreach(Node subnode in this.layers.GetLayer(node.id).nodes) {
-                    nodes.Add(subnode);
-
-                    if (subnode.haslayer) {
-                        GetLayerNodes(subnode, nodes);
+                Layer layer = this.layers.GetLayer(node.id);
+                if (layer != null && layer.nodes != null) {
+                    foreach (Node subnode in this.layers.GetLayer(node.id).nodes) {
+                        nodes.Add(subnode);
+                        if (subnode.haslayer) {
+                            GetLayerNodes(subnode, nodes);
+                        }
                     }
                 }
             }

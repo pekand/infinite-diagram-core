@@ -189,7 +189,8 @@ namespace Diagram
 
         private void LabelHomepage_HomepageClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start(this.main.programOptions.home_page);
+            Network.OpenUrl(this.main.programOptions.home_page);
+            this.Close();
         }
 
         private void AboutForm_FormClosed(object sender, FormClosedEventArgs e)

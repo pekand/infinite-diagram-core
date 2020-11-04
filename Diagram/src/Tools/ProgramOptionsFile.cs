@@ -171,6 +171,11 @@ namespace Diagram
                         }
                     }
                 }
+
+                if (option.Name.ToString() == "skipVersion")
+                {
+                    this.programOptions.skipVersion = option.Value;
+                }
             }
 
             if (this.programOptions.signatureSecret == null || this.programOptions.signatureSecret.Trim() == "") {
@@ -238,6 +243,7 @@ namespace Diagram
             root.Add(new XElement("defaultDiagram", this.programOptions.defaultDiagram));
             root.Add(new XElement("signatureSecret", this.programOptions.signatureSecret));
             root.Add(new XElement("signatureIV", this.programOptions.signatureIV));
+            root.Add(new XElement("skipVersion", this.programOptions.skipVersion));
 
             programOptions.RemoveOldRecentFiles();
 

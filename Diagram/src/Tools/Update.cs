@@ -16,7 +16,7 @@ namespace Diagram
         private string signatureFile = "signature.txt";
         private string installationUrl = "https://github.com/pekand/infinite-diagram-core/releases/download/v{VERSION}/infinite-diagram-install.exe";
 
-        public void CheckUpdates() {
+        public void CheckUpdates(bool showCurrentVersionStatus = false) {
             Job.DoJob(
                new DoWorkEventHandler(
                    delegate (object o, DoWorkEventArgs args)
@@ -35,8 +35,12 @@ namespace Diagram
                            }
 
                            lastVersion = lastVersion.TrimEnd('\r', '\n').Trim();
-                           
-                           if (lastVersion != currentVersion)
+
+
+                           Version localVersion = new Version(currentVersion);
+                           Version serverVersion = new Version(lastVersion);
+
+                           if (serverVersion.CompareTo(localVersion) == 1)
                            {
 
                                string signature = Network.GetWebPage(this.homepage + this.signatureFile);
@@ -59,7 +63,7 @@ namespace Diagram
 
                                    string downloadFromUrl = installationUrl.Replace("{VERSION}", lastVersion);
 
-                                   Program.log.Write("CheckUpdates downloading: "+ downloadFromUrl);
+                                   Program.log.Write("CheckUpdates downloading: " + downloadFromUrl);
 
                                    Network.DownloadFile(downloadFromUrl, executablePath);
 
@@ -69,14 +73,23 @@ namespace Diagram
                                    {
                                        Os.RunProcess(executablePath);
                                    }
-                                   else {
+                                   else
+                                   {
                                        Program.log.Write("CheckUpdates error: invalid signature");
                                    }
+                               } else if (updateForm.SkipVersion()) { 
+
+                               }
+                           }
+                           else {
+                               if (showCurrentVersionStatus)
+                               {
+                                   MessageBox.Show("You have last version.");
                                }
                            }
 
                        } catch (Exception ex) {
-                           Program.log.Write("CheckUpdates error: " + ex.Message);
+                            Program.log.Write("CheckUpdates error: " + ex.Message);
                        }
                    }
                ),

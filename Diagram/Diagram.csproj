@@ -18,7 +18,7 @@
   <PropertyGroup>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <ApplicationIcon>InfiniteDiagram.ico</ApplicationIcon>
-    <Version>1.0.5.0</Version>
+    <Version>1.0.5.2</Version>
     <AssemblyName>InfiniteDiagram</AssemblyName>
     <Authors>pekand@gmail.com</Authors>
     <Company>Success Company, s.r.o.</Company>

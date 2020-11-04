@@ -18,12 +18,9 @@ Plugins/FirstPlugin/obj
 Plugins/NcalcPlugin/bin
 Plugins/NcalcPlugin/obj
 
-
 Plugins/ScriptingPlugin/bin
 Plugins/ScriptingPlugin/obj
 
 install-windows/Output
 install-windows/files
 install-windows/plugins
-
-

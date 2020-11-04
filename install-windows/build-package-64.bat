@@ -67,6 +67,6 @@ iscc /q create-installation-package-64.iss
 
 call subscribe "output\infinite-diagram-install.exe"
 
-sha256sum "output\infinite-diagram-install.exe" > "output\sifnature.txt"
+sha256sum "output\infinite-diagram-install.exe" > "output\signature.txt"
 
 pause

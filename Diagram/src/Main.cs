@@ -117,9 +117,6 @@ namespace Diagram
         {
             Program.log.Write("Program: Main");
 
-            Update update = new Update();
-            update.CheckUpdates();
-
             this.LoadProgramOptionFiles();
 
             this.LoadPugins();
@@ -135,6 +132,9 @@ namespace Diagram
             if ((server.mainProcess && this.Diagrams.Count > 0) || this.console != null)
             {
                 this.mainform = new MainForm(this);
+
+                Update update = new Update();
+                update.CheckUpdates();
             }
         }
 
