@@ -1121,7 +1121,8 @@ namespace Diagram
             items["openLayerInNewViewItem"].Checked = this.diagramView.diagram.options.openLayerInNewView;
             items["openConfigDirItem"].Enabled = true;
             items["openLastFileItem"].Checked = this.diagramView.main.programOptions.openLastFile;
-            items["setAsDefaultDiagramItem"].Checked = this.diagramView.main.programOptions.defaultDiagram != "";
+            items["setAsDefaultDiagramItem"].Checked = 
+                this.diagramView.main.programOptions.defaultDiagram != "" && this.diagramView.main.programOptions.defaultDiagram == this.diagramView.diagram.FileName;
 
             items["optionTheme"].Enabled = true;
             items["defaultFontItem"].Enabled = isNotReadOnly;
