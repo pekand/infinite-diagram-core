@@ -109,6 +109,7 @@ namespace Diagram
         public SearchPanel searhPanel = null; // search panel
         public Position currentPosition = new Position();
         public long currentPositionLayer = 0;
+        public decimal currentPositionScale = 0;
         public List<long> nodesSearchResult = new List<long>(); // all nodes found by search panel
 
         // MARKED NODES
@@ -119,7 +120,7 @@ namespace Diagram
 
         // MOVETIMER
         private readonly Timer animationTimer = new Timer(); //timer for all animations (goto node animation)
-        private readonly Position animationTimerSpeed = new Position();
+        private readonly Position animationTimerStep = new Position();
         private int animationTimerCounter = 0;
 
         // ZOOMTIMER
@@ -2866,18 +2867,56 @@ namespace Diagram
             return false;
         }
 
-        
+
 
         /*************************************************************************************************************************/
 
-        // SEARCH                                                                                          // SEARCH
-        public void Search(string find)
+        // SEARCHPANEL action UID7186033387
+        public void SearchPanelChanged(string action, string search)
         {
-            if (find.Trim() != "")
+            if (action == "search")
             {
-                this.ClearSelection();
-                searchFor = find.Trim();
+                this.SearchFirst(search);
             }
+
+            if (action == "searchNext")
+            {
+                this.SearchNext();
+            }
+
+            if (action == "searchPrev")
+            {
+                this.SearchPrev();
+            }
+
+            if (action == "cancel")
+            {
+                this.SearchCancel();
+            }
+
+            if (action == "close")
+            {
+                this.SearchClose();
+            }
+        }
+
+        // SEARCHPANEL SHOW UID3966468665
+        private void ShowSearchPanel()
+        {
+            if (searhPanel == null)
+            {
+                searhPanel = new SearchPanel(this);
+                this.searhPanel.SearchpanelStateChanged += this.SearchPanelChanged;
+                this.Controls.Add(this.searhPanel);
+            }
+
+            currentPosition.x = this.shift.x;
+            currentPosition.y = this.shift.y;
+            currentPositionLayer = this.currentLayer.id;
+            currentPositionScale = this.scale;
+
+            searhPanel.ShowPanel();
+            this.stateSearching = true;
         }
 
         /// <summary>
@@ -2895,6 +2934,7 @@ namespace Diagram
             this.lastFound = -1;
             this.searchFor = find;
 
+            // get all nodes containing string
             foreach (Node node in this.diagram.GetAllNodes())
             {
                 if (node.note.ToUpper().IndexOf(searchFor.ToUpper()) != -1
@@ -2907,9 +2947,9 @@ namespace Diagram
 
             this.searhPanel.Highlight(foundNodes.Count() == 0);
 
+            // get center ov view
             Position middle = new Position();
             middle.Copy(this.currentPosition);
-
             middle.x -= this.ClientSize.Width / 2;
             middle.y -= this.ClientSize.Height / 2;
 
@@ -2939,6 +2979,8 @@ namespace Diagram
 
                     return 1;
                 }
+
+                // compare distance from center of view when shearch panel is open
 
                 Node parent = this.diagram.layers.GetLayer(first.layer).parentNode;
                 Position m = (currentLayerId == first.layer) ? middle : (parent != null) ? parent.layerShift : firstLayereShift;
@@ -2980,6 +3022,7 @@ namespace Diagram
             if (nodesSearchResult.Count() == 0)
                 return;
 
+            // search from last position to end
             for (int i = lastFound+1; i < nodesSearchResult.Count(); i++)
             {
                 node = this.diagram.GetNodeByID(nodesSearchResult[i]);
@@ -2991,6 +3034,7 @@ namespace Diagram
                 }
             }
 
+            // search from fist search result to actual position (in cycle)
             if (node == null)
             {
                 for (int i = 0; i < lastFound; i++)
@@ -3027,6 +3071,7 @@ namespace Diagram
                 lastFound = 0;
             }
 
+            // search from lastfound to begging of search results
             for (int i = lastFound-1; i >= 0; i--)
             {
                 node = this.diagram.GetNodeByID(nodesSearchResult[i]);
@@ -3038,6 +3083,7 @@ namespace Diagram
                 }
             }
 
+            // search from end of search result to last found (in cycle)
             if (node == null)
             {
                 for (int i = nodesSearchResult.Count()-1; i >= lastFound; i--)
@@ -3060,23 +3106,7 @@ namespace Diagram
             }
         }
 
-        // SEARCHPANEL SHOW UID3966468665
-        private void ShowSearchPanel()
-        {
-            if (searhPanel == null)
-            {
-                searhPanel = new SearchPanel(this);
-                this.searhPanel.SearchpanelStateChanged += this.SearchPanelChanged;
-                this.Controls.Add(this.searhPanel);
-            }
 
-            currentPosition.x = this.shift.x;
-            currentPosition.y = this.shift.y;
-            currentPositionLayer = this.currentLayer.id;
-
-            searhPanel.ShowPanel();
-            this.stateSearching = true;
-        }
 
         // SEARCHPANEL CANCEL - restore beggining search position
         private void SearchCancel()
@@ -3084,6 +3114,7 @@ namespace Diagram
             this.GoToLayer(currentPositionLayer);
             this.shift.x = currentPosition.x;
             this.shift.y = currentPosition.y;
+            this.scale = currentPositionScale;
 
 
             this.SearchClose();
@@ -3097,34 +3128,7 @@ namespace Diagram
             this.diagram.InvalidateDiagram();
         }
 
-        // SEARCHPANEL action UID7186033387
-        public void SearchPanelChanged(string action, string search)
-        {
-            if (action == "searchNext")
-            {
-                this.SearchNext();
-            }
-
-            if (action == "searchPrev")
-            {
-                this.SearchPrev();
-            }
-
-            if (action == "search")
-            {
-                this.SearchFirst(search);
-            }
-
-            if (action == "cancel")
-            {
-                this.SearchCancel();
-            }
-
-            if (action == "close")
-            {
-                this.SearchClose();
-            }
-        }
+        
 
         /*************************************************************************************************************************/
 
@@ -4228,8 +4232,8 @@ namespace Diagram
             if (rec != null)
             {
                 this.scale = rec.scale;
-                this.GoToPosition(rec.position);
                 this.GoToLayer(rec.layer);
+                this.GoToPosition(rec.position);
             }
         }
 
@@ -6097,23 +6101,31 @@ namespace Diagram
         {
             if (node != null)
             {
-                if (node.layer != this.currentLayer.id || node.scale != this.scale) // if node is in different layer then move instantly
+                if (node.layer != this.currentLayer.id || (node.scale != this.scale && Math.Abs(node.scale - this.scale) > 2)) // if node is in different layer then move instantly
                 {
                     this.GoToNode(node);
                 }
                 else
                 {
-                    this.animationTimer.Enabled = true;
+                    ///xxx
+                    
+                    Position nodePositionOnScreen = node.position.Clone().Add(this.shift).Split(Tools.GetScale(this.scale));
 
-                    this.animationTimerSpeed.Set(this.shift.Clone().Invert())
-                        .Subtract(node.position)
-                        .Add(this.ClientRectangle.Width / 2, this.ClientRectangle.Height / 2);
+                    Position centerOfViewPosition = new Position(this.ClientRectangle.Width, this.ClientRectangle.Height).Split(2);
 
-                    double distance = this.animationTimerSpeed.Size();
-                    this.animationTimerCounter = (distance > 1000) ? 10 : 30;
+                    double distance = nodePositionOnScreen.Distance(centerOfViewPosition);
 
-                    this.animationTimerSpeed
-                        .Split(this.animationTimerCounter);
+                    if (distance > 10000)
+                    {
+                        this.GoToNode(node);
+                    }
+                    else {
+
+                        this.animationTimerCounter = 30;
+                        this.animationTimerStep.Set(nodePositionOnScreen.Clone().Subtract(centerOfViewPosition).Split(30)).Scale(Tools.GetScale(this.scale));
+                        this.animationTimer.Enabled = true;
+
+                    }
 
                 }
 
@@ -6128,7 +6140,7 @@ namespace Diagram
 #if DEBUG
             this.LogEvent("animationTimer");
 #endif
-            this.shift.Add(this.animationTimerSpeed);
+            this.shift.Subtract(this.animationTimerStep);
 
             if (--this.animationTimerCounter <= 0) {
                 this.animationTimer.Enabled = false;
@@ -6146,37 +6158,6 @@ namespace Diagram
 #if DEBUG
             this.LogEvent("zoomTimer");
 #endif
-            /*if (zoomTimerScale > this.scale) // zoom in
-            {
-                this.scale += zoomTimerStep;
-
-                if (zoomTimerScale < this.scale) // prevent infinite animation
-                {
-                    this.scale = zoomTimerScale;
-                    this.zoomTimer.Enabled = false;
-                }
-
-                this.diagram.InvalidateDiagram();
-            }
-            else
-            if (zoomTimerScale < this.scale) // zoom out
-            {
-                this.scale -= zoomTimerStep;
-
-                if (zoomTimerScale > this.scale) // prevent infinite animation
-                {
-                    this.scale = zoomTimerScale;
-                    this.zoomTimer.Enabled = false;
-                }
-
-                this.diagram.InvalidateDiagram();
-            }
-            else
-            {
-                this.zoomTimer.Enabled = false; // prevent infinite animation
-            }
-            */
-            
             if(zoomTmerTime-- ==0 ) 
             {
                 this.zoomTimer.Enabled = false;
